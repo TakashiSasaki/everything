@@ -2,3 +2,6 @@
 es.exe
 __pycache__/everything_dll_list.cpython-313.pyc
 __pycache__/dll_list.cpython-313.pyc
+__pycache__/test_dll.cpython-313-pytest-8.3.5.pyc
+__pycache__/test_es.cpython-313-pytest-8.3.5.pyc
+__pycache__/test_http.cpython-313-pytest-8.3.5.pyc
