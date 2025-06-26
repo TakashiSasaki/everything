@@ -1,12 +1,12 @@
 # everything_test_selftest.py
-# Test script to verify --test (with/without --json), --search (with/without --all-fields) of everything_subprocess_list.py
+# Test script to verify --test (with/without --json), --search (with/without --all-fields) of subprocess_list.py
 
 import subprocess
 import sys
 import re
 import json
 
-SCRIPT = "everything_subprocess_list.py"
+SCRIPT = "subprocess_list.py"
 
 def run_test(args, expected_pattern=None, json_check=None):
     try:

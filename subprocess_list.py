@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """ 
-everything_subprocess_list.py
+subprocess_list.py
 
 This script uses the Everything "es.exe" command-line interface to retrieve a list of files
 matching a given search query, runs a connectivity test, and supports various output formats.
