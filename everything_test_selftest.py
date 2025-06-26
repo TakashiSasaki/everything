@@ -1,5 +1,5 @@
 # everything_test_selftest.py
-# Test script to verify --test (with and without --json) and --search option of everything_subprocess_list.py
+# Test script to verify --test (with/without --json), --search (with/without --all-fields) of everything_subprocess_list.py
 
 import subprocess
 import sys
@@ -39,8 +39,8 @@ def run_test(args, expected_pattern=None, json_check=None):
     else:
         return False
 
-def check_hosts_ics_json(data):
-    # Must be a non-empty list and have correct keys for a 'hosts.ics' file entry
+def check_hosts_ics_json_allfields(data):
+    # Checks for --json --all-fields: full record
     if not isinstance(data, list) or len(data) == 0:
         print("JSON output is not a non-empty list.")
         return False
@@ -51,8 +51,22 @@ def check_hosts_ics_json(data):
         "attributes", "run_count", "date_run",
         "date_recently_changed", "file_list_file_name"
     ]
-    # Basic field presence and file name check
     return all(k in entry for k in required_keys) and entry["name"].lower() == "hosts.ics"
+
+def check_hosts_ics_json_default(data):
+    # Checks for --json (no --all-fields): only name, path, size
+    if not isinstance(data, list) or len(data) == 0:
+        print("JSON output is not a non-empty list.")
+        return False
+    entry = data[0]
+    # Must only have "name", "path", "size"
+    required_keys = ["name", "path", "size"]
+    extraneous_keys = set(entry.keys()) - set(required_keys)
+    return (
+        all(k in entry for k in required_keys)
+        and entry["name"].lower() == "hosts.ics"
+        and not extraneous_keys
+    )
 
 def main():
     expected_test = r"Test passed: hosts file found with size \d+\."
@@ -63,13 +77,25 @@ def main():
     # Test 2: --test and --json
     test_json_passed = run_test(["--test", "--json"], expected_pattern=expected_test)
 
-    # Test 3: --search for hosts.ics in JSON
-    # (Change the path string below if needed for your environment)
+    # Test 3: --search for hosts.ics in JSON with all fields
     search_query = r"windows\system32\drivers\etc\hosts.ics"
-    search_passed = run_test(
+    search_allfields_passed = run_test(
         ["--search", search_query, "--json", "--all-fields"],
-        json_check=check_hosts_ics_json
+        json_check=check_hosts_ics_json_allfields
     )
 
-    if test_passed and test_json_passed and search_passed:
-        print("✅ All tests PASSED: --test and --search opt
+    # Test 4: --search for hosts.ics in JSON with default fields
+    search_default_passed = run_test(
+        ["--search", search_query, "--json"],
+        json_check=check_hosts_ics_json_default
+    )
+
+    if all([test_passed, test_json_passed, search_allfields_passed, search_default_passed]):
+        print("✅ All tests PASSED: --test, --search, --all-fields combinations work as expected.")
+        sys.exit(0)
+    else:
+        print("❌ Test FAILED: Some options did not behave as expected.")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
