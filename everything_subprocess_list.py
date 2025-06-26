@@ -75,7 +75,7 @@ def locate_es():
 
 
 def run_test(es_cmd):
-    test_query = r"C:\\Windows\\System32\\drivers\\etc\\hosts"
+    test_query = "C:\\Windows\\System32\\drivers\\etc\\hosts"
     cmd = [es_cmd, "-size", "-n", "1", test_query]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
