@@ -1,3 +1,4 @@
 .env
 es.exe
 __pycache__/everything_dll_list.cpython-313.pyc
+__pycache__/dll_list.cpython-313.pyc
