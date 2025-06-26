@@ -1,9 +1,10 @@
 # test_everything_file_list_testmode.py
 """
-Test script for everything_file_list.py --test option (normal and --json).
+Test script for everything_file_list.py
 
-- Verifies that '--test' produces expected plain text output.
-- Verifies that '--test --json' produces correct JSON output.
+- Verifies '--test' (plain text) output.
+- Verifies '--test --json' output.
+- Verifies '--search ... --json' returns expected file entry.
 """
 
 import subprocess
@@ -40,7 +41,6 @@ def test_test_json_option():
     if stderr:
         print("--- --test --json STDERR ---")
         print(stderr)
-    # 出力が正しいJSONで、passed: true, size > 0 を含むかチェック
     try:
         data = json.loads(stdout)
         assert data["passed"] is True, "--test --json: 'passed' is not True"
@@ -49,7 +49,30 @@ def test_test_json_option():
         print(f"JSON parse error or assertion failed: {e}")
         sys.exit(1)
 
+def test_search_json_option():
+    search_query = r"windows\system32\drivers\etc\hosts.ics"
+    stdout, stderr = run_command(["--search", search_query, "--json"])
+    print(f"\n--- --search \"{search_query}\" --json STDOUT ---")
+    print(stdout)
+    if stderr:
+        print("--- --search ... --json STDERR ---")
+        print(stderr)
+    try:
+        data = json.loads(stdout)
+        assert isinstance(data, list), "--search --json: output is not a list"
+        # 少なくとも1件はヒットし、nameとpathが一致するものがあるか
+        found = any(
+            entry.get("name") == "hosts.ics" and 
+            entry.get("path", "").lower().endswith(r"windows\system32\drivers\etc")
+            for entry in data
+        )
+        assert found, "--search --json: expected file not found in results"
+    except Exception as e:
+        print(f"JSON parse error or assertion failed: {e}")
+        sys.exit(1)
+
 if __name__ == "__main__":
     test_test_option()
     test_test_json_option()
-    print("✅ Both --test and --test --json tests passed.")
+    test_search_json_option()
+    print("✅ All tests (--test, --test --json, --search --json) passed.")
