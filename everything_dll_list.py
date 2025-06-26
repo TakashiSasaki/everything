@@ -237,6 +237,8 @@ def main():
     args = parse_args()
     dll = load_everything_dll()
     init_functions(dll)
+
+    # テストモード: --json フラグで JSON、それ以外はプレーンテキスト
     if args.test:
         hostfile = r"C:\Windows\System32\drivers\etc\hosts"
         results = run_search(dll, hostfile, 0, 10, all_fields=args.all_fields)
@@ -249,11 +251,19 @@ def main():
         if size == 0:
             actual = os.path.getsize(hostfile) if os.path.isfile(hostfile) else 0
             if actual > 1:
-                print(json.dumps({"warning": f"indexed size 0, actual size {actual}."}))
+                if args.json:
+                    print(json.dumps({"warning": f"indexed size 0, actual size {actual}."}, ensure_ascii=False, indent=2))
+                else:
+                    print(f"Warning: indexed size 0, actual size {actual}.")
                 sys.exit(0)
             sys.exit("Test failed: hosts file size is zero both in index and on disk.")
-        print(json.dumps({"passed": True, "size": size}))
+        if args.json:
+            print(json.dumps({"passed": True, "size": size}, ensure_ascii=False, indent=2))
+        else:
+            print(f"Test passed: hosts file found, size {size}.")
         sys.exit(0)
+
+    # 通常モード: --json フラグで JSON、それ以外はタブ区切りテキスト
     if not args.search:
         sys.exit("Error: --search is required unless --test is specified.")
     results = run_search(dll, args.search, args.offset, args.count, all_fields=args.all_fields)
