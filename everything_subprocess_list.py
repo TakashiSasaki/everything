@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
-"""
+""" 
 everything_subprocess_list.py
 
 This script uses the Everything "es.exe" command-line interface to retrieve a list of files
-matching a given search query, or runs a connectivity test via subprocess.
+matching a given search query, runs a connectivity test, and supports various output formats.
 
 Features:
   - Perform search by invoking es.exe as a subprocess
   - Support --search, --offset, --count options
   - Support --all-fields option to display all available fields
+  - Support --json option to output results in JSON format (uses CSV export internally for accurate parsing)
+  - Support --csv option to export CSV from Everything and parse it
   - Test mode (--test) verifies es.exe by searching for
     C:\\Windows\\System32\\drivers\\etc\\hosts and checking its size > 1
   - Validates that es.exe is available in PATH or current directory before execution
@@ -21,11 +23,14 @@ import os
 import shutil
 import subprocess
 import sys
+import json
+import csv
+import io
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Use es.exe to list files or run a connectivity test"
+        description="Use es.exe to list files, run a connectivity test, or output in various formats"
     )
     parser.add_argument(
         "--search", required=False,
@@ -41,7 +46,15 @@ def parse_args():
     )
     parser.add_argument(
         "--all-fields", action="store_true",
-        help="Output all available fields"
+        help="Include all available fields in output"
+    )
+    parser.add_argument(
+        "--json", action="store_true",
+        help="Output results in JSON format (uses CSV export internally)"
+    )
+    parser.add_argument(
+        "--csv", action="store_true",
+        help="Export results via -csv and parse CSV"
     )
     parser.add_argument(
         "--test", action="store_true",
@@ -50,10 +63,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def main():
-    args = parse_args()
-
-    # Locate es.exe in PATH or current directory
+def locate_es():
     es_cmd = shutil.which("es.exe")
     if not es_cmd:
         local_path = os.path.join(os.getcwd(), "es.exe")
@@ -61,38 +71,34 @@ def main():
             es_cmd = local_path
     if not es_cmd:
         sys.exit("Error: 'es.exe' not found in PATH or current directory.")
+    return es_cmd
 
-    # Test mode: verify es.exe can find the hosts file and report its size
-    if args.test:
-        test_query = r"C:\\Windows\\System32\\drivers\\etc\\hosts"
-        cmd = [es_cmd, "-size", "-n", "1", test_query]
-        try:
-            result = subprocess.run(
-                cmd, capture_output=True, text=True, check=True
-            )
-        except subprocess.CalledProcessError as e:
-            sys.exit(f"Test failed: es.exe error: {e.stderr.strip()}")
 
-        output = result.stdout.strip()
-        size_token = output.split()[0] if output else "0"
-        try:
-            size = int(size_token)
-        except (ValueError, TypeError):
-            sys.exit(f"Test failed: invalid size '{size_token}' from output '{output}'")
+def run_test(es_cmd):
+    test_query = r"C:\\Windows\\System32\\drivers\\etc\\hosts"
+    cmd = [es_cmd, "-size", "-n", "1", test_query]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+    except subprocess.CalledProcessError as e:
+        sys.exit(f"Test failed: es.exe error: {e.stderr.strip()}")
 
-        if size > 1:
-            print(f"Test passed: hosts file found with size {size}.")
-            sys.exit(0)
-        else:
-            sys.exit(f"Test failed: hosts file size is {size}, expected > 1.")
+    output = result.stdout.strip()
+    size_token = output.split()[0] if output else "0"
+    try:
+        size = int(size_token)
+    except (ValueError, TypeError):
+        sys.exit(f"Test failed: invalid size '{size_token}' from output '{output}'")
 
-    # Normal search mode requires --search
-    if not args.search:
-        sys.exit("Error: --search is required unless --test is specified.")
+    if size > 1:
+        print(f"Test passed: hosts file found with size {size}.")
+        sys.exit(0)
+    else:
+        sys.exit(f"Test failed: hosts file size is {size}, expected > 1.")
 
-    # Determine display flags
-    if args.all_fields:
-        display_flags = [
+
+def build_field_config(all_fields):
+    if all_fields:
+        flags = [
             "-name",
             "-path-column",
             "-extension",
@@ -104,49 +110,108 @@ def main():
             "-file-list-file-name",
             "-run-count",
             "-date-run",
-            "-date-recently-changed"
+            "-date-recently-changed",
+            "-csv"
+        ]
+        names = [
+            "name",
+            "path",
+            "extension",
+            "size",
+            "date_created",
+            "date_modified",
+            "date_accessed",
+            "attributes",
+            "file_list_file_name",
+            "run_count",
+            "date_run",
+            "date_recently_changed"
         ]
     else:
-        display_flags = [
-            "-filename-column",
-            "-path-column",
-            "-size"
-        ]
+        flags = ["-name", "-path-column", "-size", "-csv"]
+        names = ["name", "path", "size"]
+    return flags, names
 
-    # Build es.exe command with chosen columns, offset, and count
-    cmd = [
-        es_cmd,
-        *display_flags,
-        "-offset", str(args.offset),
-        "-n", str(args.count),
-        args.search
-    ]
-    try:
-        result = subprocess.run(
-            cmd, capture_output=True, text=True, check=True
-        )
-    except subprocess.CalledProcessError as e:
-        sys.exit(f"Error running es.exe: {e.stderr.strip()}")
 
-    lines = result.stdout.splitlines()
-    if not lines:
-        print("No results found.")
-        return
+def parse_csv_text(csv_text, field_names):
+    records = []
+    f = io.StringIO(csv_text)
+    reader = csv.DictReader(f)
+    # Map CSV headers (with spaces) to internal field names
+    header_mapping = {
+        'Name': 'name',
+        'Filename': 'name',
+        'Path': 'path',
+        'Extension': 'extension',
+        'Size': 'size',
+        'Date Created': 'date_created',
+        'Date Modified': 'date_modified',
+        'Date Accessed': 'date_accessed',
+        'Attributes': 'attributes',
+        'File List File Name': 'file_list_file_name',
+        'Run Count': 'run_count',
+        'Date Run': 'date_run',
+        'Date Recently Changed': 'date_recently_changed'
+    }
+    for row in reader:
+        rec = {}
+        for orig, val in row.items():
+            key = header_mapping.get(orig)
+            if key:
+                rec[key] = val
+        # Ensure all requested fields exist
+        for name in field_names:
+            rec.setdefault(name, None)
+        records.append(rec)
+    return records
 
-    # Each line is tab-separated fields; print all fields or name/path as fallback
-    for line in lines:
-        parts = line.split("\t")
-        if args.all_fields:
-            print("\t".join(parts))
+
+def main():
+    args = parse_args()
+    es_cmd = locate_es()
+
+    if args.test:
+        run_test(es_cmd)
+
+    if not args.search:
+        sys.exit("Error: --search is required unless --test is specified.")
+
+    use_csv = args.csv or args.json
+    field_flags, field_names = build_field_config(args.all_fields)
+
+    records = []
+    if use_csv:
+        cmd = [es_cmd, *field_flags, args.search]
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        except subprocess.CalledProcessError as e:
+            sys.exit(f"Error exporting CSV: {e.stderr.strip()}")
+        records = parse_csv_text(result.stdout, field_names)
+    else:
+        # Fallback to default text output
+        text_flags, text_names = build_field_config(False)
+        cmd = [es_cmd, *text_flags, args.search]
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        except subprocess.CalledProcessError as e:
+            sys.exit(f"Error running es.exe: {e.stderr.strip()}")
+        for line in result.stdout.splitlines():
+            parts = line.split()
+            rec = {text_names[i]: parts[i] if i < len(parts) else None for i in range(len(text_names))}
+            records.append(rec)
+
+    if args.json:
+        json.dump(records, sys.stdout, ensure_ascii=False, indent=2)
+        print()
+    else:
+        if not records:
+            print("No results found.")
         else:
-            if len(parts) >= 2:
-                name = parts[0]
-                path = parts[1]
-            else:
-                full = parts[0]
-                name = os.path.basename(full)
-                path = full
-            print(f"{name}\t{path}")
+            for rec in records:
+                if args.all_fields:
+                    print("\t".join(str(rec.get(n, '')) for n in field_names))
+                else:
+                    print(rec.get('name', ''))
 
 if __name__ == "__main__":
     main()
