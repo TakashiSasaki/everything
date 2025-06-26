@@ -10,12 +10,14 @@ Features:
   - Support --search, --offset, --count options
   - Test mode (--test) verifies es.exe by searching for
     C:\\Windows\\System32\\drivers\\etc\\hosts and checking its size > 1
+  - Validates that es.exe is available in PATH or current directory before execution
 
 Requirements:
   - Everything must be installed and accessible in PATH or alongside the script
 """
 import argparse
 import os
+import shutil
 import subprocess
 import sys
 
@@ -46,10 +48,19 @@ def parse_args():
 def main():
     args = parse_args()
 
+    # Locate es.exe in PATH or current directory
+    es_cmd = shutil.which("es.exe")
+    if not es_cmd:
+        local_path = os.path.join(os.getcwd(), "es.exe")
+        if os.path.isfile(local_path) and os.access(local_path, os.X_OK):
+            es_cmd = local_path
+    if not es_cmd:
+        sys.exit("Error: 'es.exe' not found in PATH or current directory.")
+
     # Test mode: verify es.exe can find the hosts file and report its size
     if args.test:
         test_query = r"C:\Windows\System32\drivers\etc\hosts"
-        cmd = ["es.exe", "-size", "-n", "1", test_query]
+        cmd = [es_cmd, "-size", "-n", "1", test_query]
         try:
             result = subprocess.run(
                 cmd, capture_output=True, text=True, check=True
@@ -58,7 +69,6 @@ def main():
             sys.exit(f"Test failed: es.exe error: {e.stderr.strip()}")
 
         output = result.stdout.strip()
-        # es.exe returns '<size> <path>' on stdout, so split to extract size
         size_token = output.split()[0] if output else "0"
         try:
             size = int(size_token)
@@ -77,7 +87,7 @@ def main():
 
     # Build es.exe command with filename, path, and size columns, offset, and count
     cmd = [
-        "es.exe",
+        es_cmd,
         "-filename-column",
         "-path-column",
         "-size",
@@ -104,7 +114,6 @@ def main():
             name = parts[0]
             path = parts[1]
         else:
-            # Fallback: full path only
             full = parts[0]
             name = os.path.basename(full)
             path = full
