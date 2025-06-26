@@ -8,6 +8,7 @@ matching a given search query, or runs a connectivity test via subprocess.
 Features:
   - Perform search by invoking es.exe as a subprocess
   - Support --search, --offset, --count options
+  - Support --all-fields option to display all available fields
   - Test mode (--test) verifies es.exe by searching for
     C:\\Windows\\System32\\drivers\\etc\\hosts and checking its size > 1
   - Validates that es.exe is available in PATH or current directory before execution
@@ -39,6 +40,10 @@ def parse_args():
         help="Maximum number of results to return"
     )
     parser.add_argument(
+        "--all-fields", action="store_true",
+        help="Output all available fields"
+    )
+    parser.add_argument(
         "--test", action="store_true",
         help="Run connectivity test against es.exe"
     )
@@ -59,7 +64,7 @@ def main():
 
     # Test mode: verify es.exe can find the hosts file and report its size
     if args.test:
-        test_query = r"C:\Windows\System32\drivers\etc\hosts"
+        test_query = r"C:\\Windows\\System32\\drivers\\etc\\hosts"
         cmd = [es_cmd, "-size", "-n", "1", test_query]
         try:
             result = subprocess.run(
@@ -85,12 +90,33 @@ def main():
     if not args.search:
         sys.exit("Error: --search is required unless --test is specified.")
 
-    # Build es.exe command with filename, path, and size columns, offset, and count
+    # Determine display flags
+    if args.all_fields:
+        display_flags = [
+            "-name",
+            "-path-column",
+            "-extension",
+            "-size",
+            "-date-created",
+            "-date-modified",
+            "-date-accessed",
+            "-attributes",
+            "-file-list-file-name",
+            "-run-count",
+            "-date-run",
+            "-date-recently-changed"
+        ]
+    else:
+        display_flags = [
+            "-filename-column",
+            "-path-column",
+            "-size"
+        ]
+
+    # Build es.exe command with chosen columns, offset, and count
     cmd = [
         es_cmd,
-        "-filename-column",
-        "-path-column",
-        "-size",
+        *display_flags,
         "-offset", str(args.offset),
         "-n", str(args.count),
         args.search
@@ -107,18 +133,20 @@ def main():
         print("No results found.")
         return
 
-    # Each line is tab-separated: <name>\t<path>\t<size>
+    # Each line is tab-separated fields; print all fields or name/path as fallback
     for line in lines:
         parts = line.split("\t")
-        if len(parts) >= 2:
-            name = parts[0]
-            path = parts[1]
+        if args.all_fields:
+            print("\t".join(parts))
         else:
-            full = parts[0]
-            name = os.path.basename(full)
-            path = full
-        print(f"{name}\t{path}")
-
+            if len(parts) >= 2:
+                name = parts[0]
+                path = parts[1]
+            else:
+                full = parts[0]
+                name = os.path.basename(full)
+                path = full
+            print(f"{name}\t{path}")
 
 if __name__ == "__main__":
     main()
