@@ -1,6 +1,6 @@
 # test_everything_file_list_testmode.py
 """
-Test script for everything_file_list.py
+Test script for file_list.py
 
 - Verifies '--test' (plain text) output.
 - Verifies '--test --json' output.
@@ -13,7 +13,7 @@ import sys
 import json
 
 def run_command(args):
-    cmd = [sys.executable, "everything_file_list.py"] + args
+    cmd = [sys.executable, "file_list.py"] + args
     try:
         result = subprocess.run(
             cmd,

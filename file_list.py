@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-everything_file_list.py
+file_list.py
 
 This script connects to the Everything HTTP API and retrieves a list of files
 matching a given search query, or runs a connectivity test.
