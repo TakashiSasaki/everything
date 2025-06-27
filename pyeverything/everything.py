@@ -1,0 +1,111 @@
+#!/usr/bin/env python3
+"""
+pyeverything.everything
+
+This module provides the Everything class for interacting with the Everything search engine.
+"""
+import ctypes
+from ctypes import wintypes
+import datetime
+import os
+import sys
+from .dll import load_everything_dll, init_functions, filetime_to_dt, EVERYTHING_REQUEST_FILE_NAME, EVERYTHING_REQUEST_PATH, EVERYTHING_REQUEST_SIZE
+
+class Everything:
+    """A class to interact with the Everything search engine."""
+
+    def __init__(self):
+        """Initializes the Everything class and loads the DLL."""
+        self.dll = load_everything_dll()
+        init_functions(self.dll)
+
+    def search(self, query, offset=0, count=100, all_fields=False):
+        """
+        Performs a search using the Everything search engine.
+
+        Args:
+            query (str): The search query.
+            offset (int): The offset of the results.
+            count (int): The maximum number of results to return.
+            all_fields (bool): Whether to request all available fields.
+
+        Returns:
+            list: A list of dictionaries representing the search results.
+        """
+        self.dll.Everything_SetSearchW(query)
+        self.dll.Everything_SetMatchPath(True)
+        flags = EVERYTHING_REQUEST_ALL if all_fields else (
+            EVERYTHING_REQUEST_FILE_NAME |
+            EVERYTHING_REQUEST_PATH |
+            EVERYTHING_REQUEST_SIZE
+        )
+        self.dll.Everything_SetRequestFlags(flags)
+        self.dll.Everything_SetOffset(offset)
+        self.dll.Everything_SetMax(count)
+        if not self.dll.Everything_QueryW(True):
+            sys.exit("Error: Everything query failed.")
+        total = self.dll.Everything_GetNumResults()
+        results = []
+        buf = ctypes.create_unicode_buffer(260)
+        for i in range(total):
+            self.dll.Everything_GetResultFullPathNameW(i, buf, 260)
+            path = buf.value
+            size_var = ctypes.c_ulonglong()
+            self.dll.Everything_GetResultSize(i, ctypes.byref(size_var))
+            size = size_var.value
+            name = os.path.basename(path)
+            if all_fields:
+                ext_buf = ctypes.create_unicode_buffer(50)
+                self.dll.Everything_GetResultExtensionW(i, ext_buf, 50)
+                ext = ext_buf.value
+                ft_created = wintypes.FILETIME()
+                self.dll.Everything_GetResultDateCreated(i, ctypes.byref(ft_created))
+                dc = filetime_to_dt(ft_created)
+                ft_modified = wintypes.FILETIME()
+                self.dll.Everything_GetResultDateModified(i, ctypes.byref(ft_modified))
+                dm = filetime_to_dt(ft_modified)
+                ft_accessed = wintypes.FILETIME()
+                self.dll.Everything_GetResultDateAccessed(i, ctypes.byref(ft_accessed))
+                da = filetime_to_dt(ft_accessed)
+                attr = self.dll.Everything_GetResultAttributes(i)
+                flfn_buf = ctypes.create_unicode_buffer(260)
+                self.dll.Everything_GetResultFileListFileNameW(i, flfn_buf, 260)
+                flfn = flfn_buf.value
+                rc = self.dll.Everything_GetResultRunCount(i)
+                ft_run = wintypes.FILETIME()
+                self.dll.Everything_GetResultDateRun(i, ctypes.byref(ft_run))
+                dr = filetime_to_dt(ft_run)
+                ft_recent = wintypes.FILETIME()
+                self.dll.Everything_GetResultDateRecentlyChanged(i, ctypes.byref(ft_recent))
+                drc = filetime_to_dt(ft_recent)
+                hfn_buf = ctypes.create_unicode_buffer(260)
+                self.dll.Everything_GetResultHighlightedFileNameW(i, hfn_buf, 260)
+                hfn = hfn_buf.value
+                hp_buf = ctypes.create_unicode_buffer(260)
+                self.dll.Everything_GetResultHighlightedPathW(i, hp_buf, 260)
+                hp = hp_buf.value
+                hfp_buf = ctypes.create_unicode_buffer(260)
+                self.dll.Everything_GetResultHighlightedFullPathAndFileNameW(i, hfp_buf, 260)
+                hfp = hfp_buf.value
+                results.append({
+                    "name": name,
+                    "path": path,
+                    "size": size,
+                    "extension": ext,
+                    "date_created": dc.isoformat() if dc else None,
+                    "date_modified": dm.isoformat() if dm else None,
+                    "date_accessed": da.isoformat() if da else None,
+                    "attributes": attr,
+                    "list_file_name": flfn,
+                    "run_count": rc,
+                    "date_run": dr.isoformat() if dr else None,
+                    "date_recently_changed": drc.isoformat() if drc else None,
+                    "highlighted_file_name": hfn,
+                    "highlighted_path": hp,
+                    "highlighted_full_path": hfp
+                })
+            else:
+                results.append({"name": name, "path": path, "size": size})
+        self.dll.Everything_CleanUp()
+        return results
+
