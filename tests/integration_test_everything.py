@@ -100,5 +100,24 @@ class TestEverythingIntegration(unittest.TestCase):
             everything.set_match_whole_word(False)
             mock_dll.Everything_SetMatchWholeWord.assert_called_with(False)
 
+            mock_dll.Everything_SetMatchWholeWord.assert_called_with(False)
+
+    def test_set_regex_integration(self):
+        """Integration test: Verify set_regex calls the DLL function correctly."""
+        with patch('pyeverything.everything.load_everything_dll') as mock_load_dll, \
+             patch('pyeverything.everything.init_functions') as mock_init_functions:
+            mock_dll = MagicMock()
+            mock_load_dll.return_value = mock_dll
+
+            everything = Everything()
+
+            # Test with True
+            everything.set_regex(True)
+            mock_dll.Everything_SetRegex.assert_called_with(True)
+
+            # Test with False
+            everything.set_regex(False)
+            mock_dll.Everything_SetRegex.assert_called_with(False)
+
 if __name__ == '__main__':
     unittest.main()
