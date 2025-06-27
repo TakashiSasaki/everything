@@ -3,7 +3,7 @@ name = "everything-cli"
 include = ["everything_cli/bin/"]
 version = "0.1.0"
 description = "A CLI tool for interacting with Everything search engine"
-authors = ["Your Name <you@example.com>"]
+authors = ["Takashi Sasaki <takashi316@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
