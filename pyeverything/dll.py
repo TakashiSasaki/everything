@@ -244,6 +244,7 @@ def run_search(dll, query, offset, count, all_fields=False):
         size_var = ctypes.c_ulonglong()
         dll.Everything_GetResultSize(i, ctypes.byref(size_var))
         size = size_var.value
+        print(f"DEBUG_DLL: id(os) in dll.run_search: {id(os)}", flush=True)
         print(f"DEBUG_DLL: Before os.path.basename: path='{path}', type(path)={type(path)}", flush=True)
         name = os.path.basename(path)
         print(f"DEBUG_DLL: After os.path.basename: name='{name}', type(name)={type(name)}", flush=True)
