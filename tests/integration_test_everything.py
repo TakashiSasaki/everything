@@ -119,5 +119,21 @@ class TestEverythingIntegration(unittest.TestCase):
             everything.set_regex(False)
             mock_dll.Everything_SetRegex.assert_called_with(False)
 
+            mock_dll.Everything_SetRegex.assert_called_with(False)
+
+    def test_set_request_flags_integration(self):
+        """Integration test: Verify set_request_flags calls the DLL function correctly."""
+        with patch('pyeverything.everything.load_everything_dll') as mock_load_dll, \
+             patch('pyeverything.everything.init_functions') as mock_init_functions:
+            mock_dll = MagicMock()
+            mock_load_dll.return_value = mock_dll
+
+            everything = Everything()
+
+            # Test with a sample flag value
+            test_flags = 0x00000001 # Example flag
+            everything.set_request_flags(test_flags)
+            mock_dll.Everything_SetRequestFlags.assert_called_with(test_flags)
+
 if __name__ == '__main__':
     unittest.main()
