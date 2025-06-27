@@ -125,6 +125,14 @@ class Everything:
         """
         self.dll.Everything_SetMatchWholeWord(enable)
 
+    def set_request_flags(self, flags: int):
+        """Sets the request flags for the next search.
+
+        Args:
+            flags (int): The flags to set.
+        """
+        self.dll.Everything_SetRequestFlags(flags)
+
     def set_regex(self, enable: bool):
         """Enables or disables regex matching.
 

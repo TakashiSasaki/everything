@@ -102,5 +102,18 @@ class TestEverything(unittest.TestCase):
         everything.set_regex(False)
         everything.dll.Everything_SetRegex.assert_called_with(False)
 
+    @patch('pyeverything.everything.load_everything_dll')
+    @patch('pyeverything.everything.init_functions')
+    def test_set_request_flags(self, mock_init_functions, mock_load_dll):
+        """Test setting the request flags."""
+        mock_dll = MagicMock()
+        mock_load_dll.return_value = mock_dll
+
+        everything = Everything()
+
+        test_flags = 0x00000001 | 0x00000002  # Example flags
+        everything.set_request_flags(test_flags)
+        everything.dll.Everything_SetRequestFlags.assert_called_with(test_flags)
+
 if __name__ == '__main__':
     unittest.main()
