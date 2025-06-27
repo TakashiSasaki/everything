@@ -51,5 +51,22 @@ class TestEverything(unittest.TestCase):
         # Assertions
         self.assertIsInstance(results, list)
 
+    @patch('pyeverything.everything.load_everything_dll')
+    @patch('pyeverything.everything.init_functions')
+    def test_set_match_case(self, mock_init_functions, mock_load_dll):
+        """Test setting the match case option."""
+        mock_dll = MagicMock()
+        mock_load_dll.return_value = mock_dll
+
+        everything = Everything()
+
+        # Test with True (case-sensitive)
+        everything.set_match_case(True)
+        everything.dll.Everything_SetMatchCase.assert_called_with(True)
+
+        # Test with False (case-insensitive)
+        everything.set_match_case(False)
+        everything.dll.Everything_SetMatchCase.assert_called_with(False)
+
 if __name__ == '__main__':
     unittest.main()

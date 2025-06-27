@@ -109,3 +109,11 @@ class Everything:
         self.dll.Everything_CleanUp()
         return results
 
+    def set_match_case(self, enable: bool):
+        """Enables or disables case-sensitive searching.
+
+        Args:
+            enable (bool): True for case-sensitive, False for case-insensitive.
+        """
+        self.dll.Everything_SetMatchCase(enable)
+
