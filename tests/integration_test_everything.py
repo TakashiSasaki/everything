@@ -8,6 +8,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from pyeverything.everything import Everything
+from pyeverything.dll import EVERYTHING_SORT_DATE_MODIFIED_DESCENDING
 
 class TestEverythingIntegration(unittest.TestCase):
 
@@ -15,6 +16,8 @@ class TestEverythingIntegration(unittest.TestCase):
         # Initialize the Everything class for integration tests
         self.everything = Everything()
         self.everything.dll.Everything_Reset()
+        # Set default sort order to Date Modified Descending to ensure new files are visible
+        self.everything.set_sort_order(EVERYTHING_SORT_DATE_MODIFIED_DESCENDING)
 
     def test_search_hosts_file_integration(self):
         """Integration test: Search for C:\Windows\System32\drivers\etc\hosts"""

@@ -170,3 +170,11 @@ class Everything:
         """Sorts the current search results by path, then by file name."""
         self.dll.Everything_SortResultsByPath()
 
+    def set_sort_order(self, sort_type: int):
+        """Sets the sort order for the next search.
+
+        Args:
+            sort_type (int): The type of sort to apply (e.g., EVERYTHING_SORT_DATE_MODIFIED_DESCENDING).
+        """
+        self.dll.Everything_SetSort(sort_type)
+

@@ -47,6 +47,42 @@ EVERYTHING_REQUEST_HIGHLIGHTED_FILE_NAME            = 0x00002000
 EVERYTHING_REQUEST_HIGHLIGHTED_PATH                 = 0x00004000
 EVERYTHING_REQUEST_HIGHLIGHTED_FULL_PATH_AND_FILE_NAME = 0x00008000
 
+# Everything SDK sort types
+EVERYTHING_SORT_NAME                                = 1
+EVERYTHING_SORT_PATH                                = 2
+EVERYTHING_SORT_SIZE                                = 3
+EVERYTHING_SORT_EXTENSION                           = 4
+EVERYTHING_SORT_TYPE                                = 5
+EVERYTHING_SORT_DATE_CREATED                        = 6
+EVERYTHING_SORT_DATE_MODIFIED                       = 7
+EVERYTHING_SORT_DATE_ACCESSED                       = 8
+EVERYTHING_SORT_RUN_COUNT                           = 9
+EVERYTHING_SORT_DATE_RUN                            = 10
+EVERYTHING_SORT_ATTRIBUTES                          = 11
+
+# Everything SDK sort order
+EVERYTHING_SORT_ASCENDING                           = 0
+EVERYTHING_SORT_DESCENDING                          = 1
+
+# Everything SDK sort types
+EVERYTHING_SORT_NAME                                = 1
+EVERYTHING_SORT_PATH                                = 2
+EVERYTHING_SORT_SIZE                                = 3
+EVERYTHING_SORT_EXTENSION                           = 4
+EVERYTHING_SORT_TYPE                                = 5
+EVERYTHING_SORT_DATE_CREATED_ASCENDING            = 6
+EVERYTHING_SORT_DATE_MODIFIED_ASCENDING           = 7
+EVERYTHING_SORT_DATE_ACCESSED_ASCENDING           = 8
+EVERYTHING_SORT_RUN_COUNT_ASCENDING               = 9
+EVERYTHING_SORT_DATE_RUN_ASCENDING                = 10
+EVERYTHING_SORT_ATTRIBUTES_ASCENDING              = 11
+EVERYTHING_SORT_DATE_CREATED_DESCENDING           = 12
+EVERYTHING_SORT_DATE_MODIFIED_DESCENDING          = 13
+EVERYTHING_SORT_DATE_ACCESSED_DESCENDING          = 14
+EVERYTHING_SORT_RUN_COUNT_DESCENDING              = 15
+EVERYTHING_SORT_DATE_RUN_DESCENDING               = 16
+EVERYTHING_SORT_ATTRIBUTES_DESCENDING             = 17
+
 # Combined flag for all fields
 EVERYTHING_REQUEST_ALL = (
     EVERYTHING_REQUEST_FILE_NAME |
@@ -118,6 +154,13 @@ def init_functions(dll):
     
     
     dll.Everything_GetNumResults.restype                 = wintypes.DWORD
+
+    dll.Everything_SetSort.argtypes                      = [wintypes.DWORD]
+    dll.Everything_SetSort.restype                       = None
+
+    
+
+    
 
     
     dll.Everything_GetResultFullPathNameW.argtypes       = [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
