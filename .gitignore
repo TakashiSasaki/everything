@@ -5,3 +5,6 @@ __pycache__/
 poetry.lock
 commit_message.txt
 COMMIT_EDITMSG
+docs/Everything.h
+docs/Everything64.def
+docs/Everything.c
