@@ -240,9 +240,7 @@ class TestDllList(unittest.TestCase):
             self.assertIn("name", results_basic[0])
             self.assertIn("path", results_basic[0])
             self.assertIn("size", results_basic[0])
-            # Temporarily modify assertion for debugging
-            import os # Add import for os.path.basename
-            self.assertEqual(results_basic[0]["name"], os.path.basename(r"C:\test\path\file.txt"))
+            self.assertEqual(results_basic[0]["name"], "file.txt")
             self.assertEqual(results_basic[0]["path"], r"C:\test\path\file.txt")
             self.assertEqual(results_basic[0]["size"], 12345)
             self.assertNotIn("extension", results_basic[0]) # Should not be present in basic
