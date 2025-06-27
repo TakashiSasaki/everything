@@ -154,5 +154,28 @@ class TestEverythingIntegration(unittest.TestCase):
             everything.set_max(test_max_results)
             mock_dll.Everything_SetMax.assert_called_with(test_max_results)
 
+            test_max_results = 0
+            everything.set_max(test_max_results)
+            mock_dll.Everything_SetMax.assert_called_with(test_max_results)
+
+    def test_set_offset_integration(self):
+        """Integration test: Verify set_offset calls the DLL function correctly."""
+        with patch('pyeverything.everything.load_everything_dll') as mock_load_dll, \
+             patch('pyeverything.everything.init_functions') as mock_init_functions:
+            mock_dll = MagicMock()
+            mock_load_dll.return_value = mock_dll
+
+            everything = Everything()
+
+            # Test with a sample offset value
+            test_offset = 50
+            everything.set_offset(test_offset)
+            mock_dll.Everything_SetOffset.assert_called_with(test_offset)
+
+            # Test with another value
+            test_offset = 0
+            everything.set_offset(test_offset)
+            mock_dll.Everything_SetOffset.assert_called_with(test_offset)
+
 if __name__ == '__main__':
     unittest.main()
