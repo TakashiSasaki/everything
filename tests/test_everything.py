@@ -115,5 +115,33 @@ class TestEverything(unittest.TestCase):
         everything.set_request_flags(test_flags)
         everything.dll.Everything_SetRequestFlags.assert_called_with(test_flags)
 
+    @patch('pyeverything.everything.load_everything_dll')
+    @patch('pyeverything.everything.init_functions')
+    def test_set_max(self, mock_init_functions, mock_load_dll):
+        """Test setting the maximum number of results."""
+        mock_dll = MagicMock()
+        mock_load_dll.return_value = mock_dll
+
+        everything = Everything()
+
+        test_max_results = 500
+        everything.set_max(test_max_results)
+        everything.dll.Everything_SetMax.assert_called_with(test_max_results)
+
+        everything.dll.Everything_SetMax.assert_called_with(test_max_results)
+
+    @patch('pyeverything.everything.load_everything_dll')
+    @patch('pyeverything.everything.init_functions')
+    def test_set_offset(self, mock_init_functions, mock_load_dll):
+        """Test setting the offset."""
+        mock_dll = MagicMock()
+        mock_load_dll.return_value = mock_dll
+
+        everything = Everything()
+
+        test_offset = 100
+        everything.set_offset(test_offset)
+        everything.dll.Everything_SetOffset.assert_called_with(test_offset)
+
 if __name__ == '__main__':
     unittest.main()

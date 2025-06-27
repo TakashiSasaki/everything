@@ -141,3 +141,19 @@ class Everything:
         """
         self.dll.Everything_SetRegex(enable)
 
+    def set_max(self, max_results: int):
+        """Sets the maximum number of results to return.
+
+        Args:
+            max_results (int): The maximum number of results.
+        """
+        self.dll.Everything_SetMax(max_results)
+
+    def set_offset(self, offset: int):
+        """Sets the offset for the next search.
+
+        Args:
+            offset (int): The offset of the results.
+        """
+        self.dll.Everything_SetOffset(offset)
+
