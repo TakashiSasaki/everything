@@ -90,10 +90,9 @@ def run_test(es_cmd):
         sys.exit(f"Test failed: invalid size '{size_token}' from output '{output}'")
 
     if size > 1:
-        print(f"Test passed: hosts file found with size {size}.")
-        sys.exit(0)
+        return {"passed": True, "size": size, "message": f"Test passed: hosts file found with size {size}."}
     else:
-        sys.exit(f"Test failed: hosts file size is {size}, expected > 1.")
+        return {"passed": False, "size": size, "message": f"Test failed: hosts file size is {size}, expected > 1."}
 
 
 def build_field_config(all_fields):
@@ -171,7 +170,15 @@ def main():
     es_cmd = locate_es()
 
     if args.test:
-        run_test(es_cmd)
+        test_result = run_test(es_cmd)
+        if args.json:
+            json.dump(test_result, sys.stdout, ensure_ascii=False, indent=2)
+            sys.stdout.write('\n')
+            sys.exit(0)
+        else:
+            print(test_result["message"])
+            sys.exit(0)
+        
 
     if not args.search:
         sys.exit("Error: --search is required unless --test is specified.")
@@ -202,16 +209,16 @@ def main():
 
     if args.json:
         json.dump(records, sys.stdout, ensure_ascii=False, indent=2)
-        print()
+        sys.stdout.write('\n')
+        sys.exit(0)
+    elif not records:
+        print("No results found.")
     else:
-        if not records:
-            print("No results found.")
-        else:
-            for rec in records:
-                if args.all_fields:
-                    print("\t".join(str(rec.get(n, '')) for n in field_names))
-                else:
-                    print(rec.get('name', ''))
+        for rec in records:
+            if args.all_fields:
+                print("\t".join(str(rec.get(n, '')) for n in field_names))
+            else:
+                print(rec.get('name', ''))
 
 if __name__ == "__main__":
     main()
