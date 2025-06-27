@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import unittest
+from unittest.mock import patch, MagicMock
 import os
 import sys
 
@@ -76,6 +77,28 @@ class TestEverythingIntegration(unittest.TestCase):
             # Clean up the temporary file
             if os.path.exists(temp_file_path):
                 os.remove(temp_file_path)
+
+            if os.path.exists(temp_file_path):
+                os.remove(temp_file_path)
+
+    def test_set_match_whole_word_integration(self):
+        """Integration test: Verify set_match_whole_word calls the DLL function correctly."""
+        # We need to patch the DLL functions for this test, as we are not testing search behavior
+        # but rather the correct calling of the DLL function.
+        with patch('pyeverything.everything.load_everything_dll') as mock_load_dll, \
+             patch('pyeverything.everything.init_functions') as mock_init_functions:
+            mock_dll = MagicMock()
+            mock_load_dll.return_value = mock_dll
+
+            everything = Everything()
+
+            # Test with True
+            everything.set_match_whole_word(True)
+            mock_dll.Everything_SetMatchWholeWord.assert_called_with(True)
+
+            # Test with False
+            everything.set_match_whole_word(False)
+            mock_dll.Everything_SetMatchWholeWord.assert_called_with(False)
 
 if __name__ == '__main__':
     unittest.main()
