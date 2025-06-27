@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "everything-cli"
-include = ["everything_cli/bin/"]
+name = "pyeverything"
+include = ["pyeverything/bin/"]
 version = "0.1.0"
 description = "A CLI tool for interacting with Everything search engine"
 authors = ["Takashi Sasaki <takashi316@gmail.com>"]
@@ -16,9 +16,9 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-everything-dll = "everything_cli.dll:main"
-everything-es = "everything_cli.es:main"
-everything-http = "everything_cli.http:main"
+everything-dll = "pyeverything.dll:main"
+everything-es = "pyeverything.es:main"
+everything-http = "pyeverything.http:main"
 
 
 

@@ -13,7 +13,7 @@ import sys
 import json
 
 def run_command(args):
-    cmd = [sys.executable, "-m", "everything_cli.http"] + args
+    cmd = [sys.executable, "-m", "pyeverything.http"] + args
     try:
         result = subprocess.run(
             cmd,

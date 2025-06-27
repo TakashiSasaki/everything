@@ -7,7 +7,7 @@ import unittest
 from unittest import mock
 from io import StringIO
 
-SCRIPT_MODULE = "everything_cli.es"
+SCRIPT_MODULE = "pyeverything.es"
 
 class TestEsSearch(unittest.TestCase):
     def setUp(self):
@@ -17,9 +17,9 @@ class TestEsSearch(unittest.TestCase):
     def tearDown(self):
         sys.stdout = self.original_stdout
 
-    @mock.patch('everything_cli.es.parse_csv_text')
-    @mock.patch('everything_cli.es.subprocess.run')
-    @mock.patch('everything_cli.es.locate_es', return_value='/mock/es.exe')
+    @mock.patch('pyeverything.es.parse_csv_text')
+    @mock.patch('pyeverything.es.subprocess.run')
+    @mock.patch('pyeverything.es.locate_es', return_value='/mock/es.exe')
     @mock.patch('sys.argv', ['es.py', '--search', 'windows system32 drivers etc hosts.ics', '--json'])
     def test_search_json_option(self, mock_locate_es, mock_run, mock_parse_csv_text):
         mock_run.return_value = mock.Mock(
@@ -35,7 +35,7 @@ class TestEsSearch(unittest.TestCase):
             }
         ]
 
-        from everything_cli.es import main
+        from pyeverything.es import main
         with self.assertRaises(SystemExit) as cm:
             main()
         self.assertEqual(cm.exception.code, 0)
@@ -43,9 +43,9 @@ class TestEsSearch(unittest.TestCase):
         data = json.loads(stdout)
         self.assertEqual(data, mock_parse_csv_text.return_value)
 
-    @mock.patch('everything_cli.es.parse_csv_text')
-    @mock.patch('everything_cli.es.subprocess.run')
-    @mock.patch('everything_cli.es.locate_es', return_value='/mock/es.exe')
+    @mock.patch('pyeverything.es.parse_csv_text')
+    @mock.patch('pyeverything.es.subprocess.run')
+    @mock.patch('pyeverything.es.locate_es', return_value='/mock/es.exe')
     @mock.patch('sys.argv', ['es.py', '--search', 'windows system32 drivers etc hosts.ics', '--json', '--all-fields'])
     def test_search_allfields_json_option(self, mock_locate_es, mock_run, mock_parse_csv_text):
         mock_run.return_value = mock.Mock(
@@ -70,7 +70,7 @@ class TestEsSearch(unittest.TestCase):
             }
         ]
 
-        from everything_cli.es import main
+        from pyeverything.es import main
         with self.assertRaises(SystemExit) as cm:
             main()
         self.assertEqual(cm.exception.code, 0)
@@ -90,7 +90,7 @@ class TestEsLocateEs(unittest.TestCase):
         mock_access.return_value = True
         mock_join.side_effect = lambda *args: '/'.join(args) # Simulate os.path.join behavior
 
-        from everything_cli.es import locate_es
+        from pyeverything.es import locate_es
         result = locate_es()
         self.assertEqual(result, '/path/to/es.exe')
         mock_which.assert_called_once_with('es.exe')
@@ -111,7 +111,7 @@ class TestEsLocateEs(unittest.TestCase):
         mock_isfile.side_effect = [True, False] # True for bin_path, False for local_path
         mock_access.side_effect = [True, False] # True for bin_path, False for local_path
 
-        from everything_cli.es import locate_es
+        from pyeverything.es import locate_es
         result = locate_es()
         self.assertEqual(result, '/mock/script/dir/bin/es.exe')
         mock_which.assert_called_once_with('es.exe')
@@ -133,7 +133,7 @@ class TestEsLocateEs(unittest.TestCase):
         mock_isfile.side_effect = [False, True] # False for bin_path, True for local_path
         mock_access.side_effect = [True] # Only one call to access is expected
 
-        from everything_cli.es import locate_es
+        from pyeverything.es import locate_es
         result = locate_es()
         self.assertEqual(result, '/mock/current/dir/es.exe')
         mock_which.assert_called_once_with('es.exe')
@@ -149,7 +149,7 @@ class TestEsLocateEs(unittest.TestCase):
     @mock.patch('os.getcwd', return_value='/mock/current/dir')
     def test_locate_es_not_found(self, mock_getcwd, mock_join, mock_dirname, mock_access, mock_isfile, mock_which):
         mock_join.side_effect = lambda *args: '/'.join(args) # Simulate os.path.join behavior
-        from everything_cli.es import locate_es
+        from pyeverything.es import locate_es
         with self.assertRaisesRegex(SystemExit, "Error: 'es.exe' not found in PATH, package bin directory, or current directory."):
             locate_es()
         mock_which.assert_called_once_with('es.exe')

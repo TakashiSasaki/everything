@@ -62,13 +62,13 @@ class MockDll:
         self.Everything_GetResultHighlightedFullPathAndFileNameW = mock.Mock()
         self.Everything_CleanUp = mock.Mock()
 
-from everything_cli import dll as dll_list
-from everything_cli.dll import filetime_to_dt
+from pyeverything import dll as dll_list
+from pyeverything.dll import filetime_to_dt
 
 class TestDllList(unittest.TestCase):
-    @mock.patch('everything_cli.dll.load_everything_dll')
-    @mock.patch('everything_cli.dll.init_functions')
-    @mock.patch('everything_cli.dll.run_search')
+    @mock.patch('pyeverything.dll.load_everything_dll')
+    @mock.patch('pyeverything.dll.init_functions')
+    @mock.patch('pyeverything.dll.run_search')
     def test_test_option_output_text(self, mock_run_search, mock_init, mock_load):
         # Simulate a search result for the hosts file
         mock_run_search.return_value = [
@@ -88,9 +88,9 @@ class TestDllList(unittest.TestCase):
                 r'^Test passed: hosts file found, size \d+\.$'
             )
 
-    @mock.patch('everything_cli.dll.load_everything_dll')
-    @mock.patch('everything_cli.dll.init_functions')
-    @mock.patch('everything_cli.dll.run_search')
+    @mock.patch('pyeverything.dll.load_everything_dll')
+    @mock.patch('pyeverything.dll.init_functions')
+    @mock.patch('pyeverything.dll.run_search')
     def test_test_option_output_json(self, mock_run_search, mock_init, mock_load):
         mock_run_search.return_value = [
             {'path': r'C:\Windows\System32\drivers\etc\hosts', 'size': 959}
@@ -106,9 +106,9 @@ class TestDllList(unittest.TestCase):
             self.assertTrue(data.get("passed") is True)
             self.assertIsInstance(data.get("size"), int)
 
-    @mock.patch('everything_cli.dll.load_everything_dll')
-    @mock.patch('everything_cli.dll.init_functions')
-    @mock.patch('everything_cli.dll.run_search')
+    @mock.patch('pyeverything.dll.load_everything_dll')
+    @mock.patch('pyeverything.dll.init_functions')
+    @mock.patch('pyeverything.dll.run_search')
     def test_search_option_output_json(self, mock_run_search, mock_init, mock_load):
         # Simulate a search result for a hosts.ics file
         mock_run_search.return_value = [
@@ -138,9 +138,9 @@ class TestDllList(unittest.TestCase):
             self.assertEqual(entry.get('path'), r'C:\Windows\System32\drivers\etc\hosts.ics')
             self.assertIsInstance(entry.get('size'), int)
 
-    @mock.patch('everything_cli.dll.load_everything_dll')
-    @mock.patch('everything_cli.dll.init_functions')
-    @mock.patch('everything_cli.dll.run_search')
+    @mock.patch('pyeverything.dll.load_everything_dll')
+    @mock.patch('pyeverything.dll.init_functions')
+    @mock.patch('pyeverything.dll.run_search')
     def test_search_option_output_json_all_fields(self, mock_run_search, mock_init, mock_load):
         # Simulate a search result with all fields
         mock_run_search.return_value = [
@@ -195,10 +195,10 @@ class TestDllList(unittest.TestCase):
             self.assertIn('highlighted_path', entry)
             self.assertIn('highlighted_full_path', entry)
 
-    @mock.patch('everything_cli.dll.ctypes.create_unicode_buffer')
-    @mock.patch('everything_cli.dll.ctypes.c_ulonglong')
-    @mock.patch('everything_cli.dll.ctypes.byref')
-    @mock.patch('everything_cli.dll.wintypes.FILETIME')
+    @mock.patch('pyeverything.dll.ctypes.create_unicode_buffer')
+    @mock.patch('pyeverything.dll.ctypes.c_ulonglong')
+    @mock.patch('pyeverything.dll.ctypes.byref')
+    @mock.patch('pyeverything.dll.wintypes.FILETIME')
     def test_run_search(self, mock_filetime, mock_byref, mock_c_ulonglong, mock_create_unicode_buffer):
         mock_dll = MockDll()
         mock_dll.Everything_QueryW.return_value = True
@@ -227,7 +227,7 @@ class TestDllList(unittest.TestCase):
         mock_filetime_instance = mock.Mock()
         mock_filetime.return_value = mock_filetime_instance
         # Simulate a valid datetime for date_created, modified, accessed, run, recently_changed
-        with mock.patch('everything_cli.dll.filetime_to_dt', side_effect=[
+        with mock.patch('pyeverything.dll.filetime_to_dt', side_effect=[
             datetime.datetime(2023, 1, 1), # created
             datetime.datetime(2023, 1, 2), # modified
             datetime.datetime(2023, 1, 3), # accessed
