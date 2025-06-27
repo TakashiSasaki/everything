@@ -112,6 +112,7 @@ def init_functions(dll):
     dll.Everything_SetMatchCase.argtypes                 = [wintypes.BOOL]
     dll.Everything_SetMatchWholeWord.argtypes            = [wintypes.BOOL]
     dll.Everything_SetRegex.argtypes                     = [wintypes.BOOL]
+    dll.Everything_SortResultsByPath.argtypes            = []
     dll.Everything_QueryW.argtypes                       = [wintypes.BOOL]
     dll.Everything_QueryW.restype                        = wintypes.BOOL
     dll.Everything_GetNumResults.argtypes                = []

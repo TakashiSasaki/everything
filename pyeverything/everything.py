@@ -157,3 +157,7 @@ class Everything:
         """
         self.dll.Everything_SetOffset(offset)
 
+    def sort_results_by_path(self):
+        """Sorts the current search results by path, then by file name."""
+        self.dll.Everything_SortResultsByPath()
+

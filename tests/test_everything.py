@@ -143,5 +143,19 @@ class TestEverything(unittest.TestCase):
         everything.set_offset(test_offset)
         everything.dll.Everything_SetOffset.assert_called_with(test_offset)
 
+        everything.dll.Everything_SetOffset.assert_called_with(test_offset)
+
+    @patch('pyeverything.everything.load_everything_dll')
+    @patch('pyeverything.everything.init_functions')
+    def test_sort_results_by_path(self, mock_init_functions, mock_load_dll):
+        """Test sorting results by path."""
+        mock_dll = MagicMock()
+        mock_load_dll.return_value = mock_dll
+
+        everything = Everything()
+
+        everything.sort_results_by_path()
+        everything.dll.Everything_SortResultsByPath.assert_called_once()
+
 if __name__ == '__main__':
     unittest.main()
