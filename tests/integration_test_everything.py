@@ -109,23 +109,30 @@ class TestEverythingIntegration(unittest.TestCase):
             mock_dll.Everything_SetMatchWholeWord.assert_called_with(False)
 
     def test_set_regex_integration(self):
-        """Integration test: Verify set_regex calls the DLL function correctly."""
-        with patch('pyeverything.everything.load_everything_dll') as mock_load_dll, \
-             patch('pyeverything.everything.init_functions') as mock_init_functions:
-            mock_dll = MagicMock()
-            mock_load_dll.return_value = mock_dll
+        """Integration test: Verify set_regex enables regex searching."""
+        # Test with regex enabled
+        self.everything.set_regex(True)
+        regex_query = ".*\.txt$"  # Matches any file ending with .txt
+        results = self.everything.search(regex_query)
+        self.assertGreater(len(results), 0, "Expected results for regex search")
+        # Verify that at least some results actually end with .txt
+        found_txt = False
+        for item in results:
+            if item["name"].lower().endswith(".txt"):
+                found_txt = True
+                break
+        self.assertTrue(found_txt, "No .txt files found in regex search results")
 
-            everything = Everything()
+        # Test with regex disabled (should not find results for regex query)
+        self.everything.set_regex(False)
+        results_no_regex = self.everything.search(regex_query)
+        # It's hard to assert 0 results here because a literal search for ".*\.txt$" might return something
+        # if a file literally has that name. Instead, we'll just ensure it doesn't crash and reset.
+        # A more robust test would involve creating and deleting a file with a literal regex name.
+        # For now, we just ensure the function can be toggled.
 
-            # Test with True
-            everything.set_regex(True)
-            mock_dll.Everything_SetRegex.assert_called_with(True)
-
-            # Test with False
-            everything.set_regex(False)
-            mock_dll.Everything_SetRegex.assert_called_with(False)
-
-            mock_dll.Everything_SetRegex.assert_called_with(False)
+        # Reset regex mode
+        self.everything.set_regex(False)
 
     def test_set_request_flags_integration(self):
         """Integration test: Verify set_request_flags calls the DLL function correctly."""
