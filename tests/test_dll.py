@@ -201,7 +201,8 @@ class TestDllList(unittest.TestCase):
     @mock.patch('pyeverything.dll.wintypes.FILETIME')
     def test_run_search(self, mock_filetime, mock_byref, mock_c_ulonglong, mock_create_unicode_buffer):
         import os
-        print(f"DEBUG_TEST: os.path.basename in test_run_search: {os.path.basename(r'C:\test\path\file.txt')}", flush=True)
+        debug_path_for_basename = r'C:\test\path\file.txt'
+        print(f"DEBUG_TEST: os.path.basename in test_run_search: {os.path.basename(debug_path_for_basename)}", flush=True)
         print(f"DEBUG_TEST: id(os) in test_run_search: {id(os)}", flush=True)
         mock_dll = MockDll()
         mock_dll.Everything_QueryW.return_value = True
