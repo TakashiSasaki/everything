@@ -66,11 +66,18 @@ def parse_args():
 def locate_es():
     es_cmd = shutil.which("es.exe")
     if not es_cmd:
+        # Check in the package's bin directory
+        script_dir = os.path.dirname(__file__)
+        bin_path = os.path.join(script_dir, "bin", "es.exe")
+        if os.path.isfile(bin_path) and os.access(bin_path, os.X_OK):
+            es_cmd = bin_path
+    if not es_cmd:
+        # Check in the current working directory
         local_path = os.path.join(os.getcwd(), "es.exe")
         if os.path.isfile(local_path) and os.access(local_path, os.X_OK):
             es_cmd = local_path
     if not es_cmd:
-        sys.exit("Error: 'es.exe' not found in PATH or current directory.")
+        sys.exit("Error: 'es.exe' not found in PATH, package bin directory, or current directory.")
     return es_cmd
 
 

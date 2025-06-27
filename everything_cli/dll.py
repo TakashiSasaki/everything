@@ -73,8 +73,9 @@ def load_everything_dll():
     
     # Search in the 'bin' directory relative to the script's location
     script_dir = os.path.dirname(os.path.abspath(__file__))
+    bin_dir = os.path.join(script_dir, "bin")
     for name in dll_names:
-        path = os.path.join(script_dir, name)
+        path = os.path.join(bin_dir, name)
         if os.path.isfile(path):
             try:
                 return ctypes.WinDLL(path)
@@ -100,7 +101,7 @@ def load_everything_dll():
     arch = '64-bit' if is_64bit else '32-bit'
     expected = 'Everything64.dll' if is_64bit else 'Everything32.dll'
     sys.exit(f"Error: Could not load Everything DLL for {arch} Python.\n"
-             f"Please ensure {expected} is in PATH or the current directory.")
+             f"Please ensure {expected} is in PATH, the package's bin directory, or the current directory.")
 
 def init_functions(dll):
     dll.Everything_SetSearchW.argtypes                   = [wintypes.LPCWSTR]
