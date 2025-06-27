@@ -73,9 +73,8 @@ def load_everything_dll():
     
     # Search in the 'bin' directory relative to the script's location
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    bin_dir = os.path.join(script_dir, '..', 'bin')
     for name in dll_names:
-        path = os.path.join(bin_dir, name)
+        path = os.path.join(script_dir, name)
         if os.path.isfile(path):
             try:
                 return ctypes.WinDLL(path)
