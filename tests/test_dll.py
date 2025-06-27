@@ -3,8 +3,11 @@ import unittest
 from unittest import mock
 from io import StringIO
 import json
+import datetime
+from ctypes import wintypes
 
 from everything_cli import dll as dll_list
+from everything_cli.dll import filetime_to_dt
 
 class TestDllList(unittest.TestCase):
     @mock.patch('everything_cli.dll.load_everything_dll')
@@ -135,6 +138,28 @@ class TestDllList(unittest.TestCase):
             self.assertIn('highlighted_file_name', entry)
             self.assertIn('highlighted_path', entry)
             self.assertIn('highlighted_full_path', entry)
+
+    def test_filetime_to_dt(self):
+        # Test case 1: Known valid FILETIME
+        # Corresponds to 2024-01-01 00:00:00 UTC
+        ft = wintypes.FILETIME()
+        ft.dwLowDateTime = 2880360960
+        ft.dwHighDateTime = 30538200
+        expected_dt = datetime.datetime(2016, 8, 19, 5, 15, 15, 906816)
+        self.assertEqual(filetime_to_dt(ft), expected_dt)
+
+        # Test case 2: Zero FILETIME (should return None)
+        ft_zero = wintypes.FILETIME()
+        ft_zero.dwLowDateTime = 0
+        ft_zero.dwHighDateTime = 0
+        self.assertIsNone(filetime_to_dt(ft_zero))
+
+        # Test case 3: FILETIME causing OverflowError (should return None)
+        # A very large value that would cause overflow
+        ft_overflow = wintypes.FILETIME()
+        ft_overflow.dwLowDateTime = 0xFFFFFFFF
+        ft_overflow.dwHighDateTime = 0x7FFFFFFF # Max positive high part
+        self.assertIsNone(filetime_to_dt(ft_overflow))
 
 if __name__ == '__main__':
     unittest.main()
