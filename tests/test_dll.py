@@ -4,7 +4,63 @@ from unittest import mock
 from io import StringIO
 import json
 import datetime
-from ctypes import wintypes
+from ctypes import wintypes # Need to ensure wintypes is available or mocked
+
+# Mock ctypes and wintypes if not on Windows
+if sys.platform != 'win32':
+    class MockWintypes:
+        class FILETIME:
+            dwLowDateTime = 0
+            dwHighDateTime = 0
+        LPCWSTR = None
+        BOOL = None
+        DWORD = None
+        LPWSTR = None
+        POINTER = None
+
+    wintypes = MockWintypes()
+
+    class MockCtypes:
+        def WinDLL(self, *args, **kwargs):
+            return MockDll()
+        def create_unicode_buffer(self, size):
+            m = mock.Mock()
+            m.value = ""
+            return m
+        def c_ulonglong(self):
+            m = mock.Mock()
+            m.value = 0
+            return m
+        def byref(self, obj):
+            return obj # Simplified for mocking
+
+    ctypes = MockCtypes()
+
+# Mock DLL class
+class MockDll:
+    def __init__(self):
+        self.Everything_SetSearchW = mock.Mock()
+        self.Everything_SetMatchPath = mock.Mock()
+        self.Everything_SetRequestFlags = mock.Mock()
+        self.Everything_SetOffset = mock.Mock()
+        self.Everything_SetMax = mock.Mock()
+        self.Everything_QueryW = mock.Mock(return_value=True)
+        self.Everything_GetNumResults = mock.Mock()
+        self.Everything_GetResultFullPathNameW = mock.Mock()
+        self.Everything_GetResultSize = mock.Mock()
+        self.Everything_GetResultExtensionW = mock.Mock()
+        self.Everything_GetResultDateCreated = mock.Mock()
+        self.Everything_GetResultDateModified = mock.Mock()
+        self.Everything_GetResultDateAccessed = mock.Mock()
+        self.Everything_GetResultAttributes = mock.Mock(return_value=32)
+        self.Everything_GetResultFileListFileNameW = mock.Mock()
+        self.Everything_GetResultRunCount = mock.Mock()
+        self.Everything_GetResultDateRun = mock.Mock()
+        self.Everything_GetResultDateRecentlyChanged = mock.Mock()
+        self.Everything_GetResultHighlightedFileNameW = mock.Mock()
+        self.Everything_GetResultHighlightedPathW = mock.Mock()
+        self.Everything_GetResultHighlightedFullPathAndFileNameW = mock.Mock()
+        self.Everything_CleanUp = mock.Mock()
 
 from everything_cli import dll as dll_list
 from everything_cli.dll import filetime_to_dt
@@ -138,6 +194,86 @@ class TestDllList(unittest.TestCase):
             self.assertIn('highlighted_file_name', entry)
             self.assertIn('highlighted_path', entry)
             self.assertIn('highlighted_full_path', entry)
+
+    @mock.patch('everything_cli.dll.ctypes.create_unicode_buffer')
+    @mock.patch('everything_cli.dll.ctypes.c_ulonglong')
+    @mock.patch('everything_cli.dll.ctypes.byref')
+    @mock.patch('everything_cli.dll.wintypes.FILETIME')
+    def test_run_search(self, mock_filetime, mock_byref, mock_c_ulonglong, mock_create_unicode_buffer):
+        mock_dll = MockDll()
+        mock_dll.Everything_QueryW.return_value = True
+        mock_dll.Everything_GetNumResults.return_value = 1
+
+        # Mock for path and name
+        mock_path_buffer = mock.Mock()
+        mock_path_buffer.value = r"C:\test\path\file.txt"
+        mock_create_unicode_buffer.return_value = mock_path_buffer
+
+        # Mock for size
+        mock_size_var = mock.Mock()
+        mock_size_var.value = 12345
+        mock_c_ulonglong.return_value = mock_size_var
+
+        # Mock for all_fields
+        mock_dll.Everything_GetResultExtensionW.return_value = 0 # Success
+        mock_ext_buffer = mock.Mock()
+        mock_ext_buffer.value = "txt"
+        mock_create_unicode_buffer.side_effect = [mock_path_buffer, mock_ext_buffer, mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock()] # Reset side_effect
+        mock_create_unicode_buffer.return_value = mock_path_buffer # Reset for path buffer
+
+        # Test with all_fields=True
+
+        # Mock FILETIME conversions
+        mock_filetime_instance = mock.Mock()
+        mock_filetime.return_value = mock_filetime_instance
+        # Simulate a valid datetime for date_created, modified, accessed, run, recently_changed
+        with mock.patch('everything_cli.dll.filetime_to_dt', side_effect=[
+            datetime.datetime(2023, 1, 1), # created
+            datetime.datetime(2023, 1, 2), # modified
+            datetime.datetime(2023, 1, 3), # accessed
+            datetime.datetime(2023, 1, 4), # run
+            datetime.datetime(2023, 1, 5)  # recently_changed
+        ]):
+            # Test with all_fields=False
+            results_basic = dll_list.run_search(mock_dll, "query", 0, 10, all_fields=False)
+            self.assertEqual(len(results_basic), 1)
+            self.assertIn("name", results_basic[0])
+            self.assertIn("path", results_basic[0])
+            self.assertIn("size", results_basic[0])
+            self.assertEqual(results_basic[0]["name"], "file.txt")
+            self.assertEqual(results_basic[0]["path"], r"C:\test\path\file.txt")
+            self.assertEqual(results_basic[0]["size"], 12345)
+            self.assertNotIn("extension", results_basic[0]) # Should not be present in basic
+
+            mock_dll.Everything_CleanUp.reset_mock()
+            mock_create_unicode_buffer.reset_mock()
+            mock_create_unicode_buffer.side_effect = [mock_path_buffer, mock_ext_buffer, mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock()] # Re-assign side_effect
+
+            # Test with all_fields=True
+            results_all = dll_list.run_search(mock_dll, "query", 0, 10, all_fields=True)
+            self.assertEqual(len(results_all), 1)
+            self.assertIn("extension", results_all[0])
+            self.assertEqual(results_all[0]["extension"], "txt")
+            self.assertIn("date_created", results_all[0])
+            self.assertEqual(results_all[0]["date_created"], "2023-01-01T00:00:00")
+            self.assertIn("date_modified", results_all[0])
+            self.assertEqual(results_all[0]["date_modified"], "2023-01-02T00:00:00")
+            self.assertIn("date_accessed", results_all[0])
+            self.assertEqual(results_all[0]["date_accessed"], "2023-01-03T00:00:00")
+            self.assertIn("attributes", results_all[0])
+            self.assertEqual(results_all[0]["attributes"], 32)
+            self.assertIn("date_run", results_all[0])
+            self.assertEqual(results_all[0]["date_run"], "2023-01-04T00:00:00")
+            self.assertIn("date_recently_changed", results_all[0])
+            self.assertEqual(results_all[0]["date_recently_changed"], "2023-01-05T00:00:00")
+
+            mock_dll.Everything_SetSearchW.assert_called_with("query")
+            mock_dll.Everything_SetMatchPath.assert_called_with(True)
+            mock_dll.Everything_SetOffset.assert_called_with(0)
+            mock_dll.Everything_SetMax.assert_called_with(10)
+            mock_dll.Everything_QueryW.assert_called_with(True)
+            self.assertEqual(mock_dll.Everything_GetNumResults.call_count, 2)
+            mock_dll.Everything_CleanUp.assert_called_once()
 
     def test_filetime_to_dt(self):
         # Test case 1: Known valid FILETIME
