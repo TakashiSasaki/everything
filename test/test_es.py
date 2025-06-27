@@ -6,12 +6,12 @@ import sys
 import re
 import json
 
-SCRIPT = "subprocess_list.py"
+SCRIPT = "everything-es"
 
 def run_test(args, expected_pattern=None, json_check=None):
     try:
         result = subprocess.run(
-            [sys.executable, SCRIPT] + args,
+            ["poetry", "run", SCRIPT] + args,
             capture_output=True,
             text=True
         )

@@ -4,7 +4,7 @@ from unittest import mock
 from io import StringIO
 import json
 
-import dll_list
+from everything_cli import dll as dll_list
 
 class TestDllList(unittest.TestCase):
     @mock.patch('dll_list.load_everything_dll')

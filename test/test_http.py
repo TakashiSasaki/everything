@@ -13,7 +13,7 @@ import sys
 import json
 
 def run_command(args):
-    cmd = [sys.executable, "file_list.py"] + args
+    cmd = ["poetry", "run", "everything-http"] + args
     try:
         result = subprocess.run(
             cmd,

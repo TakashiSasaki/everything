@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 r"""
-dll_list.py
+everything_cli.dll
 
 This script uses the Everything DLL (Everything64.dll or Everything32.dll) to retrieve a list
 of files matching a given search query, or runs a connectivity test by searching for
@@ -70,6 +70,19 @@ EVERYTHING_REQUEST_ALL = (
 def load_everything_dll():
     is_64bit = sys.maxsize > 2**32
     dll_names = ["Everything64.dll", "Everything32.dll"] if is_64bit else ["Everything32.dll", "Everything64.dll"]
+    
+    # Search in the 'bin' directory relative to the script's location
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    bin_dir = os.path.join(script_dir, '..', 'bin')
+    for name in dll_names:
+        path = os.path.join(bin_dir, name)
+        if os.path.isfile(path):
+            try:
+                return ctypes.WinDLL(path)
+            except OSError:
+                continue
+
+    # Search in the current working directory
     cwd = os.getcwd()
     for name in dll_names:
         path = os.path.join(cwd, name)
@@ -78,6 +91,8 @@ def load_everything_dll():
                 return ctypes.WinDLL(path)
             except OSError:
                 continue
+    
+    # Search in PATH
     for name in dll_names:
         try:
             return ctypes.WinDLL(name)
