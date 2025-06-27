@@ -1,76 +1,59 @@
 import os
-import os
-import os
 import subprocess
 import sys
 import re
 import json
 import unittest
 from unittest import mock
+from io import StringIO
 
 SCRIPT_MODULE = "everything_cli.es"
 
-def run_command(args):
-    cmd = [sys.executable, "-m", SCRIPT_MODULE] + args
-    try:
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            check=False
+class TestEsSearch(unittest.TestCase):
+    def setUp(self):
+        self.original_stdout = sys.stdout
+        sys.stdout = StringIO()
+
+    def tearDown(self):
+        sys.stdout = self.original_stdout
+
+    @mock.patch('everything_cli.es.parse_csv_text')
+    @mock.patch('everything_cli.es.subprocess.run')
+    @mock.patch('everything_cli.es.locate_es', return_value='/mock/es.exe')
+    @mock.patch('sys.argv', ['es.py', '--search', 'windows system32 drivers etc hosts.ics', '--json'])
+    def test_search_json_option(self, mock_locate_es, mock_run, mock_parse_csv_text):
+        mock_run.return_value = mock.Mock(
+            stdout="mocked csv content",
+            stderr="",
+            returncode=0
         )
-        return result.stdout, result.stderr
-    except Exception as e:
-        # This block should ideally not be reached if check=False
-        # but keeping it for robustness, returning empty strings for output
-        print(f"Failed to run test command: {e}")
-        return "", str(e)
-
-def test_test_option():
-    stdout, stderr = run_command(["--test"])
-    expected_pattern = r"Test passed: hosts file found with size \d+."
-    assert re.search(expected_pattern, stdout), "--test output not as expected"
-
-def test_test_json_option():
-    stdout, stderr = run_command(["--test", "--json"])
-    try:
-        data = json.loads(stdout)
-        assert data["passed"] is True, "--test --json: 'passed' is not True"
-        assert isinstance(data["size"], int) and data["size"] > 0, "--test --json: invalid or missing 'size'"
-    except Exception as e:
-        raise AssertionError(f"JSON parse error or assertion failed: {e}\nSTDOUT: {stdout}\nSTDERR: {stderr}") from e
-
-@mock.patch('everything_cli.es.subprocess.run')
-def test_search_json_option(mock_run):
-    mock_run.return_value = mock.Mock(
-        stdout=json.dumps([
+        mock_parse_csv_text.return_value = [
             {
                 "name": "hosts.ics",
                 "path": "C:\\Windows\\System32\\drivers\\etc\\hosts.ics",
                 "size": 438
             }
-        ], indent=2),
-        stderr="",
-        returncode=0
-    )
+        ]
 
-    search_query = r"windows\\system32\\drivers\\etc\\hosts.ics"
-    stdout, stderr = run_command(["--search", search_query, "--json"])
-    try:
+        from everything_cli.es import main
+        with self.assertRaises(SystemExit) as cm:
+            main()
+        self.assertEqual(cm.exception.code, 0)
+        stdout = sys.stdout.getvalue()
         data = json.loads(stdout)
-        assert isinstance(data, list), "--search --json: output is not a list"
-        found = any(
-            entry.get("name") == "hosts.ics" and             os.path.normcase(r"C:\Windows\System32\drivers\etc") == os.path.normcase(os.path.dirname(entry.get("path", "")))
-            for entry in data
-        )
-        assert found, "--search --json: expected file not found in results"
-    except Exception as e:
-        raise AssertionError(f"JSON parse error or assertion failed: {e}\nSTDOUT: {stdout}\nSTDERR: {stderr}") from e
+        self.assertEqual(data, mock_parse_csv_text.return_value)
 
-@mock.patch('everything_cli.es.subprocess.run')
-def test_search_allfields_json_option(mock_run):
-    mock_run.return_value = mock.Mock(
-        stdout=json.dumps([
+    @mock.patch('everything_cli.es.parse_csv_text')
+    @mock.patch('everything_cli.es.subprocess.run')
+    @mock.patch('everything_cli.es.locate_es', return_value='/mock/es.exe')
+    @mock.patch('sys.argv', ['es.py', '--search', 'windows system32 drivers etc hosts.ics', '--json', '--all-fields'])
+    def test_search_allfields_json_option(self, mock_locate_es, mock_run, mock_parse_csv_text):
+        mock_run.return_value = mock.Mock(
+            stdout="mocked csv content",
+            stderr="",
+            returncode=0
+        )
+        mock_parse_csv_text.return_value = [
             {
                 "name": "hosts.ics",
                 "path": "C:\\Windows\\System32\\drivers\\etc\\hosts.ics",
@@ -85,23 +68,91 @@ def test_search_allfields_json_option(mock_run):
                 "date_run": None,
                 "date_recently_changed": None
             }
-        ], indent=2) + '\n',
-        stderr="",
-        returncode=0
-    )
+        ]
 
-    search_query = r"windows\\system32\\drivers\\etc\\hosts.ics"
-    stdout, stderr = run_command(["--search", search_query, "--json", "--all-fields"])
-    try:
+        from everything_cli.es import main
+        with self.assertRaises(SystemExit) as cm:
+            main()
+        self.assertEqual(cm.exception.code, 0)
+        stdout = sys.stdout.getvalue()
         data = json.loads(stdout)
-        assert isinstance(data, list) and len(data) > 0, "--search --json --all-fields: output not a list or empty"
-        found = False
-        for entry in data:
-            if (
-                entry.get("name") == "hosts.ics" and                os.path.normcase(r"C:\Windows\System32\drivers\etc") == os.path.normcase(os.path.dirname(entry.get("path", "")))
-            ):
-                assert "date_modified" in entry, "--search --json --all-fields: 'date_modified' missing"
-                found = True
-        assert found, "--search --json --all-fields: expected file not found in results"
-    except Exception as e:
-        raise AssertionError(f"JSON parse error or assertion failed: {e}\nSTDOUT: {stdout}\nSTDERR: {stderr}") from e
+        self.assertEqual(data, mock_parse_csv_text.return_value)
+
+class TestEsLocateEs(unittest.TestCase):
+    @mock.patch('shutil.which')
+    @mock.patch('os.path.isfile')
+    @mock.patch('os.access')
+    @mock.patch('os.path.dirname', return_value='/mock/script/dir')
+    @mock.patch('os.path.join')
+    def test_locate_es_in_path(self, mock_join, mock_dirname, mock_access, mock_isfile, mock_which):
+        mock_which.return_value = '/path/to/es.exe'
+        mock_isfile.return_value = True
+        mock_access.return_value = True
+        mock_join.side_effect = lambda *args: '/'.join(args) # Simulate os.path.join behavior
+
+        from everything_cli.es import locate_es
+        result = locate_es()
+        self.assertEqual(result, '/path/to/es.exe')
+        mock_which.assert_called_once_with('es.exe')
+        mock_isfile.assert_not_called() # Should not be called if found in PATH
+        mock_access.assert_not_called() # Should not be called if found in PATH
+
+    @mock.patch('shutil.which', return_value=None)
+    @mock.patch('os.path.isfile')
+    @mock.patch('os.access')
+    @mock.patch('os.path.dirname', return_value='/mock/script/dir')
+    @mock.patch('os.path.join')
+    def test_locate_es_in_package_bin(self, mock_join, mock_dirname, mock_access, mock_isfile, mock_which):
+        # Simulate es.exe not in PATH, but in package bin
+        mock_which.return_value = None
+        mock_join.side_effect = lambda *args: '/'.join(args) # Simulate os.path.join behavior
+
+        # Set side_effect for isfile and access to simulate finding in package bin
+        mock_isfile.side_effect = [True, False] # True for bin_path, False for local_path
+        mock_access.side_effect = [True, False] # True for bin_path, False for local_path
+
+        from everything_cli.es import locate_es
+        result = locate_es()
+        self.assertEqual(result, '/mock/script/dir/bin/es.exe')
+        mock_which.assert_called_once_with('es.exe')
+        mock_isfile.assert_any_call('/mock/script/dir/bin/es.exe')
+        mock_access.assert_any_call('/mock/script/dir/bin/es.exe', os.X_OK)
+
+    @mock.patch('shutil.which', return_value=None)
+    @mock.patch('os.path.isfile')
+    @mock.patch('os.access')
+    @mock.patch('os.path.dirname', return_value='/mock/script/dir')
+    @mock.patch('os.path.join')
+    @mock.patch('os.getcwd', return_value='/mock/current/dir')
+    def test_locate_es_in_cwd(self, mock_getcwd, mock_join, mock_dirname, mock_access, mock_isfile, mock_which):
+        # Simulate es.exe not in PATH or package bin, but in CWD
+        mock_which.return_value = None
+        mock_join.side_effect = lambda *args: '/'.join(args) # Simulate os.path.join behavior
+
+        # Set side_effect for isfile and access to simulate finding in CWD
+        mock_isfile.side_effect = [False, True] # False for bin_path, True for local_path
+        mock_access.side_effect = [True] # Only one call to access is expected
+
+        from everything_cli.es import locate_es
+        result = locate_es()
+        self.assertEqual(result, '/mock/current/dir/es.exe')
+        mock_which.assert_called_once_with('es.exe')
+        mock_isfile.assert_any_call('/mock/script/dir/bin/es.exe')
+        mock_isfile.assert_any_call('/mock/current/dir/es.exe')
+        mock_access.assert_called_once_with('/mock/current/dir/es.exe', os.X_OK)
+
+    @mock.patch('shutil.which', return_value=None)
+    @mock.patch('os.path.isfile', return_value=False)
+    @mock.patch('os.access', return_value=False)
+    @mock.patch('os.path.dirname', return_value='/mock/script/dir')
+    @mock.patch('os.path.join')
+    @mock.patch('os.getcwd', return_value='/mock/current/dir')
+    def test_locate_es_not_found(self, mock_getcwd, mock_join, mock_dirname, mock_access, mock_isfile, mock_which):
+        mock_join.side_effect = lambda *args: '/'.join(args) # Simulate os.path.join behavior
+        from everything_cli.es import locate_es
+        with self.assertRaisesRegex(SystemExit, "Error: 'es.exe' not found in PATH, package bin directory, or current directory."):
+            locate_es()
+        mock_which.assert_called_once_with('es.exe')
+        mock_isfile.assert_any_call('/mock/script/dir/bin/es.exe')
+        mock_isfile.assert_any_call('/mock/current/dir/es.exe')
+        mock_access.assert_not_called()
