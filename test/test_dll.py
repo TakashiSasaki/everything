@@ -7,9 +7,9 @@ import json
 from everything_cli import dll as dll_list
 
 class TestDllList(unittest.TestCase):
-    @mock.patch('dll_list.load_everything_dll')
-    @mock.patch('dll_list.init_functions')
-    @mock.patch('dll_list.run_search')
+    @mock.patch('everything_cli.dll.load_everything_dll')
+    @mock.patch('everything_cli.dll.init_functions')
+    @mock.patch('everything_cli.dll.run_search')
     def test_test_option_output_text(self, mock_run_search, mock_init, mock_load):
         # Simulate a search result for the hosts file
         mock_run_search.return_value = [
@@ -29,9 +29,9 @@ class TestDllList(unittest.TestCase):
                 r'^Test passed: hosts file found, size \d+\.$'
             )
 
-    @mock.patch('dll_list.load_everything_dll')
-    @mock.patch('dll_list.init_functions')
-    @mock.patch('dll_list.run_search')
+    @mock.patch('everything_cli.dll.load_everything_dll')
+    @mock.patch('everything_cli.dll.init_functions')
+    @mock.patch('everything_cli.dll.run_search')
     def test_test_option_output_json(self, mock_run_search, mock_init, mock_load):
         mock_run_search.return_value = [
             {'path': r'C:\Windows\System32\drivers\etc\hosts', 'size': 959}
@@ -47,9 +47,9 @@ class TestDllList(unittest.TestCase):
             self.assertTrue(data.get("passed") is True)
             self.assertIsInstance(data.get("size"), int)
 
-    @mock.patch('dll_list.load_everything_dll')
-    @mock.patch('dll_list.init_functions')
-    @mock.patch('dll_list.run_search')
+    @mock.patch('everything_cli.dll.load_everything_dll')
+    @mock.patch('everything_cli.dll.init_functions')
+    @mock.patch('everything_cli.dll.run_search')
     def test_search_option_output_json(self, mock_run_search, mock_init, mock_load):
         # Simulate a search result for a hosts.ics file
         mock_run_search.return_value = [
@@ -79,9 +79,9 @@ class TestDllList(unittest.TestCase):
             self.assertEqual(entry.get('path'), r'C:\Windows\System32\drivers\etc\hosts.ics')
             self.assertIsInstance(entry.get('size'), int)
 
-    @mock.patch('dll_list.load_everything_dll')
-    @mock.patch('dll_list.init_functions')
-    @mock.patch('dll_list.run_search')
+    @mock.patch('everything_cli.dll.load_everything_dll')
+    @mock.patch('everything_cli.dll.init_functions')
+    @mock.patch('everything_cli.dll.run_search')
     def test_search_option_output_json_all_fields(self, mock_run_search, mock_init, mock_load):
         # Simulate a search result with all fields
         mock_run_search.return_value = [
