@@ -135,5 +135,24 @@ class TestEverythingIntegration(unittest.TestCase):
             everything.set_request_flags(test_flags)
             mock_dll.Everything_SetRequestFlags.assert_called_with(test_flags)
 
+    def test_set_max_integration(self):
+        """Integration test: Verify set_max calls the DLL function correctly."""
+        with patch('pyeverything.everything.load_everything_dll') as mock_load_dll, \
+             patch('pyeverything.everything.init_functions') as mock_init_functions:
+            mock_dll = MagicMock()
+            mock_load_dll.return_value = mock_dll
+
+            everything = Everything()
+
+            # Test with a sample max results value
+            test_max_results = 10
+            everything.set_max(test_max_results)
+            mock_dll.Everything_SetMax.assert_called_with(test_max_results)
+
+            # Test with another value
+            test_max_results = 0
+            everything.set_max(test_max_results)
+            mock_dll.Everything_SetMax.assert_called_with(test_max_results)
+
 if __name__ == '__main__':
     unittest.main()
