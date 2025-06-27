@@ -109,6 +109,7 @@ def init_functions(dll):
     dll.Everything_SetRequestFlags.argtypes              = [wintypes.DWORD]
     dll.Everything_SetOffset.argtypes                    = [wintypes.DWORD]
     dll.Everything_SetMax.argtypes                       = [wintypes.DWORD]
+    dll.Everything_SetMatchCase.argtypes                 = [wintypes.BOOL]
     dll.Everything_QueryW.argtypes                       = [wintypes.BOOL]
     dll.Everything_QueryW.restype                        = wintypes.BOOL
     dll.Everything_GetNumResults.argtypes                = []
