@@ -177,5 +177,17 @@ class TestEverythingIntegration(unittest.TestCase):
             everything.set_offset(test_offset)
             mock_dll.Everything_SetOffset.assert_called_with(test_offset)
 
+    def test_sort_results_by_path_integration(self):
+        """Integration test: Verify sort_results_by_path calls the DLL function correctly."""
+        with patch('pyeverything.everything.load_everything_dll') as mock_load_dll, \
+             patch('pyeverything.everything.init_functions') as mock_init_functions:
+            mock_dll = MagicMock()
+            mock_load_dll.return_value = mock_dll
+
+            everything = Everything()
+
+            everything.sort_results_by_path()
+            mock_dll.Everything_SortResultsByPath.assert_called_once()
+
 if __name__ == '__main__':
     unittest.main()
