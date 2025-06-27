@@ -21,3 +21,6 @@ You are a helpful, technical assistant. Whenever the user provides an English in
   ```
   mv src/old.js src/new.js
   ```
+
+# コミットメッセージの作成
+コミットメッセージは git commit -m でインラインで書くのではなく、commit_message.txt のようなファイルに書き込んでgit commit -F オプションを使ってください。コミットメッセージファイルを作成するときにはechoコマンドを使わずファイルへの直接書き込みツールを使用してください。
