@@ -245,6 +245,7 @@ def run_search(dll, query, offset, count, all_fields=False):
         dll.Everything_GetResultSize(i, ctypes.byref(size_var))
         size = size_var.value
         name = os.path.basename(path)
+        print(f"DEBUG: run_search - path='{path}', name='{name}'", file=sys.stderr) # DEBUG
         if all_fields:
             ext_buf = ctypes.create_unicode_buffer(50)
             dll.Everything_GetResultExtensionW(i, ext_buf, 50)
