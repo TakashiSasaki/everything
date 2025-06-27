@@ -9,7 +9,8 @@ from ctypes import wintypes
 import datetime
 import os
 import sys
-from .dll import load_everything_dll, init_functions, filetime_to_dt, EVERYTHING_REQUEST_FILE_NAME, EVERYTHING_REQUEST_PATH, EVERYTHING_REQUEST_SIZE
+from .dll import load_everything_dll, init_functions, filetime_to_dt
+from .dll import EVERYTHING_REQUEST_FILE_NAME, EVERYTHING_REQUEST_PATH, EVERYTHING_REQUEST_SIZE, EVERYTHING_REQUEST_ALL
 
 class Everything:
     """A class to interact with the Everything search engine."""
