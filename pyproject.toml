@@ -1,5 +1,6 @@
 [tool.poetry]
 name = "everything-cli"
+include = ["everything_cli/Everything64.dll"]
 version = "0.1.0"
 description = "A CLI tool for interacting with Everything search engine"
 authors = ["Your Name <you@example.com>"]
