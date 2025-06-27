@@ -115,8 +115,11 @@ def init_functions(dll):
     dll.Everything_SortResultsByPath.argtypes            = []
     dll.Everything_QueryW.argtypes                       = [wintypes.BOOL]
     dll.Everything_QueryW.restype                        = wintypes.BOOL
-    dll.Everything_GetNumResults.argtypes                = []
+    
+    
     dll.Everything_GetNumResults.restype                 = wintypes.DWORD
+
+    
     dll.Everything_GetResultFullPathNameW.argtypes       = [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
     dll.Everything_GetResultFullPathNameW.restype        = wintypes.DWORD
     dll.Everything_GetResultSize.argtypes                = [wintypes.DWORD, ctypes.POINTER(ctypes.c_ulonglong)]
@@ -145,6 +148,7 @@ def init_functions(dll):
     dll.Everything_GetResultHighlightedPathW.restype     = wintypes.DWORD
     dll.Everything_GetResultHighlightedFullPathAndFileNameW.argtypes = [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
     dll.Everything_GetResultHighlightedFullPathAndFileNameW.restype  = wintypes.DWORD
+    
     dll.Everything_CleanUp.argtypes                      = []
 
 def parse_args():
