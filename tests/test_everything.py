@@ -157,5 +157,77 @@ class TestEverything(unittest.TestCase):
         everything.sort_results_by_path()
         everything.dll.Everything_SortResultsByPath.assert_called_once()
 
+    @patch('pyeverything.everything.load_everything_dll')
+    @patch('pyeverything.everything.init_functions')
+    def test_set_match_case_with_search_results(self, mock_init_functions, mock_load_dll):
+        """Test set_match_case by observing search results."""
+        mock_dll = MagicMock()
+        mock_load_dll.return_value = mock_dll
+
+        everything = Everything()
+
+        # Variable to track the case sensitivity setting
+        self.match_case_enabled = False
+
+        def mock_set_match_case(enable):
+            self.match_case_enabled = enable
+            mock_dll.Everything_SetMatchCase.assert_called_with(enable)
+
+        mock_dll.Everything_SetMatchCase.side_effect = mock_set_match_case
+
+        # Mock search results for a file named "TestFile.txt"
+        mock_filename = "TestFile.txt"
+        mock_full_path = "C:\\Path\\To\\" + mock_filename
+
+        def mock_query_w(b_block):
+            return True
+
+        def mock_get_num_results():
+            if self.match_case_enabled and everything.dll.Everything_GetSearchW().value != mock_filename:
+                return 0
+            return 1
+
+        def mock_get_result_full_path_name_w(index, buf, buf_len):
+            if index == 0:
+                # Ensure the buffer is large enough
+                if buf_len < len(mock_full_path) + 1:
+                    raise ValueError("Buffer too small")
+                # Assign the value directly to the buffer's internal object
+                ctypes.memmove(buf, mock_full_path, len(mock_full_path) * ctypes.sizeof(ctypes.c_wchar))
+            return len(mock_full_path)
+
+        def mock_get_result_size(index, size_var):
+            size_var._obj.value = 1024
+            return True
+
+        mock_dll.Everything_QueryW.side_effect = mock_query_w
+        mock_dll.Everything_GetNumResults.side_effect = mock_get_num_results
+        mock_dll.Everything_GetResultFullPathNameW.side_effect = mock_get_result_full_path_name_w
+        mock_dll.Everything_GetResultSize.side_effect = mock_get_result_size
+
+        # Mock Everything_GetSearchW to return the last set search query
+        everything.dll.Everything_SetSearchW.side_effect = lambda query: setattr(everything.dll.Everything_SetSearchW, 'value', query)
+        everything.dll.Everything_GetSearchW.return_value = MagicMock(value="testfile.txt") # Default value
+
+        # Test case-sensitive search (should find no results for lowercase query)
+        everything.set_match_case(True)
+        everything.dll.Everything_GetSearchW.return_value.value = "testfile.txt" # Set the search query for the mock
+        results_case_sensitive = everything.search("testfile.txt")
+        self.assertEqual(len(results_case_sensitive), 0)
+
+        # Test case-insensitive search (should find results for lowercase query)
+        everything.set_match_case(False)
+        everything.dll.Everything_GetSearchW.return_value.value = "testfile.txt" # Set the search query for the mock
+        results_case_insensitive = everything.search("testfile.txt")
+        self.assertEqual(len(results_case_insensitive), 1)
+        self.assertEqual(results_case_insensitive[0]["name"], mock_filename)
+
+        # Test case-sensitive search with correct case (should find results)
+        everything.set_match_case(True)
+        everything.dll.Everything_GetSearchW.return_value.value = mock_filename # Set the search query for the mock
+        results_case_sensitive_correct_case = everything.search(mock_filename)
+        self.assertEqual(len(results_case_sensitive_correct_case), 1)
+        self.assertEqual(results_case_sensitive_correct_case[0]["name"], mock_filename)
+
 if __name__ == '__main__':
     unittest.main()
