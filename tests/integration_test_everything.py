@@ -38,6 +38,12 @@ class TestEverythingIntegration(unittest.TestCase):
                 self.assertIsNotNone(found_item)
                 self.assertGreater(found_item["size"], 0, "Found hosts file has zero size in search results")
 
+    def test_search_common_string_returns_many_results(self):
+        """Integration test: Search for a common string and ensure many results are returned."""
+        query = "exe"
+        results = self.everything.search(query, count=200) # Request more than 100 results
+        self.assertGreaterEqual(len(results), 100, f"Expected at least 100 results for '{query}', but got {len(results)}")
+
     def test_set_match_case_integration(self):
         """Integration test: Verify set_match_case functionality with actual searches."""
         import tempfile
@@ -136,46 +142,52 @@ class TestEverythingIntegration(unittest.TestCase):
             mock_dll.Everything_SetRequestFlags.assert_called_with(test_flags)
 
     def test_set_max_integration(self):
-        """Integration test: Verify set_max calls the DLL function correctly."""
-        with patch('pyeverything.everything.load_everything_dll') as mock_load_dll, \
-             patch('pyeverything.everything.init_functions') as mock_init_functions:
-            mock_dll = MagicMock()
-            mock_load_dll.return_value = mock_dll
+        """Integration test: Verify set_max limits the number of search results."""
+        query = "exe"  # A common query likely to return many results
 
-            everything = Everything()
+        # Test with max_results = 1
+        results = self.everything.search(query, count=1)
+        self.assertEqual(len(results), 1, "Expected 1 result when max_results is 1")
 
-            # Test with a sample max results value
-            test_max_results = 10
-            everything.set_max(test_max_results)
-            mock_dll.Everything_SetMax.assert_called_with(test_max_results)
+        # Test with max_results = 2
+        results = self.everything.search(query, count=2)
+        self.assertEqual(len(results), 2, "Expected 2 results when max_results is 2")
 
-            # Test with another value
-            test_max_results = 0
-            everything.set_max(test_max_results)
-            mock_dll.Everything_SetMax.assert_called_with(test_max_results)
+        # Test with max_results = 3
+        results = self.everything.search(query, count=3)
+        self.assertEqual(len(results), 3, "Expected 3 results when max_results is 3")
 
-            test_max_results = 0
-            everything.set_max(test_max_results)
-            mock_dll.Everything_SetMax.assert_called_with(test_max_results)
+        # Test with max_results = 4
+        results = self.everything.search(query, count=4)
+        self.assertEqual(len(results), 4, "Expected 4 results when max_results is 4")
+
+        # Reset max_results to default (0 means no limit)
+        self.everything.set_max(0)
 
     def test_set_offset_integration(self):
-        """Integration test: Verify set_offset calls the DLL function correctly."""
-        with patch('pyeverything.everything.load_everything_dll') as mock_load_dll, \
-             patch('pyeverything.everything.init_functions') as mock_init_functions:
-            mock_dll = MagicMock()
-            mock_load_dll.return_value = mock_dll
+        """Integration test: Verify set_offset correctly offsets search results."""
+        query = "exe"  # A common query likely to return many results
 
-            everything = Everything()
+        # Get all results to establish a baseline
+        all_results = self.everything.search(query, count=0, offset=0)
 
-            # Test with a sample offset value
-            test_offset = 50
-            everything.set_offset(test_offset)
-            mock_dll.Everything_SetOffset.assert_called_with(test_offset)
+        if len(all_results) < 5:  # Ensure there are enough results to test offset
+            self.skipTest("Not enough search results to test offset functionality effectively.")
 
-            # Test with another value
-            test_offset = 0
-            everything.set_offset(test_offset)
-            mock_dll.Everything_SetOffset.assert_called_with(test_offset)
+        # Test with offset = 1
+        offset_results_1 = self.everything.search(query, offset=1)
+        self.assertEqual(len(offset_results_1), len(all_results) - 1, "Offset 1 should return one less result")
+        self.assertEqual(offset_results_1[0], all_results[1], "First result with offset 1 should be second overall result")
+
+        # Test with offset = 2
+        offset_results_2 = self.everything.search(query, offset=2)
+        self.assertEqual(len(offset_results_2), len(all_results) - 2, "Offset 2 should return two less results")
+        self.assertEqual(offset_results_2[0], all_results[2], "First result with offset 2 should be third overall result")
+
+        # Test with offset = 0 (reset)
+        reset_results = self.everything.search(query, offset=0)
+        self.assertEqual(len(reset_results), len(all_results), "Resetting offset to 0 should return all results")
+        self.assertEqual(reset_results[0], all_results[0], "First result after reset should be original first result")
 
     def test_sort_results_by_path_integration(self):
         """Integration test: Verify sort_results_by_path calls the DLL function correctly."""

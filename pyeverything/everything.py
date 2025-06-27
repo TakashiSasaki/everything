@@ -41,14 +41,19 @@ class Everything:
             EVERYTHING_REQUEST_SIZE
         )
         self.dll.Everything_SetRequestFlags(flags)
-        self.dll.Everything_SetOffset(offset)
-        self.dll.Everything_SetMax(count)
         if not self.dll.Everything_QueryW(True):
             sys.exit("Error: Everything query failed.")
         total = self.dll.Everything_GetNumResults()
         results = []
         buf = ctypes.create_unicode_buffer(260)
-        for i in range(total):
+
+        start_index = offset
+        end_index = total
+
+        if count != 0:
+            end_index = min(offset + count, total)
+
+        for i in range(start_index, end_index):
             self.dll.Everything_GetResultFullPathNameW(i, buf, 260)
             path = buf.value
             size_var = ctypes.c_ulonglong()
