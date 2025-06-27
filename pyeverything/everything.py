@@ -117,3 +117,11 @@ class Everything:
         """
         self.dll.Everything_SetMatchCase(enable)
 
+    def set_match_whole_word(self, enable: bool):
+        """Enables or disables whole word matching.
+
+        Args:
+            enable (bool): True for whole word matching, False otherwise.
+        """
+        self.dll.Everything_SetMatchWholeWord(enable)
+
