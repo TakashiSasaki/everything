@@ -3,3 +3,4 @@ es.exe
 __pycache__/
 *.pyc
 poetry.lock
+commit_message.txt
