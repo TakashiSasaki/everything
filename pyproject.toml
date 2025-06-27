@@ -19,7 +19,9 @@ build-backend = "poetry.core.masonry.api"
 everything-dll = "everything_cli.dll:main"
 everything-es = "everything_cli.es:main"
 everything-http = "everything_cli.http:main"
+test = "everything_cli.run_tests:main"
 
 
 [tool.poetry.group.dev.dependencies]
 poetry = "^1.8.2"
+pytest = "^8.2.2"
