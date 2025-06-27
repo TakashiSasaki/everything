@@ -57,11 +57,12 @@ class Everything:
 
         for i in range(start_index, end_index):
             self.dll.Everything_GetResultFullPathNameW(i, buf, 260)
-            path = buf.value
+            full_path = buf.value
+            path = os.path.dirname(full_path)
             size_var = ctypes.c_ulonglong()
             self.dll.Everything_GetResultSize(i, ctypes.byref(size_var))
             size = size_var.value
-            name = os.path.basename(path)
+            name = os.path.basename(full_path)
             if all_fields:
                 ext_buf = ctypes.create_unicode_buffer(50)
                 self.dll.Everything_GetResultExtensionW(i, ext_buf, 50)

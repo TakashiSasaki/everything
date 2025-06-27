@@ -92,25 +92,51 @@ class TestEverythingIntegration(unittest.TestCase):
                 os.remove(temp_file_path)
 
     def test_set_match_whole_word_integration(self):
-        """Integration test: Verify set_match_whole_word calls the DLL function correctly."""
-        # We need to patch the DLL functions for this test, as we are not testing search behavior
-        # but rather the correct calling of the DLL function.
-        with patch('pyeverything.everything.load_everything_dll') as mock_load_dll, \
-             patch('pyeverything.everything.init_functions') as mock_init_functions:
-            mock_dll = MagicMock()
-            mock_load_dll.return_value = mock_dll
+        """Integration test: Verify set_match_whole_word functionality with actual searches."""
+        import tempfile
+        import time
 
-            everything = Everything()
+        # Create temporary files for testing
+        temp_dir = tempfile.gettempdir()
+        whole_word_filename = "TestWholeWord.txt"
+        partial_word_filename = "TestPartialWordFile.txt"
+        
+        whole_word_path = os.path.join(temp_dir, whole_word_filename)
+        partial_word_path = os.path.join(temp_dir, partial_word_filename)
 
-            # Test with True
-            everything.set_match_whole_word(True)
-            mock_dll.Everything_SetMatchWholeWord.assert_called_with(True)
+        with open(whole_word_path, "w") as f:
+            f.write("whole word test")
+        with open(partial_word_path, "w") as f:
+            f.write("partial word test")
 
-            # Test with False
-            everything.set_match_whole_word(False)
-            mock_dll.Everything_SetMatchWholeWord.assert_called_with(False)
+        try:
+            # Give Everything time to index the new files
+            time.sleep(2)
 
-            mock_dll.Everything_SetMatchWholeWord.assert_called_with(False)
+            # Test with whole word matching enabled
+            self.everything.set_match_whole_word(True)
+            
+            # Search for the exact whole word
+            results_whole = self.everything.search(f'"{whole_word_filename}"')
+            self.assertTrue(any(item["path"].lower() == whole_word_path.lower() for item in results_whole), "Should find file with whole word matching.")
+
+            # Search for a partial word - should not find the file
+            results_partial = self.everything.search('"PartialWord"')
+            self.assertFalse(any(item["path"].lower() == partial_word_path.lower() for item in results_partial), "Should not find file with partial word matching when whole word is enabled.")
+
+            # Test with whole word matching disabled
+            self.everything.set_match_whole_word(False)
+            
+            # Search for a partial word - should find the file now
+            results_partial_disabled = self.everything.search('"PartialWord"')
+            self.assertTrue(any(item["path"].lower() == partial_word_path.lower() for item in results_partial_disabled), "Should find file with partial word matching when whole word is disabled.")
+
+        finally:
+            # Clean up temporary files
+            if os.path.exists(whole_word_path):
+                os.remove(whole_word_path)
+            if os.path.exists(partial_word_path):
+                os.remove(partial_word_path)
 
     def test_set_regex_integration(self):
         """Integration test: Verify set_regex enables regex searching."""
@@ -139,18 +165,54 @@ class TestEverythingIntegration(unittest.TestCase):
         self.everything.set_regex(False)
 
     def test_set_request_flags_integration(self):
-        """Integration test: Verify set_request_flags calls the DLL function correctly."""
-        with patch('pyeverything.everything.load_everything_dll') as mock_load_dll, \
-             patch('pyeverything.everything.init_functions') as mock_init_functions:
-            mock_dll = MagicMock()
-            mock_load_dll.return_value = mock_dll
+        """Integration test: Verify set_request_flags functionality with actual searches."""
+        import tempfile
+        import time
+        from pyeverything.dll import EVERYTHING_REQUEST_FILE_NAME, EVERYTHING_REQUEST_PATH, EVERYTHING_REQUEST_SIZE
 
-            everything = Everything()
+        # Create a temporary file for testing
+        temp_dir = tempfile.gettempdir()
+        test_filename = "TestRequestFlags.txt"
+        test_filepath = os.path.join(temp_dir, test_filename)
 
-            # Test with a sample flag value
-            test_flags = 0x00000001 # Example flag
-            everything.set_request_flags(test_flags)
-            mock_dll.Everything_SetRequestFlags.assert_called_with(test_flags)
+        with open(test_filepath, "w") as f:
+            f.write("request flags test")
+
+        try:
+            # Give Everything time to index the new file
+            time.sleep(2)
+
+            # Test with only file name request
+            self.everything.set_request_flags(EVERYTHING_REQUEST_FILE_NAME)
+            results_name_only = self.everything.search(f'"{test_filename}"')
+            
+            self.assertTrue(len(results_name_only) > 0, "Should find the file.")
+            found_item = next((item for item in results_name_only if item["path"].lower().endswith(test_filename.lower())), None)
+            self.assertIsNotNone(found_item, "File not found in search results.")
+            
+            # In the current implementation, 'path' and 'size' are always returned.
+            # A more accurate test would be to check if other fields are absent when not requested.
+            # For now, we confirm the basic query works with the flag set.
+            self.assertIn("name", found_item)
+            self.assertEqual(found_item["name"], test_filename)
+
+            # Test with multiple flags
+            self.everything.set_request_flags(EVERYTHING_REQUEST_FILE_NAME | EVERYTHING_REQUEST_PATH | EVERYTHING_REQUEST_SIZE)
+            results_full = self.everything.search(f'"{test_filename}"')
+            
+            self.assertTrue(len(results_full) > 0, "Should find the file with multiple flags.")
+            found_item_full = next((item for item in results_full if item["path"].lower().endswith(test_filename.lower())), None)
+            self.assertIsNotNone(found_item_full, "File not found in search results with multiple flags.")
+
+            self.assertIn("name", found_item_full)
+            self.assertIn("path", found_item_full)
+            self.assertIn("size", found_item_full)
+            self.assertGreater(found_item_full["size"], 0)
+
+        finally:
+            # Clean up the temporary file
+            if os.path.exists(test_filepath):
+                os.remove(test_filepath)
 
     def test_set_max_integration(self):
         """Integration test: Verify set_max limits the number of search results."""
@@ -201,16 +263,53 @@ class TestEverythingIntegration(unittest.TestCase):
         self.assertEqual(reset_results[0], all_results[0], "First result after reset should be original first result")
 
     def test_sort_results_by_path_integration(self):
-        """Integration test: Verify sort_results_by_path calls the DLL function correctly."""
-        with patch('pyeverything.everything.load_everything_dll') as mock_load_dll, \
-             patch('pyeverything.everything.init_functions') as mock_init_functions:
-            mock_dll = MagicMock()
-            mock_load_dll.return_value = mock_dll
+        """Integration test: Verify sort_results_by_path functionality with actual searches."""
+        import tempfile
+        import time
 
-            everything = Everything()
+        # Create temporary files in different subdirectories for sorting
+        temp_dir = tempfile.gettempdir()
+        dir_a = os.path.join(temp_dir, "dir_a")
+        dir_b = os.path.join(temp_dir, "dir_b")
+        os.makedirs(dir_a, exist_ok=True)
+        os.makedirs(dir_b, exist_ok=True)
 
-            everything.sort_results_by_path()
-            mock_dll.Everything_SortResultsByPath.assert_called_once()
+        file_a_path = os.path.join(dir_a, "test_sort_file.txt")
+        file_b_path = os.path.join(dir_b, "test_sort_file.txt")
+
+        with open(file_a_path, "w") as f:
+            f.write("sort test a")
+        with open(file_b_path, "w") as f:
+            f.write("sort test b")
+
+        try:
+            # Give Everything time to index the new files
+            time.sleep(2)
+
+            # Perform search and sort by path
+            self.everything.sort_results_by_path()
+            results = self.everything.search("test_sort_file.txt")
+
+            # Extract paths from results
+            paths = [item["path"] for item in results if "test_sort_file.txt" in item["path"]]
+            
+            # Verify the paths are sorted
+            self.assertEqual(sorted(paths), paths, "Search results are not sorted by path.")
+            
+            # Ensure our specific files are in the sorted list correctly
+            if file_a_path in paths and file_b_path in paths:
+                self.assertLess(paths.index(file_a_path), paths.index(file_b_path), "dir_a should come before dir_b in sorted paths.")
+
+        finally:
+            # Clean up temporary files and directories
+            if os.path.exists(file_a_path):
+                os.remove(file_a_path)
+            if os.path.exists(file_b_path):
+                os.remove(file_b_path)
+            if os.path.exists(dir_a):
+                os.rmdir(dir_a)
+            if os.path.exists(dir_b):
+                os.rmdir(dir_b)
 
 if __name__ == '__main__':
     unittest.main()
