@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 poetry.lock
 commit_message.txt
+COMMIT_EDITMSG
