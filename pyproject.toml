@@ -20,3 +20,6 @@ everything-dll = "everything_cli.dll:main"
 everything-es = "everything_cli.es:main"
 everything-http = "everything_cli.http:main"
 test = "pytest"
+
+[tool.poetry.group.dev.dependencies]
+poetry = "^1.8.2"
