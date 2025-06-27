@@ -125,3 +125,11 @@ class Everything:
         """
         self.dll.Everything_SetMatchWholeWord(enable)
 
+    def set_regex(self, enable: bool):
+        """Enables or disables regex matching.
+
+        Args:
+            enable (bool): True for regex matching, False otherwise.
+        """
+        self.dll.Everything_SetRegex(enable)
+

@@ -85,5 +85,22 @@ class TestEverything(unittest.TestCase):
         everything.set_match_whole_word(False)
         everything.dll.Everything_SetMatchWholeWord.assert_called_with(False)
 
+    @patch('pyeverything.everything.load_everything_dll')
+    @patch('pyeverything.everything.init_functions')
+    def test_set_regex(self, mock_init_functions, mock_load_dll):
+        """Test setting the regex option."""
+        mock_dll = MagicMock()
+        mock_load_dll.return_value = mock_dll
+
+        everything = Everything()
+
+        # Test with True (regex enabled)
+        everything.set_regex(True)
+        everything.dll.Everything_SetRegex.assert_called_with(True)
+
+        # Test with False (regex disabled)
+        everything.set_regex(False)
+        everything.dll.Everything_SetRegex.assert_called_with(False)
+
 if __name__ == '__main__':
     unittest.main()
