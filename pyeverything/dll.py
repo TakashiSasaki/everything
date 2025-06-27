@@ -150,6 +150,7 @@ def init_functions(dll):
     dll.Everything_GetResultHighlightedFullPathAndFileNameW.restype  = wintypes.DWORD
     
     dll.Everything_CleanUp.argtypes                      = []
+    dll.Everything_Reset.argtypes                        = []
 
 def parse_args():
     parser = argparse.ArgumentParser(

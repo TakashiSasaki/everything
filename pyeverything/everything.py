@@ -41,6 +41,8 @@ class Everything:
             EVERYTHING_REQUEST_SIZE
         )
         self.dll.Everything_SetRequestFlags(flags)
+        self.dll.Everything_SetOffset(offset)
+        self.dll.Everything_SetMax(count)
         if not self.dll.Everything_QueryW(True):
             sys.exit("Error: Everything query failed.")
         total = self.dll.Everything_GetNumResults()
@@ -113,6 +115,7 @@ class Everything:
             else:
                 results.append({"name": name, "path": path, "size": size})
         self.dll.Everything_CleanUp()
+        self.dll.Everything_Reset()
         return results
 
     def set_match_case(self, enable: bool):

@@ -14,6 +14,7 @@ class TestEverythingIntegration(unittest.TestCase):
     def setUp(self):
         # Initialize the Everything class for integration tests
         self.everything = Everything()
+        self.everything.dll.Everything_Reset()
 
     def test_search_hosts_file_integration(self):
         """Integration test: Search for C:\Windows\System32\drivers\etc\hosts"""
