@@ -22,7 +22,7 @@ Requirements:
   - Place Everything64.dll (64-bit) or Everything32.dll (32-bit) in PATH or current directory
 """
 import argparse
-import os
+import os as pydll_os # Use an alias for os module
 import sys
 import json
 import ctypes
@@ -108,21 +108,21 @@ def load_everything_dll():
     dll_names = ["Everything64.dll", "Everything32.dll"] if is_64bit else ["Everything32.dll", "Everything64.dll"]
     
     # Search in the 'bin' directory relative to the script's location
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    bin_dir = os.path.join(script_dir, "bin")
+    script_dir = pydll_os.path.dirname(pydll_os.path.abspath(__file__))
+    bin_dir = pydll_os.path.join(script_dir, "bin")
     for name in dll_names:
-        path = os.path.join(bin_dir, name)
-        if os.path.isfile(path):
+        path = pydll_os.path.join(bin_dir, name)
+        if pydll_os.path.isfile(path):
             try:
                 return ctypes.WinDLL(path)
             except OSError:
                 continue
 
     # Search in the current working directory
-    cwd = os.getcwd()
+    cwd = pydll_os.getcwd()
     for name in dll_names:
-        path = os.path.join(cwd, name)
-        if os.path.isfile(path):
+        path = pydll_os.path.join(cwd, name)
+        if pydll_os.path.isfile(path):
             try:
                 return ctypes.WinDLL(path)
             except OSError:
@@ -244,7 +244,10 @@ def run_search(dll, query, offset, count, all_fields=False):
         size_var = ctypes.c_ulonglong()
         dll.Everything_GetResultSize(i, ctypes.byref(size_var))
         size = size_var.value
-        name = os.path.basename(path)
+        print(f"DEBUG_DLL: id(pydll_os) in dll.run_search: {id(pydll_os)}", flush=True)
+        print(f"DEBUG_DLL: Before pydll_os.path.basename: path='{path}', type(path)={type(path)}", flush=True)
+        name = pydll_os.path.basename(path)
+        print(f"DEBUG_DLL: After pydll_os.path.basename: name='{name}', type(name)={type(name)}", flush=True)
         if all_fields:
             ext_buf = ctypes.create_unicode_buffer(50)
             dll.Everything_GetResultExtensionW(i, ext_buf, 50)
@@ -316,7 +319,7 @@ def main():
             sys.exit("Test failed: hosts file not found among search results.")
         size = match["size"]
         if size == 0:
-            actual = os.path.getsize(hostfile) if os.path.isfile(hostfile) else 0
+            actual = pydll_os.path.getsize(hostfile) if pydll_os.path.isfile(hostfile) else 0
             if actual > 1:
                 if args.json:
                     print(json.dumps({"warning": f"indexed size 0, actual size {actual}."}, ensure_ascii=False, indent=2))
