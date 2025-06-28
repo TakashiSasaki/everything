@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 r"""
-everything_cli.dll
+pyeverything.dll
 
 This script uses the Everything DLL (Everything64.dll or Everything32.dll) to retrieve a list
 of files matching a given search query, or runs a connectivity test by searching for

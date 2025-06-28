@@ -111,7 +111,7 @@ class TestEverythingIntegration(unittest.TestCase):
 
         try:
             # Give Everything time to index the new files
-            time.sleep(2)
+            time.sleep(5)
 
             # Test with whole word matching enabled
             self.everything.set_match_whole_word(True)
@@ -180,7 +180,7 @@ class TestEverythingIntegration(unittest.TestCase):
 
         try:
             # Give Everything time to index the new file
-            time.sleep(2)
+            time.sleep(5)
 
             # Test with only file name request
             self.everything.set_request_flags(EVERYTHING_REQUEST_FILE_NAME)
@@ -284,7 +284,7 @@ class TestEverythingIntegration(unittest.TestCase):
 
         try:
             # Give Everything time to index the new files
-            time.sleep(2)
+            time.sleep(5)
 
             # Perform search and sort by path
             self.everything.sort_results_by_path()
