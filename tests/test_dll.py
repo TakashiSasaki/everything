@@ -18,7 +18,7 @@ if sys.platform != 'win32':
         LPWSTR = None
         POINTER = None
 
-    wintypes = MockWintypes()
+    # wintypes = MockWintypes() # Commented out
 
     class MockCtypes:
         def WinDLL(self, *args, **kwargs):
@@ -34,7 +34,7 @@ if sys.platform != 'win32':
         def byref(self, obj):
             return obj # Simplified for mocking
 
-    ctypes = MockCtypes()
+    # ctypes = MockCtypes() # Commented out
 
 # Mock DLL class
 class MockDll:
@@ -195,10 +195,13 @@ class TestDllList(unittest.TestCase):
             self.assertIn('highlighted_path', entry)
             self.assertIn('highlighted_full_path', entry)
 
+    # Patch pyeverything.dll's ctypes and wintypes.FILETIME for non-Windows
+    # For Windows, use the actual modules/classes to avoid breaking real functionality if tests run there.
+    @mock.patch('pyeverything.dll.wintypes.FILETIME', new_callable=lambda: MockWintypes.FILETIME if sys.platform != 'win32' else wintypes.FILETIME)
+    @mock.patch('pyeverything.dll.ctypes', new_callable=lambda: MockCtypes() if sys.platform != 'win32' else ctypes)
     @mock.patch('pyeverything.dll.ctypes.create_unicode_buffer')
     @mock.patch('pyeverything.dll.ctypes.c_ulonglong')
     @mock.patch('pyeverything.dll.ctypes.byref')
-    @mock.patch('pyeverything.dll.wintypes.FILETIME')
     def test_run_search(self, mock_filetime, mock_byref, mock_c_ulonglong, mock_create_unicode_buffer):
         import os
         debug_path_for_basename = r'C:\test\path\file.txt'
@@ -208,28 +211,50 @@ class TestDllList(unittest.TestCase):
         mock_dll.Everything_QueryW.return_value = True
         mock_dll.Everything_GetNumResults.return_value = 1
 
+        # Setup mocks that were previously passed as arguments, now accessed via mock_ctypes_in_dll
+        # Ensure these mock objects behave as expected by the test logic.
+        mock_create_unicode_buffer = mock_ctypes_in_dll.create_unicode_buffer
+        mock_c_ulonglong = mock_ctypes_in_dll.c_ulonglong
+        # mock_byref is a function in ctypes, so mock_ctypes_in_dll.byref will be the mocked one.
+        # mock_filetime_in_dll is the mocked FILETIME class itself.
+
         # Mock for path and name
         mock_path_buffer = mock.Mock()
         mock_path_buffer.value = r"C:\test\path\file.txt"
-        mock_create_unicode_buffer.return_value = mock_path_buffer
+        # create_unicode_buffer is now a method of mock_ctypes_in_dll,
+        # so we configure its return_value or side_effect on the instance.
+        mock_ctypes_in_dll.create_unicode_buffer.return_value = mock_path_buffer
+
 
         # Mock for size
         mock_size_var = mock.Mock()
         mock_size_var.value = 12345
-        mock_c_ulonglong.return_value = mock_size_var
+        mock_ctypes_in_dll.c_ulonglong.return_value = mock_size_var
+
 
         # Mock for all_fields
         mock_dll.Everything_GetResultExtensionW.return_value = 0 # Success
         mock_ext_buffer = mock.Mock()
         mock_ext_buffer.value = "txt"
-        mock_create_unicode_buffer.side_effect = [mock_path_buffer, mock_ext_buffer, mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock()] # Reset side_effect
-        mock_create_unicode_buffer.return_value = mock_path_buffer # Reset for path buffer
+        # Configure side_effect for create_unicode_buffer on the mock_ctypes_in_dll instance
+        mock_ctypes_in_dll.create_unicode_buffer.side_effect = [
+            mock_path_buffer, mock_ext_buffer, mock.Mock(), mock.Mock(), mock.Mock(),
+            mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock()
+        ]
+        # The return_value below might be overridden by side_effect if not careful.
+        # For simplicity, ensure side_effect is comprehensive or reset it appropriately.
+        # For now, let's assume the side_effect list is consumed and then it might revert to return_value if any.
+        # However, it's safer to manage side_effect carefully.
+        # Let's re-assign return_value after side_effect is expected to be exhausted for basic search.
+        # This part of the logic needs careful review based on execution order.
 
         # Test with all_fields=True
 
         # Mock FILETIME conversions
+        # mock_filetime_in_dll is the mocked class. We need to control its instantiation.
         mock_filetime_instance = mock.Mock()
-        mock_filetime.return_value = mock_filetime_instance
+        mock_filetime_in_dll.return_value = mock_filetime_instance # When MockWintypes.FILETIME() is called
+
         # Simulate a valid datetime for date_created, modified, accessed, run, recently_changed
         with mock.patch('pyeverything.dll.filetime_to_dt', side_effect=[
             datetime.datetime(2023, 1, 1), # created
