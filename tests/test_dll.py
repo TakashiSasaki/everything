@@ -199,7 +199,10 @@ class TestDllList(unittest.TestCase):
     # For Windows, use the actual modules/classes to avoid breaking real functionality if tests run there.
     @mock.patch('pyeverything.dll.wintypes.FILETIME', new_callable=lambda: MockWintypes.FILETIME if sys.platform != 'win32' else wintypes.FILETIME)
     @mock.patch('pyeverything.dll.ctypes', new_callable=lambda: MockCtypes() if sys.platform != 'win32' else ctypes)
-    def test_run_search(self, mock_ctypes_in_dll, mock_filetime_in_dll):
+    @mock.patch('pyeverything.dll.ctypes.create_unicode_buffer')
+    @mock.patch('pyeverything.dll.ctypes.c_ulonglong')
+    @mock.patch('pyeverything.dll.ctypes.byref')
+    def test_run_search(self, mock_filetime, mock_byref, mock_c_ulonglong, mock_create_unicode_buffer):
         import os
         debug_path_for_basename = r'C:\test\path\file.txt'
         print(f"DEBUG_TEST: os.path.basename in test_run_search: {os.path.basename(debug_path_for_basename)}", flush=True)
