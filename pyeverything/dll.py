@@ -140,31 +140,62 @@ def load_everything_dll():
              f"Please ensure {expected} is in PATH, the package's bin directory, or the current directory.")
 
 def init_functions(dll):
+    # Setters
     dll.Everything_SetSearchW.argtypes                   = [wintypes.LPCWSTR]
+    dll.Everything_SetSearchA.argtypes                   = [wintypes.LPCSTR]
     dll.Everything_SetMatchPath.argtypes                 = [wintypes.BOOL]
-    dll.Everything_SetRequestFlags.argtypes              = [wintypes.DWORD]
-    dll.Everything_SetOffset.argtypes                    = [wintypes.DWORD]
-    dll.Everything_SetMax.argtypes                       = [wintypes.DWORD]
     dll.Everything_SetMatchCase.argtypes                 = [wintypes.BOOL]
     dll.Everything_SetMatchWholeWord.argtypes            = [wintypes.BOOL]
     dll.Everything_SetRegex.argtypes                     = [wintypes.BOOL]
-    dll.Everything_SortResultsByPath.argtypes            = []
+    dll.Everything_SetMax.argtypes                       = [wintypes.DWORD]
+    dll.Everything_SetOffset.argtypes                    = [wintypes.DWORD]
+    dll.Everything_SetRequestFlags.argtypes              = [wintypes.DWORD]
+    dll.Everything_SetSort.argtypes                      = [wintypes.DWORD]
+    dll.Everything_SetReplyWindow.argtypes               = [wintypes.HWND]
+    dll.Everything_SetTargetMachine.argtypes             = [wintypes.LPCWSTR]
+    dll.Everything_SetRunCountW.argtypes                 = [wintypes.LPCWSTR, ctypes.c_int]
+    dll.Everything_SetRunCountW.restype                  = wintypes.BOOL
+    dll.Everything_SetRunCountA.argtypes                 = [wintypes.LPCSTR, ctypes.c_int]
+    dll.Everything_SetRunCountA.restype                  = wintypes.BOOL
+
+    # Getters
+    dll.Everything_GetMatchPath.restype                  = wintypes.BOOL
+    dll.Everything_GetMatchCase.restype                  = wintypes.BOOL
+    dll.Everything_GetMatchWholeWord.restype             = wintypes.BOOL
+    dll.Everything_GetRegex.restype                      = wintypes.BOOL
+    dll.Everything_GetMax.restype                        = wintypes.DWORD
+    dll.Everything_GetOffset.restype                     = wintypes.DWORD
+    dll.Everything_GetSort.restype                       = wintypes.DWORD
+    dll.Everything_GetRequestFlags.restype               = wintypes.DWORD
+    dll.Everything_GetSearchW.restype                    = wintypes.LPCWSTR
+    dll.Everything_GetSearchA.restype                    = wintypes.LPCSTR
+    dll.Everything_GetNumResults.restype                 = wintypes.DWORD
+    dll.Everything_GetLastError.restype                  = wintypes.DWORD
+    dll.Everything_GetReplyWindow.restype                = wintypes.HWND
+    dll.Everything_GetTargetMachine.restype              = wintypes.LPCWSTR
+    dll.Everything_GetRunCountW.argtypes                 = [wintypes.LPCWSTR]
+    dll.Everything_GetRunCountW.restype                  = ctypes.c_int
+    dll.Everything_GetRunCountA.argtypes                 = [wintypes.LPCSTR]
+    dll.Everything_GetRunCountA.restype                  = ctypes.c_int
+
+    # Query
     dll.Everything_QueryW.argtypes                       = [wintypes.BOOL]
     dll.Everything_QueryW.restype                        = wintypes.BOOL
-    
-    
-    dll.Everything_GetNumResults.restype                 = wintypes.DWORD
+    dll.Everything_QueryA.argtypes                       = [wintypes.BOOL]
+    dll.Everything_QueryA.restype                        = wintypes.BOOL
+    dll.Everything_IsQueryReply.argtypes                 = [wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM, wintypes.DWORD]
+    dll.Everything_IsQueryReply.restype                  = wintypes.BOOL
 
-    dll.Everything_SetSort.argtypes                      = [wintypes.DWORD]
-    dll.Everything_SetSort.restype                       = None
-
-    
-
-    
-
-    
+    # Results
+    dll.Everything_SortResultsByPath.argtypes            = []
     dll.Everything_GetResultFullPathNameW.argtypes       = [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
     dll.Everything_GetResultFullPathNameW.restype        = wintypes.DWORD
+    dll.Everything_GetResultFullPathNameA.argtypes       = [wintypes.DWORD, wintypes.LPSTR, wintypes.DWORD]
+    dll.Everything_GetResultFullPathNameA.restype        = wintypes.DWORD
+    dll.Everything_GetResultFileNameW.argtypes           = [wintypes.DWORD]
+    dll.Everything_GetResultFileNameW.restype            = wintypes.LPCWSTR
+    dll.Everything_GetResultFileNameA.argtypes           = [wintypes.DWORD]
+    dll.Everything_GetResultFileNameA.restype            = wintypes.LPCSTR
     dll.Everything_GetResultSize.argtypes                = [wintypes.DWORD, ctypes.POINTER(ctypes.c_ulonglong)]
     dll.Everything_GetResultSize.restype                 = wintypes.BOOL
     dll.Everything_GetResultExtensionW.argtypes          = [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
@@ -179,6 +210,8 @@ def init_functions(dll):
     dll.Everything_GetResultAttributes.restype           = wintypes.DWORD
     dll.Everything_GetResultFileListFileNameW.argtypes   = [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
     dll.Everything_GetResultFileListFileNameW.restype    = wintypes.DWORD
+    dll.Everything_GetResultFileListFileNameA.argtypes   = [wintypes.DWORD, wintypes.LPSTR, wintypes.DWORD]
+    dll.Everything_GetResultFileListFileNameA.restype    = wintypes.DWORD
     dll.Everything_GetResultRunCount.argtypes            = [wintypes.DWORD]
     dll.Everything_GetResultRunCount.restype             = wintypes.DWORD
     dll.Everything_GetResultDateRun.argtypes             = [wintypes.DWORD, ctypes.POINTER(wintypes.FILETIME)]
@@ -191,9 +224,22 @@ def init_functions(dll):
     dll.Everything_GetResultHighlightedPathW.restype     = wintypes.DWORD
     dll.Everything_GetResultHighlightedFullPathAndFileNameW.argtypes = [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
     dll.Everything_GetResultHighlightedFullPathAndFileNameW.restype  = wintypes.DWORD
-    
+
+    # Version
+    dll.Everything_GetMajorVersion.restype               = wintypes.DWORD
+    dll.Everything_GetMinorVersion.restype               = wintypes.DWORD
+    dll.Everything_GetRevision.restype                   = wintypes.DWORD
+    dll.Everything_GetBuildNumber.restype                = wintypes.DWORD
+
+    # Status
+    dll.Everything_IsDBLoaded.restype                    = wintypes.BOOL
+    dll.Everything_IsAdmin.restype                       = wintypes.BOOL
+    dll.Everything_IsAppData.restype                     = wintypes.BOOL
+
+    # Control
     dll.Everything_CleanUp.argtypes                      = []
     dll.Everything_Reset.argtypes                        = []
+    dll.Everything_Exit.argtypes                         = []
 
 def parse_args():
     parser = argparse.ArgumentParser(
