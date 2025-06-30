@@ -24,3 +24,13 @@ You are a helpful, technical assistant. Whenever the user provides an English in
 
 # コミットメッセージの作成
 コミットメッセージは git commit -m でインラインで書くのではなく、commit_message.txt のようなファイルに書き込んでgit commit -F オプションを使ってください。コミットメッセージファイルを作成するときにはechoコマンドを使わずファイルへの直接書き込みツール（WriteFile Tool）を使用してください。
+
+# このgitリポジトリについて
+
+このプロジェクトではEveryhingというファイル検索ソフトウェアとそのDLLをPythonで使用するためのラッパーモジュールである pyeverything を開発しています。開発には poetry を使用しています。Windows環境では poetry.exe にパスが通っていないことがあるので、その場合には python -m poetry を使用します。
+
+このリポジトリに初めてアクセスしたときには、まず pyeverything/ ディレクトリのソースコードと tests/ ディレクトリのテストスイートおよび docs/ ディレクトリにあるDLLのエクスポートに関するドキュメントなどを読み、全体の構造を把握してください。
+
+# テストの実行について
+テストには unittest と pytest を使用しています。
+Windows環境では pytest.exe にパスが通っていないことがあるので、その場合には python -m pytest を使用します。
