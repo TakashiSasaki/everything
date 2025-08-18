@@ -54,24 +54,24 @@ def test_test_option_json() -> None:
 @requires_windows
 @requires_dll
 def test_search_json_option() -> None:
-    # Use a known Windows system file that typically exists
-    query = r"windows\\system32\\drivers\\etc\\hosts.ics"
+    # Use a universal Windows system file and a robust tokenized query
+    query = "windows system32 drivers etc hosts"
     stdout, stderr, rc = run_command(["--search", query, "--json"]) 
     assert rc == 0, f"--search --json failed rc={rc}, stderr={stderr}\nstdout={stdout}"
     data = json.loads(stdout)
     assert isinstance(data, list) and len(data) >= 0
     found = any(
-        entry.get("name") == "hosts.ics" and
-        entry.get("path", "").lower().endswith(r"windows\system32\drivers\etc\hosts.ics")
+        str(entry.get("name", "")).lower() == "hosts" and
+        r"windows\system32\drivers\etc\hosts" in str(entry.get("path", "")).lower()
         for entry in data
     )
-    assert found, "Expected hosts.ics entry not found in search results"
+    assert found, "Expected hosts entry not found in search results"
 
 
 @requires_windows
 @requires_dll
 def test_search_allfields_json_option() -> None:
-    query = r"windows\\system32\\drivers\\etc\\hosts.ics"
+    query = "windows system32 drivers etc hosts"
     stdout, stderr, rc = run_command(["--search", query, "--json", "--all-fields"]) 
     assert rc == 0, f"--search --json --all-fields failed rc={rc}, stderr={stderr}\nstdout={stdout}"
     data = json.loads(stdout)
@@ -79,10 +79,10 @@ def test_search_allfields_json_option() -> None:
     found = False
     for entry in data:
         if (
-            entry.get("name") == "hosts.ics" and
-            entry.get("path", "").lower().endswith(r"windows\system32\drivers\etc\hosts.ics")
+            str(entry.get("name", "")).lower() == "hosts" and
+            r"windows\system32\drivers\etc\hosts" in str(entry.get("path", "")).lower()
         ):
             # A representative all-fields key
             assert "date_modified" in entry
             found = True
-    assert found, "Expected hosts.ics entry with extended fields not found"
+    assert found, "Expected hosts entry with extended fields not found"
