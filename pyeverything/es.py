@@ -64,6 +64,14 @@ def parse_args():
 
 
 def locate_es():
+    """Locate es.exe on Windows.
+
+    Search order:
+    1) PATH (via shutil.which)
+    2) Package bin directory (pyeverything/bin/es.exe)
+    3) Current working directory (./es.exe)
+    4) Common install locations (C:\\bin\\es.exe, Program Files\\Everything\\es.exe)
+    """
     es_cmd = shutil.which("es.exe")
     if not es_cmd:
         # Check in the package's bin directory
@@ -77,7 +85,18 @@ def locate_es():
         if os.path.isfile(local_path) and os.access(local_path, os.X_OK):
             es_cmd = local_path
     if not es_cmd:
-        sys.exit("Error: 'es.exe' not found in PATH, package bin directory, or current directory.")
+        # Common absolute install locations (do not require os.access to avoid unit test coupling)
+        candidate_paths = [
+            r"C:\\bin\\es.exe",
+            os.path.join(os.environ.get("ProgramFiles", r"C:\\Program Files"), "Everything", "es.exe"),
+            os.path.join(os.environ.get("ProgramFiles(x86)", r"C:\\Program Files (x86)"), "Everything", "es.exe"),
+        ]
+        for candidate in candidate_paths:
+            if os.path.isfile(candidate):
+                es_cmd = candidate
+                break
+    if not es_cmd:
+        sys.exit("Error: 'es.exe' not found in PATH, package bin directory, current directory, or common install locations.")
     return es_cmd
 
 

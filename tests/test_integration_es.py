@@ -29,6 +29,15 @@ def _es_present() -> bool:
     cwd_es = os.path.join(os.getcwd(), "es.exe")
     if os.path.isfile(cwd_es) and os.access(cwd_es, os.X_OK):
         return True
+    # common absolute install locations
+    common_paths = [
+        r"C:\\bin\\es.exe",
+        os.path.join(os.environ.get("ProgramFiles", r"C:\\Program Files"), "Everything", "es.exe"),
+        os.path.join(os.environ.get("ProgramFiles(x86)", r"C:\\Program Files (x86)"), "Everything", "es.exe"),
+    ]
+    for p in common_paths:
+        if os.path.isfile(p):
+            return True
     return False
 
 
@@ -96,4 +105,3 @@ def test_search_allfields_json_option() -> None:
             assert "date_modified" in entry
             found = True
     assert found, "Expected hosts.ics entry with extended fields not found"
-
