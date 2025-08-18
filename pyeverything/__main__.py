@@ -1,6 +1,7 @@
 import argparse
 import sys
 
+
 def main():
     """Main entry point for the pyeverything package."""
     parser = argparse.ArgumentParser(
@@ -9,7 +10,7 @@ def main():
     subparsers = parser.add_subparsers(dest="command")
 
     # TUI command
-    tui_parser = subparsers.add_parser("tui", help="Run the Textual TUI application.")
+    subparsers.add_parser("tui", help="Run the Textual TUI app.")
 
     # If no arguments are provided, print the help message
     if len(sys.argv) == 1:
@@ -22,6 +23,7 @@ def main():
         from pyeverything.tui import EverythingTUI
         app = EverythingTUI()
         app.run()
+
 
 if __name__ == "__main__":
     main()

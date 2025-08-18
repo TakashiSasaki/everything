@@ -22,7 +22,7 @@ Requirements:
   - Place Everything64.dll (64-bit) or Everything32.dll (32-bit) in PATH or current directory
 """
 import argparse
-import os as pydll_os # Use an alias for os module
+import os as pydll_os  # Use an alias for os module
 import sys
 import json
 import ctypes

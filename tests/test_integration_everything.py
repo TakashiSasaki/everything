@@ -33,7 +33,7 @@ class TestEverythingIntegration(unittest.TestCase):
         time.sleep(1)
 
     def test_search_hosts_file_integration(self):
-        """Integration test: Search for C:\Windows\System32\drivers\etc\hosts"""
+        r"""Integration test: Search for C:\Windows\System32\drivers\etc\hosts"""
         host_file_path = r"C:\Windows\System32\drivers\etc\hosts"
 
         # Perform the actual search
@@ -135,7 +135,7 @@ class TestEverythingIntegration(unittest.TestCase):
         """Integration test: Verify set_regex enables regex searching."""
         # Test with regex enabled
         self.everything.set_regex(True)
-        regex_query = ".*\.txt$"  # Matches any file ending with .txt
+        regex_query = r".*\.txt$"  # Matches any file ending with .txt
         results = self.everything.search(regex_query)
         self.assertGreater(len(results), 0, "Expected results for regex search")
         # Verify that at least some results actually end with .txt
