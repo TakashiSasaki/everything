@@ -10,3 +10,5 @@ docs/Everything64.def
 docs/Everything.c
 .pytest_cache/
 .venv/
+logs/es_test.json
+logs/es_search_hosts.json
