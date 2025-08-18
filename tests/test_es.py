@@ -156,6 +156,7 @@ class TestEsLocateEs(unittest.TestCase):
         mock_isfile.side_effect = [True, False] # True for bin_path, False for local_path
         mock_access.side_effect = [True, False] # True for bin_path, False for local_path
 
+        from pyeverything.es import locate_es
         result = locate_es()
         self.assertEqual(result, '/mock/script/dir/bin/es.exe')
         mock_which.assert_called_once_with('es.exe')
