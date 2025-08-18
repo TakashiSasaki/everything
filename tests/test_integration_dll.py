@@ -62,7 +62,7 @@ def test_search_json_option() -> None:
     assert isinstance(data, list) and len(data) >= 0
     found = any(
         entry.get("name") == "hosts.ics" and
-        entry.get("path", "").lower().endswith(r"windows\system32\drivers\etc")
+        entry.get("path", "").lower().endswith(r"windows\system32\drivers\etc\hosts.ics")
         for entry in data
     )
     assert found, "Expected hosts.ics entry not found in search results"
@@ -80,10 +80,9 @@ def test_search_allfields_json_option() -> None:
     for entry in data:
         if (
             entry.get("name") == "hosts.ics" and
-            entry.get("path", "").lower().endswith(r"windows\system32\drivers\etc")
+            entry.get("path", "").lower().endswith(r"windows\system32\drivers\etc\hosts.ics")
         ):
             # A representative all-fields key
             assert "date_modified" in entry
             found = True
     assert found, "Expected hosts.ics entry with extended fields not found"
-
