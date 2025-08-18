@@ -4,63 +4,65 @@ from unittest import mock
 from io import StringIO
 import json
 import datetime
-from ctypes import wintypes # Need to ensure wintypes is available or mocked
+from typing import Any, Dict, List, Optional
+from ctypes import wintypes  # Need to ensure wintypes is available or mocked
 
 # Mock ctypes and wintypes if not on Windows
 if sys.platform != 'win32':
     class MockWintypes:
         class FILETIME:
-            dwLowDateTime = 0
-            dwHighDateTime = 0
-        LPCWSTR = None
-        BOOL = None
-        DWORD = None
-        LPWSTR = None
-        POINTER = None
+            dwLowDateTime: int = 0
+            dwHighDateTime: int = 0
+
+        LPCWSTR: Optional[str] = None
+        BOOL: Optional[bool] = None
+        DWORD: Optional[int] = None
+        LPWSTR: Optional[str] = None
+        POINTER: Any = None
 
     wintypes = MockWintypes()
 
     class MockCtypes:
-        def WinDLL(self, *args, **kwargs):
+        def WinDLL(self, *args: Any, **kwargs: Any) -> "MockDll":
             return MockDll()
-        def create_unicode_buffer(self, size):
-            m = mock.Mock()
+        def create_unicode_buffer(self, size: int) -> Any:
+            m: Any = mock.Mock()
             m.value = ""
             return m
-        def c_ulonglong(self):
-            m = mock.Mock()
+        def c_ulonglong(self) -> Any:
+            m: Any = mock.Mock()
             m.value = 0
             return m
-        def byref(self, obj):
-            return obj # Simplified for mocking
+        def byref(self, obj: Any) -> Any:  # Simplified for mocking
+            return obj
 
     ctypes = MockCtypes()
 
 # Mock DLL class
 class MockDll:
-    def __init__(self):
-        self.Everything_SetSearchW = mock.Mock()
-        self.Everything_SetMatchPath = mock.Mock()
-        self.Everything_SetRequestFlags = mock.Mock()
-        self.Everything_SetOffset = mock.Mock()
-        self.Everything_SetMax = mock.Mock()
-        self.Everything_QueryW = mock.Mock(return_value=True)
-        self.Everything_GetNumResults = mock.Mock()
-        self.Everything_GetResultFullPathNameW = mock.Mock()
-        self.Everything_GetResultSize = mock.Mock()
-        self.Everything_GetResultExtensionW = mock.Mock()
-        self.Everything_GetResultDateCreated = mock.Mock()
-        self.Everything_GetResultDateModified = mock.Mock()
-        self.Everything_GetResultDateAccessed = mock.Mock()
-        self.Everything_GetResultAttributes = mock.Mock(return_value=32)
-        self.Everything_GetResultFileListFileNameW = mock.Mock()
-        self.Everything_GetResultRunCount = mock.Mock()
-        self.Everything_GetResultDateRun = mock.Mock()
-        self.Everything_GetResultDateRecentlyChanged = mock.Mock()
-        self.Everything_GetResultHighlightedFileNameW = mock.Mock()
-        self.Everything_GetResultHighlightedPathW = mock.Mock()
-        self.Everything_GetResultHighlightedFullPathAndFileNameW = mock.Mock()
-        self.Everything_CleanUp = mock.Mock()
+    def __init__(self) -> None:
+        self.Everything_SetSearchW: mock.Mock = mock.Mock()
+        self.Everything_SetMatchPath: mock.Mock = mock.Mock()
+        self.Everything_SetRequestFlags: mock.Mock = mock.Mock()
+        self.Everything_SetOffset: mock.Mock = mock.Mock()
+        self.Everything_SetMax: mock.Mock = mock.Mock()
+        self.Everything_QueryW: mock.Mock = mock.Mock(return_value=True)
+        self.Everything_GetNumResults: mock.Mock = mock.Mock()
+        self.Everything_GetResultFullPathNameW: mock.Mock = mock.Mock()
+        self.Everything_GetResultSize: mock.Mock = mock.Mock()
+        self.Everything_GetResultExtensionW: mock.Mock = mock.Mock()
+        self.Everything_GetResultDateCreated: mock.Mock = mock.Mock()
+        self.Everything_GetResultDateModified: mock.Mock = mock.Mock()
+        self.Everything_GetResultDateAccessed: mock.Mock = mock.Mock()
+        self.Everything_GetResultAttributes: mock.Mock = mock.Mock(return_value=32)
+        self.Everything_GetResultFileListFileNameW: mock.Mock = mock.Mock()
+        self.Everything_GetResultRunCount: mock.Mock = mock.Mock()
+        self.Everything_GetResultDateRun: mock.Mock = mock.Mock()
+        self.Everything_GetResultDateRecentlyChanged: mock.Mock = mock.Mock()
+        self.Everything_GetResultHighlightedFileNameW: mock.Mock = mock.Mock()
+        self.Everything_GetResultHighlightedPathW: mock.Mock = mock.Mock()
+        self.Everything_GetResultHighlightedFullPathAndFileNameW: mock.Mock = mock.Mock()
+        self.Everything_CleanUp: mock.Mock = mock.Mock()
 
 from pyeverything import dll as dll_list
 from pyeverything.dll import filetime_to_dt
@@ -69,7 +71,7 @@ class TestDllList(unittest.TestCase):
     @mock.patch('pyeverything.dll.load_everything_dll')
     @mock.patch('pyeverything.dll.init_functions')
     @mock.patch('pyeverything.dll.run_search')
-    def test_test_option_output_text(self, mock_run_search, mock_init, mock_load):
+    def test_test_option_output_text(self, mock_run_search: mock.Mock, mock_init: mock.Mock, mock_load: mock.Mock) -> None:
         # Simulate a search result for the hosts file
         mock_run_search.return_value = [
             {'path': r'C:\Windows\System32\drivers\etc\hosts', 'size': 959}
@@ -91,7 +93,7 @@ class TestDllList(unittest.TestCase):
     @mock.patch('pyeverything.dll.load_everything_dll')
     @mock.patch('pyeverything.dll.init_functions')
     @mock.patch('pyeverything.dll.run_search')
-    def test_test_option_output_json(self, mock_run_search, mock_init, mock_load):
+    def test_test_option_output_json(self, mock_run_search: mock.Mock, mock_init: mock.Mock, mock_load: mock.Mock) -> None:
         mock_run_search.return_value = [
             {'path': r'C:\Windows\System32\drivers\etc\hosts', 'size': 959}
         ]
@@ -109,7 +111,7 @@ class TestDllList(unittest.TestCase):
     @mock.patch('pyeverything.dll.load_everything_dll')
     @mock.patch('pyeverything.dll.init_functions')
     @mock.patch('pyeverything.dll.run_search')
-    def test_search_option_output_json(self, mock_run_search, mock_init, mock_load):
+    def test_search_option_output_json(self, mock_run_search: mock.Mock, mock_init: mock.Mock, mock_load: mock.Mock) -> None:
         # Simulate a search result for a hosts.ics file
         mock_run_search.return_value = [
             {
@@ -141,7 +143,7 @@ class TestDllList(unittest.TestCase):
     @mock.patch('pyeverything.dll.load_everything_dll')
     @mock.patch('pyeverything.dll.init_functions')
     @mock.patch('pyeverything.dll.run_search')
-    def test_search_option_output_json_all_fields(self, mock_run_search, mock_init, mock_load):
+    def test_search_option_output_json_all_fields(self, mock_run_search: mock.Mock, mock_init: mock.Mock, mock_load: mock.Mock) -> None:
         # Simulate a search result with all fields
         mock_run_search.return_value = [
             {
@@ -199,7 +201,7 @@ class TestDllList(unittest.TestCase):
     @mock.patch('pyeverything.dll.ctypes.c_ulonglong')
     @mock.patch('pyeverything.dll.ctypes.byref')
     @mock.patch('pyeverything.dll.wintypes.FILETIME')
-    def test_run_search(self, mock_filetime, mock_byref, mock_c_ulonglong, mock_create_unicode_buffer):
+    def test_run_search(self, mock_filetime: mock.Mock, mock_byref: mock.Mock, mock_c_ulonglong: mock.Mock, mock_create_unicode_buffer: mock.Mock) -> None:
         import os
         debug_path_for_basename = r'C:\test\path\file.txt'
         print(f"DEBUG_TEST: os.path.basename in test_run_search: {os.path.basename(debug_path_for_basename)}", flush=True)
@@ -279,7 +281,7 @@ class TestDllList(unittest.TestCase):
             self.assertEqual(mock_dll.Everything_GetNumResults.call_count, 2)
             mock_dll.Everything_CleanUp.assert_called_once()
 
-    def test_filetime_to_dt(self):
+    def test_filetime_to_dt(self) -> None:
         # Test case 1: Known valid FILETIME
         # Corresponds to 2024-01-01 00:00:00 UTC
         ft = wintypes.FILETIME()
