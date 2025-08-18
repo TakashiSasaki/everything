@@ -64,9 +64,8 @@ class Everything:
             size = size_var.value
             name = os.path.basename(full_path)
             if all_fields:
-                ext_buf = ctypes.create_unicode_buffer(50)
-                self.dll.Everything_GetResultExtensionW(i, ext_buf, 50)
-                ext = ext_buf.value
+                ext_ptr = self.dll.Everything_GetResultExtensionW(i)
+                ext = ext_ptr if ext_ptr else ""
                 ft_created = wintypes.FILETIME()
                 self.dll.Everything_GetResultDateCreated(i, ctypes.byref(ft_created))
                 dc = filetime_to_dt(ft_created)
@@ -77,9 +76,8 @@ class Everything:
                 self.dll.Everything_GetResultDateAccessed(i, ctypes.byref(ft_accessed))
                 da = filetime_to_dt(ft_accessed)
                 attr = self.dll.Everything_GetResultAttributes(i)
-                flfn_buf = ctypes.create_unicode_buffer(260)
-                self.dll.Everything_GetResultFileListFileNameW(i, flfn_buf, 260)
-                flfn = flfn_buf.value
+                flfn_ptr = self.dll.Everything_GetResultFileListFileNameW(i)
+                flfn = flfn_ptr if flfn_ptr else ""
                 rc = self.dll.Everything_GetResultRunCount(i)
                 ft_run = wintypes.FILETIME()
                 self.dll.Everything_GetResultDateRun(i, ctypes.byref(ft_run))
@@ -87,15 +85,12 @@ class Everything:
                 ft_recent = wintypes.FILETIME()
                 self.dll.Everything_GetResultDateRecentlyChanged(i, ctypes.byref(ft_recent))
                 drc = filetime_to_dt(ft_recent)
-                hfn_buf = ctypes.create_unicode_buffer(260)
-                self.dll.Everything_GetResultHighlightedFileNameW(i, hfn_buf, 260)
-                hfn = hfn_buf.value
-                hp_buf = ctypes.create_unicode_buffer(260)
-                self.dll.Everything_GetResultHighlightedPathW(i, hp_buf, 260)
-                hp = hp_buf.value
-                hfp_buf = ctypes.create_unicode_buffer(260)
-                self.dll.Everything_GetResultHighlightedFullPathAndFileNameW(i, hfp_buf, 260)
-                hfp = hfp_buf.value
+                hfn_ptr = self.dll.Everything_GetResultHighlightedFileNameW(i)
+                hfn = hfn_ptr if hfn_ptr else ""
+                hp_ptr = self.dll.Everything_GetResultHighlightedPathW(i)
+                hp = hp_ptr if hp_ptr else ""
+                hfp_ptr = self.dll.Everything_GetResultHighlightedFullPathAndFileNameW(i)
+                hfp = hfp_ptr if hfp_ptr else ""
                 results.append({
                     "name": name,
                     "path": path,

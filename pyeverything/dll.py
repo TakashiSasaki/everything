@@ -47,41 +47,33 @@ EVERYTHING_REQUEST_HIGHLIGHTED_FILE_NAME            = 0x00002000
 EVERYTHING_REQUEST_HIGHLIGHTED_PATH                 = 0x00004000
 EVERYTHING_REQUEST_HIGHLIGHTED_FULL_PATH_AND_FILE_NAME = 0x00008000
 
-# Everything SDK sort types
-EVERYTHING_SORT_NAME                                = 1
-EVERYTHING_SORT_PATH                                = 2
-EVERYTHING_SORT_SIZE                                = 3
-EVERYTHING_SORT_EXTENSION                           = 4
-EVERYTHING_SORT_TYPE                                = 5
-EVERYTHING_SORT_DATE_CREATED                        = 6
-EVERYTHING_SORT_DATE_MODIFIED                       = 7
-EVERYTHING_SORT_DATE_ACCESSED                       = 8
-EVERYTHING_SORT_RUN_COUNT                           = 9
-EVERYTHING_SORT_DATE_RUN                            = 10
-EVERYTHING_SORT_ATTRIBUTES                          = 11
-
-# Everything SDK sort order
-EVERYTHING_SORT_ASCENDING                           = 0
-EVERYTHING_SORT_DESCENDING                          = 1
-
-# Everything SDK sort types
-EVERYTHING_SORT_NAME                                = 1
-EVERYTHING_SORT_PATH                                = 2
-EVERYTHING_SORT_SIZE                                = 3
-EVERYTHING_SORT_EXTENSION                           = 4
-EVERYTHING_SORT_TYPE                                = 5
-EVERYTHING_SORT_DATE_CREATED_ASCENDING            = 6
-EVERYTHING_SORT_DATE_MODIFIED_ASCENDING           = 7
-EVERYTHING_SORT_DATE_ACCESSED_ASCENDING           = 8
-EVERYTHING_SORT_RUN_COUNT_ASCENDING               = 9
-EVERYTHING_SORT_DATE_RUN_ASCENDING                = 10
-EVERYTHING_SORT_ATTRIBUTES_ASCENDING              = 11
-EVERYTHING_SORT_DATE_CREATED_DESCENDING           = 12
-EVERYTHING_SORT_DATE_MODIFIED_DESCENDING          = 13
-EVERYTHING_SORT_DATE_ACCESSED_DESCENDING          = 14
-EVERYTHING_SORT_RUN_COUNT_DESCENDING              = 15
-EVERYTHING_SORT_DATE_RUN_DESCENDING               = 16
-EVERYTHING_SORT_ATTRIBUTES_DESCENDING             = 17
+# Everything SDK sort constants (match Everything.h)
+EVERYTHING_SORT_NAME_ASCENDING                     = 1
+EVERYTHING_SORT_NAME_DESCENDING                    = 2
+EVERYTHING_SORT_PATH_ASCENDING                     = 3
+EVERYTHING_SORT_PATH_DESCENDING                    = 4
+EVERYTHING_SORT_SIZE_ASCENDING                     = 5
+EVERYTHING_SORT_SIZE_DESCENDING                    = 6
+EVERYTHING_SORT_EXTENSION_ASCENDING                = 7
+EVERYTHING_SORT_EXTENSION_DESCENDING               = 8
+EVERYTHING_SORT_TYPE_NAME_ASCENDING                = 9
+EVERYTHING_SORT_TYPE_NAME_DESCENDING               = 10
+EVERYTHING_SORT_DATE_CREATED_ASCENDING             = 11
+EVERYTHING_SORT_DATE_CREATED_DESCENDING            = 12
+EVERYTHING_SORT_DATE_MODIFIED_ASCENDING            = 13
+EVERYTHING_SORT_DATE_MODIFIED_DESCENDING           = 14
+EVERYTHING_SORT_ATTRIBUTES_ASCENDING               = 15
+EVERYTHING_SORT_ATTRIBUTES_DESCENDING              = 16
+EVERYTHING_SORT_FILE_LIST_FILENAME_ASCENDING       = 17
+EVERYTHING_SORT_FILE_LIST_FILENAME_DESCENDING      = 18
+EVERYTHING_SORT_RUN_COUNT_ASCENDING                = 19
+EVERYTHING_SORT_RUN_COUNT_DESCENDING               = 20
+EVERYTHING_SORT_DATE_RECENTLY_CHANGED_ASCENDING    = 21
+EVERYTHING_SORT_DATE_RECENTLY_CHANGED_DESCENDING   = 22
+EVERYTHING_SORT_DATE_ACCESSED_ASCENDING            = 23
+EVERYTHING_SORT_DATE_ACCESSED_DESCENDING           = 24
+EVERYTHING_SORT_DATE_RUN_ASCENDING                 = 25
+EVERYTHING_SORT_DATE_RUN_DESCENDING                = 26
 
 # Combined flag for all fields
 EVERYTHING_REQUEST_ALL = (
@@ -152,11 +144,6 @@ def init_functions(dll):
     dll.Everything_SetRequestFlags.argtypes              = [wintypes.DWORD]
     dll.Everything_SetSort.argtypes                      = [wintypes.DWORD]
     dll.Everything_SetReplyWindow.argtypes               = [wintypes.HWND]
-    dll.Everything_SetTargetMachine.argtypes             = [wintypes.LPCWSTR]
-    dll.Everything_SetRunCountW.argtypes                 = [wintypes.LPCWSTR, ctypes.c_int]
-    dll.Everything_SetRunCountW.restype                  = wintypes.BOOL
-    dll.Everything_SetRunCountA.argtypes                 = [wintypes.LPCSTR, ctypes.c_int]
-    dll.Everything_SetRunCountA.restype                  = wintypes.BOOL
 
     # Getters
     dll.Everything_GetMatchPath.restype                  = wintypes.BOOL
@@ -172,11 +159,7 @@ def init_functions(dll):
     dll.Everything_GetNumResults.restype                 = wintypes.DWORD
     dll.Everything_GetLastError.restype                  = wintypes.DWORD
     dll.Everything_GetReplyWindow.restype                = wintypes.HWND
-    dll.Everything_GetTargetMachine.restype              = wintypes.LPCWSTR
-    dll.Everything_GetRunCountW.argtypes                 = [wintypes.LPCWSTR]
-    dll.Everything_GetRunCountW.restype                  = ctypes.c_int
-    dll.Everything_GetRunCountA.argtypes                 = [wintypes.LPCSTR]
-    dll.Everything_GetRunCountA.restype                  = ctypes.c_int
+    dll.Everything_GetTargetMachine.restype              = wintypes.DWORD
 
     # Query
     dll.Everything_QueryW.argtypes                       = [wintypes.BOOL]
@@ -198,8 +181,8 @@ def init_functions(dll):
     dll.Everything_GetResultFileNameA.restype            = wintypes.LPCSTR
     dll.Everything_GetResultSize.argtypes                = [wintypes.DWORD, ctypes.POINTER(ctypes.c_ulonglong)]
     dll.Everything_GetResultSize.restype                 = wintypes.BOOL
-    dll.Everything_GetResultExtensionW.argtypes          = [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
-    dll.Everything_GetResultExtensionW.restype           = wintypes.DWORD
+    dll.Everything_GetResultExtensionW.argtypes          = [wintypes.DWORD]
+    dll.Everything_GetResultExtensionW.restype           = wintypes.LPCWSTR
     dll.Everything_GetResultDateCreated.argtypes         = [wintypes.DWORD, ctypes.POINTER(wintypes.FILETIME)]
     dll.Everything_GetResultDateCreated.restype          = wintypes.BOOL
     dll.Everything_GetResultDateModified.argtypes        = [wintypes.DWORD, ctypes.POINTER(wintypes.FILETIME)]
@@ -208,22 +191,22 @@ def init_functions(dll):
     dll.Everything_GetResultDateAccessed.restype         = wintypes.BOOL
     dll.Everything_GetResultAttributes.argtypes          = [wintypes.DWORD]
     dll.Everything_GetResultAttributes.restype           = wintypes.DWORD
-    dll.Everything_GetResultFileListFileNameW.argtypes   = [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
-    dll.Everything_GetResultFileListFileNameW.restype    = wintypes.DWORD
-    dll.Everything_GetResultFileListFileNameA.argtypes   = [wintypes.DWORD, wintypes.LPSTR, wintypes.DWORD]
-    dll.Everything_GetResultFileListFileNameA.restype    = wintypes.DWORD
+    dll.Everything_GetResultFileListFileNameW.argtypes   = [wintypes.DWORD]
+    dll.Everything_GetResultFileListFileNameW.restype    = wintypes.LPCWSTR
+    dll.Everything_GetResultFileListFileNameA.argtypes   = [wintypes.DWORD]
+    dll.Everything_GetResultFileListFileNameA.restype    = wintypes.LPCSTR
     dll.Everything_GetResultRunCount.argtypes            = [wintypes.DWORD]
     dll.Everything_GetResultRunCount.restype             = wintypes.DWORD
     dll.Everything_GetResultDateRun.argtypes             = [wintypes.DWORD, ctypes.POINTER(wintypes.FILETIME)]
     dll.Everything_GetResultDateRun.restype              = wintypes.BOOL
     dll.Everything_GetResultDateRecentlyChanged.argtypes = [wintypes.DWORD, ctypes.POINTER(wintypes.FILETIME)]
     dll.Everything_GetResultDateRecentlyChanged.restype  = wintypes.BOOL
-    dll.Everything_GetResultHighlightedFileNameW.argtypes= [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
-    dll.Everything_GetResultHighlightedFileNameW.restype = wintypes.DWORD
-    dll.Everything_GetResultHighlightedPathW.argtypes    = [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
-    dll.Everything_GetResultHighlightedPathW.restype     = wintypes.DWORD
-    dll.Everything_GetResultHighlightedFullPathAndFileNameW.argtypes = [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
-    dll.Everything_GetResultHighlightedFullPathAndFileNameW.restype  = wintypes.DWORD
+    dll.Everything_GetResultHighlightedFileNameW.argtypes= [wintypes.DWORD]
+    dll.Everything_GetResultHighlightedFileNameW.restype = wintypes.LPCWSTR
+    dll.Everything_GetResultHighlightedPathW.argtypes    = [wintypes.DWORD]
+    dll.Everything_GetResultHighlightedPathW.restype     = wintypes.LPCWSTR
+    dll.Everything_GetResultHighlightedFullPathAndFileNameW.argtypes = [wintypes.DWORD]
+    dll.Everything_GetResultHighlightedFullPathAndFileNameW.restype  = wintypes.LPCWSTR
 
     # Version
     dll.Everything_GetMajorVersion.restype               = wintypes.DWORD
@@ -268,6 +251,20 @@ def filetime_to_dt(ft):
     except OverflowError:
         return None
 
+def _get_wstring_field(dll, func_name, index):
+    """Compatibility getter: try buffer API then pointer API."""
+    func = getattr(dll, func_name)
+    try:
+        buf = ctypes.create_unicode_buffer(260)
+        func(index, buf, 260)
+        return buf.value
+    except Exception:
+        try:
+            ptr = func(index)
+            return ptr if ptr else ""
+        except Exception:
+            return ""
+
 def run_search(dll, query, offset, count, all_fields=False):
     dll.Everything_SetSearchW(query)
     dll.Everything_SetMatchPath(True)
@@ -295,9 +292,7 @@ def run_search(dll, query, offset, count, all_fields=False):
         name = pydll_os.path.basename(path)
         print(f"DEBUG_DLL: After pydll_os.path.basename: name='{name}', type(name)={type(name)}", flush=True)
         if all_fields:
-            ext_buf = ctypes.create_unicode_buffer(50)
-            dll.Everything_GetResultExtensionW(i, ext_buf, 50)
-            ext = ext_buf.value
+            ext = _get_wstring_field(dll, 'Everything_GetResultExtensionW', i)
             ft_created = wintypes.FILETIME()
             dll.Everything_GetResultDateCreated(i, ctypes.byref(ft_created))
             dc = filetime_to_dt(ft_created)
@@ -308,9 +303,7 @@ def run_search(dll, query, offset, count, all_fields=False):
             dll.Everything_GetResultDateAccessed(i, ctypes.byref(ft_accessed))
             da = filetime_to_dt(ft_accessed)
             attr = dll.Everything_GetResultAttributes(i)
-            flfn_buf = ctypes.create_unicode_buffer(260)
-            dll.Everything_GetResultFileListFileNameW(i, flfn_buf, 260)
-            flfn = flfn_buf.value
+            flfn = _get_wstring_field(dll, 'Everything_GetResultFileListFileNameW', i)
             rc = dll.Everything_GetResultRunCount(i)
             ft_run = wintypes.FILETIME()
             dll.Everything_GetResultDateRun(i, ctypes.byref(ft_run))
@@ -318,15 +311,9 @@ def run_search(dll, query, offset, count, all_fields=False):
             ft_recent = wintypes.FILETIME()
             dll.Everything_GetResultDateRecentlyChanged(i, ctypes.byref(ft_recent))
             drc = filetime_to_dt(ft_recent)
-            hfn_buf = ctypes.create_unicode_buffer(260)
-            dll.Everything_GetResultHighlightedFileNameW(i, hfn_buf, 260)
-            hfn = hfn_buf.value
-            hp_buf = ctypes.create_unicode_buffer(260)
-            dll.Everything_GetResultHighlightedPathW(i, hp_buf, 260)
-            hp = hp_buf.value
-            hfp_buf = ctypes.create_unicode_buffer(260)
-            dll.Everything_GetResultHighlightedFullPathAndFileNameW(i, hfp_buf, 260)
-            hfp = hfp_buf.value
+            hfn = _get_wstring_field(dll, 'Everything_GetResultHighlightedFileNameW', i)
+            hp = _get_wstring_field(dll, 'Everything_GetResultHighlightedPathW', i)
+            hfp = _get_wstring_field(dll, 'Everything_GetResultHighlightedFullPathAndFileNameW', i)
             results.append({
                 "name": name,
                 "path": path,
