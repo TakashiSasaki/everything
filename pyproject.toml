@@ -10,6 +10,7 @@ readme = "README.md"
 python = "^3.9"
 requests = "^2.32.3"
 python-dotenv = "^1.0.1"
+textual = "^0.70.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -26,3 +27,5 @@ everything-http = "pyeverything.http:main"
 poetry = "^1.8.2"
 pytest = "^8.2.2"
 flake8 = "*"
+pytest-asyncio = "^0.23.7"
+pytest-textual-snapshot = "^0.1.0"
