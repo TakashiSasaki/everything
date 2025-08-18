@@ -6,22 +6,23 @@ import json
 import unittest
 from unittest import mock
 from io import StringIO
+from typing import Any
 
-SCRIPT_MODULE = "pyeverything.es"
+SCRIPT_MODULE: str = "pyeverything.es"
 
 class TestEsSearch(unittest.TestCase):
-    def setUp(self):
-        self.original_stdout = sys.stdout
+    def setUp(self) -> None:
+        self.original_stdout: Any = sys.stdout
         sys.stdout = StringIO()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         sys.stdout = self.original_stdout
 
     @mock.patch('pyeverything.es.parse_csv_text')
     @mock.patch('pyeverything.es.subprocess.run')
     @mock.patch('pyeverything.es.locate_es', return_value='/mock/es.exe')
     @mock.patch('sys.argv', ['es.py', '--search', 'windows system32 drivers etc hosts.ics', '--json'])
-    def test_search_json_option(self, mock_locate_es, mock_run, mock_parse_csv_text):
+    def test_search_json_option(self, mock_locate_es: mock.Mock, mock_run: mock.Mock, mock_parse_csv_text: mock.Mock) -> None:
         mock_run.return_value = mock.Mock(
             stdout="mocked csv content",
             stderr="",
@@ -47,7 +48,7 @@ class TestEsSearch(unittest.TestCase):
     @mock.patch('pyeverything.es.subprocess.run')
     @mock.patch('pyeverything.es.locate_es', return_value='/mock/es.exe')
     @mock.patch('sys.argv', ['es.py', '--search', 'windows system32 drivers etc hosts.ics', '--json', '--all-fields'])
-    def test_search_allfields_json_option(self, mock_locate_es, mock_run, mock_parse_csv_text):
+    def test_search_allfields_json_option(self, mock_locate_es: mock.Mock, mock_run: mock.Mock, mock_parse_csv_text: mock.Mock) -> None:
         mock_run.return_value = mock.Mock(
             stdout="mocked csv content",
             stderr="",
@@ -84,7 +85,7 @@ class TestEsLocateEs(unittest.TestCase):
     @mock.patch('os.access')
     @mock.patch('os.path.dirname', return_value='/mock/script/dir')
     @mock.patch('os.path.join')
-    def test_locate_es_in_path(self, mock_join, mock_dirname, mock_access, mock_isfile, mock_which):
+    def test_locate_es_in_path(self, mock_join: mock.Mock, mock_dirname: mock.Mock, mock_access: mock.Mock, mock_isfile: mock.Mock, mock_which: mock.Mock) -> None:
         mock_which.return_value = '/path/to/es.exe'
         mock_isfile.return_value = True
         mock_access.return_value = True
@@ -102,7 +103,7 @@ class TestEsLocateEs(unittest.TestCase):
     @mock.patch('os.access')
     @mock.patch('os.path.dirname', return_value='/mock/script/dir')
     @mock.patch('os.path.join')
-    def test_locate_es_in_package_bin(self, mock_join, mock_dirname, mock_access, mock_isfile, mock_which):
+    def test_locate_es_in_package_bin(self, mock_join: mock.Mock, mock_dirname: mock.Mock, mock_access: mock.Mock, mock_isfile: mock.Mock, mock_which: mock.Mock) -> None:
         # Simulate es.exe not in PATH, but in package bin
         mock_which.return_value = None
         mock_join.side_effect = lambda *args: '/'.join(args) # Simulate os.path.join behavior
@@ -124,7 +125,7 @@ class TestEsLocateEs(unittest.TestCase):
     @mock.patch('os.path.dirname', return_value='/mock/script/dir')
     @mock.patch('os.path.join')
     @mock.patch('os.getcwd', return_value='/mock/current/dir')
-    def test_locate_es_in_cwd(self, mock_getcwd, mock_join, mock_dirname, mock_access, mock_isfile, mock_which):
+    def test_locate_es_in_cwd(self, mock_getcwd: mock.Mock, mock_join: mock.Mock, mock_dirname: mock.Mock, mock_access: mock.Mock, mock_isfile: mock.Mock, mock_which: mock.Mock) -> None:
         # Simulate es.exe not in PATH or package bin, but in CWD
         mock_which.return_value = None
         mock_join.side_effect = lambda *args: '/'.join(args) # Simulate os.path.join behavior
@@ -147,7 +148,7 @@ class TestEsLocateEs(unittest.TestCase):
     @mock.patch('os.path.dirname', return_value='/mock/script/dir')
     @mock.patch('os.path.join')
     @mock.patch('os.getcwd', return_value='/mock/current/dir')
-    def test_locate_es_not_found(self, mock_getcwd, mock_join, mock_dirname, mock_access, mock_isfile, mock_which):
+    def test_locate_es_not_found(self, mock_getcwd: mock.Mock, mock_join: mock.Mock, mock_dirname: mock.Mock, mock_access: mock.Mock, mock_isfile: mock.Mock, mock_which: mock.Mock) -> None:
         mock_join.side_effect = lambda *args: '/'.join(args) # Simulate os.path.join behavior
         from pyeverything.es import locate_es
         with self.assertRaisesRegex(SystemExit, "Error: 'es.exe' not found in PATH, package bin directory, or current directory."):
