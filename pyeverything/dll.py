@@ -96,40 +96,40 @@ EVERYTHING_REQUEST_ALL = (
 )
 
 def load_everything_dll():
-    is_64bit = sys.maxsize > 2**32
-    dll_names = ["Everything64.dll", "Everything32.dll"] if is_64bit else ["Everything32.dll", "Everything64.dll"]
-    
+    """Load the 64-bit Everything DLL only (Everything64.dll).
+
+    Searches the package's `bin` directory, current working directory,
+    then the system PATH. Exits with an error if not found.
+    """
+    dll_name = "Everything64.dll"
+
     # Search in the 'bin' directory relative to the script's location
     script_dir = pydll_os.path.dirname(pydll_os.path.abspath(__file__))
     bin_dir = pydll_os.path.join(script_dir, "bin")
-    for name in dll_names:
-        path = pydll_os.path.join(bin_dir, name)
-        if pydll_os.path.isfile(path):
-            try:
-                return ctypes.WinDLL(path)
-            except OSError:
-                continue
+    path = pydll_os.path.join(bin_dir, dll_name)
+    if pydll_os.path.isfile(path):
+        try:
+            return ctypes.WinDLL(path)
+        except OSError:
+            pass
 
     # Search in the current working directory
     cwd = pydll_os.getcwd()
-    for name in dll_names:
-        path = pydll_os.path.join(cwd, name)
-        if pydll_os.path.isfile(path):
-            try:
-                return ctypes.WinDLL(path)
-            except OSError:
-                continue
-    
-    # Search in PATH
-    for name in dll_names:
+    path = pydll_os.path.join(cwd, dll_name)
+    if pydll_os.path.isfile(path):
         try:
-            return ctypes.WinDLL(name)
+            return ctypes.WinDLL(path)
         except OSError:
-            continue
-    arch = '64-bit' if is_64bit else '32-bit'
-    expected = 'Everything64.dll' if is_64bit else 'Everything32.dll'
-    sys.exit(f"Error: Could not load Everything DLL for {arch} Python.\n"
-             f"Please ensure {expected} is in PATH, the package's bin directory, or the current directory.")
+            pass
+
+    # Search in PATH
+    try:
+        return ctypes.WinDLL(dll_name)
+    except OSError:
+        sys.exit(
+            "Error: Could not load Everything64.dll.\n"
+            "Please ensure Everything64.dll is in PATH, the package's bin directory, or the current directory."
+        )
 
 def init_functions(dll):
     # Setters
@@ -287,10 +287,7 @@ def run_search(dll, query, offset, count, all_fields=False):
         size_var = ctypes.c_ulonglong()
         dll.Everything_GetResultSize(i, ctypes.byref(size_var))
         size = size_var.value
-        print(f"DEBUG_DLL: id(pydll_os) in dll.run_search: {id(pydll_os)}", flush=True)
-        print(f"DEBUG_DLL: Before pydll_os.path.basename: path='{path}', type(path)={type(path)}", flush=True)
         name = pydll_os.path.basename(path)
-        print(f"DEBUG_DLL: After pydll_os.path.basename: name='{name}', type(name)={type(name)}", flush=True)
         if all_fields:
             ext = _get_wstring_field(dll, 'Everything_GetResultExtensionW', i)
             ft_created = wintypes.FILETIME()
