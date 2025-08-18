@@ -71,8 +71,8 @@ class TestEsSearch(unittest.TestCase):
         with self.assertRaises(SystemExit) as cm:
             main()
         self.assertEqual(cm.exception.code, 0)
-        stdout = sys.stdout.getvalue()
-        data = json.loads(stdout)
+        stdout: str = sys.stdout.getvalue()
+        data: list[dict[str, Any]] = json.loads(stdout)
         self.assertEqual(data, mock_parse_csv_text.return_value)
 
     @mock.patch('pyeverything.es.parse_csv_text')
@@ -111,8 +111,8 @@ class TestEsSearch(unittest.TestCase):
         with self.assertRaises(SystemExit) as cm:
             main()
         self.assertEqual(cm.exception.code, 0)
-        stdout = sys.stdout.getvalue()
-        data = json.loads(stdout)
+        stdout: str = sys.stdout.getvalue()
+        data: list[dict[str, Any]] = json.loads(stdout)
         self.assertEqual(data, mock_parse_csv_text.return_value)
 
 class TestEsLocateEs(unittest.TestCase):
