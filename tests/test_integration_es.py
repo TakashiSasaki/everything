@@ -73,14 +73,14 @@ def test_test_option_json() -> None:
 @requires_windows
 @requires_es
 def test_search_json_option() -> None:
-    # Use a known Windows system file that typically exists
-    query = r"windows\\system32\\drivers\\etc\\hosts.ics"
+    # Use a known Windows system file that exists on all systems
+    query = r"windows\\system32\\drivers\\etc\\hosts"
     stdout, stderr, rc = run_es(["--search", query, "--json"]) 
     assert rc == 0, f"--search --json failed rc={rc}, stderr={stderr}\nstdout={stdout}"
     data = json.loads(stdout)
     assert isinstance(data, list)
     found = any(
-        entry.get("name") == "hosts.ics" and
+        entry.get("name") == "hosts" and
         entry.get("path", "").lower().endswith(r"windows\system32\drivers\etc")
         for entry in data
     )
@@ -90,7 +90,7 @@ def test_search_json_option() -> None:
 @requires_windows
 @requires_es
 def test_search_allfields_json_option() -> None:
-    query = r"windows\\system32\\drivers\\etc\\hosts.ics"
+    query = r"windows\\system32\\drivers\\etc\\hosts"
     stdout, stderr, rc = run_es(["--search", query, "--json", "--all-fields"]) 
     assert rc == 0, f"--search --json --all-fields failed rc={rc}, stderr={stderr}\nstdout={stdout}"
     data = json.loads(stdout)
@@ -98,7 +98,7 @@ def test_search_allfields_json_option() -> None:
     found = False
     for entry in data:
         if (
-            entry.get("name") == "hosts.ics" and
+            entry.get("name") == "hosts" and
             entry.get("path", "").lower().endswith(r"windows\system32\drivers\etc")
         ):
             # Representative all-fields presence
