@@ -156,11 +156,25 @@ class TestEsLocateEs(unittest.TestCase):
         mock_isfile.side_effect = [True, False] # True for bin_path, False for local_path
         mock_access.side_effect = [True, False] # True for bin_path, False for local_path
 
-        from pyeverything.es import locate_es
+        result = locate_es()
+        self.assertEqual(result, '/mock/script/dir/bin/es.exe')
+        mock_which.assert_called_once_with('es.exe')
+        mock_isfile.assert_any_call('/mock/script/dir/bin/es.exe')
+        mock_access.assert_any_call('/mock/script/dir/bin/es.exe', os.X_OK)
 
-        # Set side_effect for isfile and access to simulate finding in CWD
-        mock_isfile.side_effect = [False, True] # False for bin_path, True for local_path
-        mock_access.side_effect = [True] # Only one call to access is expected
+    @mock.patch('shutil.which', return_value=None)
+    @mock.patch('os.path.isfile')
+    @mock.patch('os.access')
+    @mock.patch('os.path.dirname', return_value='/mock/script/dir')
+    @mock.patch('os.path.join')
+    @mock.patch('os.getcwd', return_value='/mock/current/dir')
+    def test_locate_es_in_cwd(self, mock_getcwd: mock.Mock, mock_join: mock.Mock, mock_dirname: mock.Mock, mock_access: mock.Mock, mock_isfile: mock.Mock, mock_which: mock.Mock) -> None:
+        """Use current working directory if PATH and package `bin` are missing."""
+        mock_which.return_value = None
+        mock_join.side_effect = lambda *args: '/'.join(args)
+        # False for bin_path, True for local_path
+        mock_isfile.side_effect = [False, True]
+        mock_access.side_effect = [True]
 
         from pyeverything.es import locate_es
         result = locate_es()
@@ -178,7 +192,7 @@ class TestEsLocateEs(unittest.TestCase):
     @mock.patch('os.getcwd', return_value='/mock/current/dir')
     def test_locate_es_not_found(self, mock_getcwd: mock.Mock, mock_join: mock.Mock, mock_dirname: mock.Mock, mock_access: mock.Mock, mock_isfile: mock.Mock, mock_which: mock.Mock) -> None:
         """Exit with an error when `es.exe` cannot be found anywhere."""
-        mock_join.side_effect = lambda *args: '/'.join(args) # Simulate os.path.join behavior
+        mock_join.side_effect = lambda *args: '/'.join(args)
         from pyeverything.es import locate_es
         with self.assertRaisesRegex(SystemExit, "Error: 'es.exe' not found in PATH, package bin directory, or current directory."):
             locate_es()
