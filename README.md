@@ -123,3 +123,20 @@ poetry run pytest
 Notes:
 - Tests are in the `tests/` directory.
 - Some tests (especially integration) require Windows and a running Everything instance (and, for HTTP, the HTTP server enabled).
+
+### What `poetry run pytest` does
+
+- Executes `pytest` inside Poetry’s virtual environment for this project; it does not install dependencies by itself.
+- Uses `pyproject.toml` to identify the project and environment. This repo includes Poetry config sections: `[tool.poetry]`, `[tool.poetry.dependencies]`, `[tool.poetry.group.dev.dependencies]`, `[tool.poetry.scripts]`, and `[build-system]`.
+- `pytest` discovers tests using its defaults (here, the `tests/` folder) since there is no pytest-specific config in `pyproject.toml`.
+
+Common outcomes and fixes:
+- If `pytest` is missing: run `poetry install --with dev` (or `python -m poetry install --with dev` on Windows if `poetry` isn’t on PATH).
+- If integration tests fail: they may require Windows and a running Everything/HTTP server. Run a subset instead, e.g. `poetry run pytest tests/test_*.py`.
+- If no venv exists: Poetry will create/select one, but dev dependencies are only installed when you run `poetry install --with dev`.
+
+Quick sequence:
+```bash
+poetry install --with dev
+poetry run pytest
+```
