@@ -17,7 +17,7 @@ import pytest
 
 
 def _es_present() -> bool:
-    """Return True if es.exe is available via PATH, package bin, or CWD."""
+    """Return True if es.exe is available via PATH, package bin, CWD, or repo ./bin."""
     if shutil.which("es.exe"):
         return True
     # package bin
@@ -28,6 +28,10 @@ def _es_present() -> bool:
     # current working directory
     cwd_es = os.path.join(os.getcwd(), "es.exe")
     if os.path.isfile(cwd_es) and os.access(cwd_es, os.X_OK):
+        return True
+    # repo ./bin
+    repo_bin_es = os.path.join(os.getcwd(), "bin", "es.exe")
+    if os.path.isfile(repo_bin_es) and os.access(repo_bin_es, os.X_OK):
         return True
     # common absolute install locations
     common_paths = [

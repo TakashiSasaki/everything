@@ -70,7 +70,8 @@ def locate_es():
     1) PATH (via shutil.which)
     2) Package bin directory (pyeverything/bin/es.exe)
     3) Current working directory (./es.exe)
-    4) Common install locations (C:\\bin\\es.exe, Program Files\\Everything\\es.exe)
+    4) Repository root bin directory (./bin/es.exe)
+    5) Common install locations (C:\\bin\\es.exe, Program Files\\Everything\\es.exe)
     """
     es_cmd = shutil.which("es.exe")
     if not es_cmd:
@@ -85,6 +86,11 @@ def locate_es():
         if os.path.isfile(local_path) and os.access(local_path, os.X_OK):
             es_cmd = local_path
     if not es_cmd:
+        # Check in repository root ./bin (useful in sandboxes/CI)
+        repo_bin = os.path.join(os.getcwd(), "bin", "es.exe")
+        if os.path.isfile(repo_bin) and os.access(repo_bin, os.X_OK):
+            es_cmd = repo_bin
+    if not es_cmd:
         # Common absolute install locations (do not require os.access to avoid unit test coupling)
         candidate_paths = [
             r"C:\\bin\\es.exe",
@@ -96,7 +102,7 @@ def locate_es():
                 es_cmd = candidate
                 break
     if not es_cmd:
-        sys.exit("Error: 'es.exe' not found in PATH, package bin directory, current directory, or common install locations.")
+        sys.exit("Error: 'es.exe' not found in PATH, package bin directory, current directory, repo ./bin, or common install locations.")
     return es_cmd
 
 
