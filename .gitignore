@@ -8,3 +8,5 @@ COMMIT_EDITMSG
 docs/Everything.h
 docs/Everything64.def
 docs/Everything.c
+.pytest_cache/
+.venv/
