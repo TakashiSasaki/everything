@@ -87,7 +87,7 @@ def main():
     load_dotenv()
     args = parse_args()
 
-    host = args.host or os.getenv("EVERYTHING_HOST") or "127.0.0.1"
+    host = args.host or os.getenv("EVERYTHING_HOST") or "everything.localhost.moukaeritai.work"
     try:
         port = args.port or int(os.getenv("EVERYTHING_PORT", "")) or 80
     except ValueError:
