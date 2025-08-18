@@ -8,29 +8,32 @@ This project provides command-line interface (CLI) tools to interact with the Ev
 - **`everything-es`**: Utilize the `es.exe` command-line tool for searches.
 - **`everything-http`**: Connect to the Everything HTTP server for remote or local searches.
 - **Flexible Output**: Get search results in plain text or JSON format.
+- **CSV Output (`everything-es`)**: Export and parse CSV via `--csv` (JSON uses CSV internally).
 - **Test Mode**: Built-in connectivity tests for each method.
 
 ## Requirements
 
-- **Everything Search Engine**: You need to have the Everything search engine installed on your Windows machine.
-- **`es.exe`**: For `everything-es`, ensure `es.exe` is in your system's PATH or in the project directory.
-- **Everything DLL**: For `everything-dll`, ensure `Everything64.dll` (for 64-bit Python) or `Everything32.dll` (for 32-bit Python) is in your system's PATH or in the project directory.
-- **Everything HTTP Server**: For `everything-http`, the Everything HTTP server must be running and accessible.
+- **Python**: 3.9+ (see `pyproject.toml`).
+- **Everything Search Engine**: Installed on Windows.
+- **`es.exe`**: For `everything-es`, ensure `es.exe` is available in one of: PATH, `pyeverything/bin`, or the current directory.
+- **Everything DLL**: For `everything-dll`, ensure `Everything64.dll` (for 64-bit Python) or `Everything32.dll` (for 32-bit Python) is available in one of: `pyeverything/bin`, the current directory, or PATH. This repo includes `pyeverything/bin/Everything64.dll`.
+- **Everything HTTP Server**: For `everything-http`, the Everything HTTP server must be running and accessible (see notes below).
 
 ## Installation
 
 This project uses [Poetry](https://python-poetry.org/) for dependency management. If you don't have Poetry installed, follow their official installation guide.
 
-1. **Clone the repository (if you haven't already):**
+1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/everything-cli.git
-   cd everything-cli
+   git clone <your repo URL>
+   cd <repo folder>
    ```
 
 2. **Install dependencies using Poetry:**
    ```bash
    poetry install
    ```
+   If `poetry` is not on PATH, use `python -m poetry install`.
 
 3. **(Optional) Activate the virtual environment:**
    ```bash
@@ -52,6 +55,10 @@ poetry run everything-dll --search "your query" --json
 poetry run everything-dll --test
 ```
 
+Notes:
+- DLL lookup order: `pyeverything/bin` → current directory → PATH.
+- Use `Everything64.dll` with 64‑bit Python and `Everything32.dll` with 32‑bit Python.
+
 ### `everything-es`
 
 Uses the `es.exe` command-line utility.
@@ -59,18 +66,29 @@ Uses the `es.exe` command-line utility.
 ```bash
 poetry run everything-es --help
 poetry run everything-es --search "your query" --all-fields
+poetry run everything-es --search "your query" --csv
+poetry run everything-es --search "your query" --json --all-fields
 poetry run everything-es --test
 ```
 
+Notes:
+- `--json` uses CSV export under the hood for accurate parsing.
+- `es.exe` lookup order: PATH → `pyeverything/bin` → current directory.
+
 ### `everything-http`
 
-Connects to the Everything HTTP server. Ensure the server is running.
+Connects to the Everything HTTP server.
 
 ```bash
 poetry run everything-http --help
 poetry run everything-http --search "your query" --host 127.0.0.1 --port 8080 --json
 poetry run everything-http --test
 ```
+
+HTTP server notes:
+- Enable in Everything via: Tools → Options → HTTP Server.
+- Default port is 80 unless changed.
+- Configure via flags (`--host`, `--port`) or `.env`.
 
 ### Environment Variables (for `everything-http`)
 
@@ -81,10 +99,27 @@ EVERYTHING_HOST=127.0.0.1
 EVERYTHING_PORT=80
 ```
 
+## Python API (optional)
+
+You can use the `Everything` class directly from Python:
+
+```python
+from pyeverything.everything import Everything
+
+ev = Everything()
+results = ev.search("your query", count=10, all_fields=True)
+print(results)
+```
+
 ## Running Tests
 
-To run the unit tests for the project:
+Install dev dependencies and run tests:
 
 ```bash
-poetry run python -m pytest test/
+poetry install --with dev
+poetry run pytest
 ```
+
+Notes:
+- Tests are in the `tests/` directory.
+- Some tests (especially integration) require Windows and a running Everything instance (and, for HTTP, the HTTP server enabled).
