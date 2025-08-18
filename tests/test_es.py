@@ -195,7 +195,7 @@ class TestEsLocateEs(unittest.TestCase):
         """Exit with an error when `es.exe` cannot be found anywhere."""
         mock_join.side_effect = lambda *args: '/'.join(args)
         from pyeverything.es import locate_es
-        with self.assertRaisesRegex(SystemExit, "Error: 'es.exe' not found in PATH, package bin directory, or current directory."):
+        with self.assertRaisesRegex(SystemExit, "Error: 'es.exe' not found in PATH, package bin directory, current directory, repo ./bin, or common install locations."):
             locate_es()
         mock_which.assert_called_once_with('es.exe')
         mock_isfile.assert_any_call('/mock/script/dir/bin/es.exe')
