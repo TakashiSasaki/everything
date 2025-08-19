@@ -235,7 +235,6 @@ class TestEverythingIntegration(unittest.TestCase):
         # Reset max_results to default (0 means no limit)
         self.everything.set_max(0)
 
-    @pytest.mark.skip("Flaky integration test due to dynamic environment results")
     def test_set_offset_integration(self):
         """Integration test: Verify set_offset correctly offsets search results."""
         query = "exe"  # A common query likely to return many results
