@@ -157,7 +157,7 @@ def parse_csv_text(csv_text, field_names):
     # Map CSV headers (with spaces) to internal field names
     header_mapping = {
         'Name': 'name',
-        'Filename': 'name',
+        'Filename': 'path',
         'Path': 'path',
         'Full Path and Name': 'path',
         'Extension': 'extension',
@@ -233,13 +233,20 @@ def main():
 
     records = []
     if use_csv:
-        # CSV export with full path column for reliable parsing
-        cmd = [es_cmd, "-n", str(args.count), *field_flags, *tokens]
+        # CSV export with reliable, documented columns.
+        if args.all_fields:
+            cmd = [es_cmd, "-n", str(args.count), *field_flags, *tokens]
+            expected = field_names
+        else:
+            # Use combined option -efu (single token) to output:
+            # Filename,Size,Date Modified,Date Created,Attributes
+            cmd = [es_cmd, "-efu", "-n", str(args.count), *tokens]
+            expected = ["path", "size", "date_modified", "date_created", "attributes"]
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         except subprocess.CalledProcessError as e:
             sys.exit(f"Error exporting CSV: {e.stderr.strip()}")
-        records = parse_csv_text(result.stdout, field_names)
+        records = parse_csv_text(result.stdout, expected)
     else:
         # Plain text mode: enable path matching (-p), pass tokenized query, limit results
         cmd = [es_cmd, "-p", "-n", str(args.count), *tokens]
