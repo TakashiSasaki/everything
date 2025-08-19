@@ -9,14 +9,14 @@ This project provides command-line interface (CLI) tools to interact with the Ev
 - **`everything-http`**: Connect to the Everything HTTP server for remote or local searches.
 - **Flexible Output**: Get search results in plain text or JSON format.
 - **CSV Output (`everything-es`)**: Export and parse CSV via `--csv` (JSON uses CSV internally).
-- **Test Mode**: Built-in connectivity tests for each method.
+- **Connectivity Tests (pytest)**: Connectivity is verified via pytest suites (no CLI `--test` for DLL/ES).
 
 ## Requirements
 
 - **Python**: 3.9+ (see `pyproject.toml`).
 - **Everything Search Engine**: Installed on Windows.
 - **`es.exe`**: For `everything-es`, ensure `es.exe` is available in one of: PATH, `pyeverything/bin`, or the current directory.
-- **Everything DLL**: For `everything-dll`, ensure `Everything64.dll` (for 64-bit Python) or `Everything32.dll` (for 32-bit Python) is available in one of: `pyeverything/bin`, the current directory, or PATH. This repo includes `pyeverything/bin/Everything64.dll`.
+- **Everything DLL**: For `everything-dll`, ensure `Everything64.dll` is available in one of: `pyeverything/bin`, the current directory, or PATH. This repo includes `pyeverything/bin/Everything64.dll`. Only 64‑bit DLLs are supported.
 - **Everything HTTP Server**: For `everything-http`, the Everything HTTP server must be running and accessible (see notes below).
 
 ## Installation
@@ -52,12 +52,14 @@ Interacts directly with the Everything DLL.
 ```bash
 poetry run everything-dll --help
 poetry run everything-dll --search "your query" --json
-poetry run everything-dll --test
+# Alternate module entry (new class-based CLI):
+python -m pyeverything.dll_class --search "your query" --json
 ```
 
 Notes:
 - DLL lookup order: `pyeverything/bin` → current directory → PATH.
-- Use `Everything64.dll` with 64‑bit Python and `Everything32.dll` with 32‑bit Python.
+- Only `Everything64.dll` is supported. Place it in one of the lookup locations above.
+- The class-based CLI `python -m pyeverything.dll_class` follows the same behavior and output shape.
 
 ### `everything-es`
 
@@ -68,7 +70,6 @@ poetry run everything-es --help
 poetry run everything-es --search "your query" --all-fields
 poetry run everything-es --search "your query" --csv
 poetry run everything-es --search "your query" --json --all-fields
-poetry run everything-es --test
 ```
 
 Notes:
@@ -123,6 +124,9 @@ poetry run pytest
 Notes:
 - Tests are in the `tests/` directory.
 - Some tests (especially integration) require Windows and a running Everything instance (and, for HTTP, the HTTP server enabled).
+- Connectivity tests replacing CLI `--test` options:
+  - DLL CLIs: `tests/test_cli_connectivity.py`
+  - ES CLI: `tests/test_cli_connectivity_es.py`
 
 ### What `poetry run pytest` does
 
