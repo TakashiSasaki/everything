@@ -566,19 +566,8 @@ def main(argv=None):
             sys.exit(str(e))
         if not results:
             sys.exit("Test failed: no search results returned for hosts file.")
-        # Prefer exact match, otherwise relax to substring on normalized path
-        match = next(
-            (e for e in results if str(e.get("path", "")).lower() == hostfile.lower()),
-            None,
-        )
-        if not match:
-            # Drive-agnostic fallback: look for the canonical tail segment
-            tail = r"\windows\system32\drivers\etc\hosts"
-            for e in results:
-                p = str(e.get("path", "")).lower().replace("/", "\\")
-                if tail in p:
-                    match = e
-                    break
+        # Prefer exact match; fall back to helper for robust matching
+        match = find_hosts_match(results, hostfile)
         if not match:
             sys.exit("Test failed: hosts file not found among search results.")
         size = match.get("size", 0)
@@ -616,3 +605,37 @@ def main(argv=None):
 
 if __name__ == "__main__":
     main()
+
+
+# -----------------
+# Test helpers
+def build_test_queries(hostfile: str) -> list[str]:
+    """Return a list of robust queries for the hosts file.
+
+    Order matters: absolute path, path: filtered query, then tokenized form.
+    """
+    return [
+        hostfile,
+        r'path:"\\windows\\system32\\drivers\\etc" hosts',
+        "windows system32 drivers etc hosts",
+    ]
+
+
+def find_hosts_match(results: list[dict], hostfile: str) -> Optional[dict]:
+    """Find a matching hosts entry within Everything results.
+
+    Prefers exact full path match; falls back to drive-agnostic tail match.
+    """
+    host_lower = hostfile.lower()
+    # Exact full-path match
+    for e in results:
+        p = str(e.get("path", ""))
+        if p.lower() == host_lower:
+            return e
+    # Drive-agnostic tail match
+    tail = r"\windows\system32\drivers\etc\hosts"
+    for e in results:
+        p = str(e.get("path", "")).lower().replace("/", "\\")
+        if tail in p:
+            return e
+    return None
