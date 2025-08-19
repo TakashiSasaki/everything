@@ -226,7 +226,7 @@ def init_functions(dll):
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Use Everything DLL to list files or run a connectivity test"
+        description="Use Everything DLL to list files via the Everything SDK"
     )
     parser.add_argument("--search", required=False,
                         help="Search pattern (Everything query syntax)")
@@ -238,8 +238,7 @@ def parse_args():
                         help="Request all available fields from the Everything SDK")
     parser.add_argument("--json", action="store_true",
                         help="Output results in JSON format")
-    parser.add_argument("--test", action="store_true",
-                        help="Run connectivity test against hosts file")
+    # Note: connectivity checks moved to tests; CLI focuses on search only.
     return parser.parse_args()
 
 def filetime_to_dt(ft):
@@ -338,34 +337,9 @@ def main():
     dll = load_everything_dll()
     init_functions(dll)
 
-    # テストモード: --json フラグで JSON、それ以外はプレーンテキスト
-    if args.test:
-        hostfile = r"C:\Windows\System32\drivers\etc\hosts"
-        results = run_search(dll, hostfile, 0, 10, all_fields=args.all_fields)
-        if not results:
-            sys.exit("Test failed: no search results returned for hosts file.")
-        match = next((e for e in results if e["path"].lower() == hostfile.lower()), None)
-        if not match:
-            sys.exit("Test failed: hosts file not found among search results.")
-        size = match["size"]
-        if size == 0:
-            actual = pydll_os.path.getsize(hostfile) if pydll_os.path.isfile(hostfile) else 0
-            if actual > 1:
-                if args.json:
-                    print(json.dumps({"warning": f"indexed size 0, actual size {actual}."}, ensure_ascii=False, indent=2))
-                else:
-                    print(f"Warning: indexed size 0, actual size {actual}.")
-                sys.exit(0)
-            sys.exit("Test failed: hosts file size is zero both in index and on disk.")
-        if args.json:
-            print(json.dumps({"passed": True, "size": size}, ensure_ascii=False, indent=2))
-        else:
-            print(f"Test passed: hosts file found, size {size}.")
-        sys.exit(0)
-
     # 通常モード: --json フラグで JSON、それ以外はタブ区切りテキスト
     if not args.search:
-        sys.exit("Error: --search is required unless --test is specified.")
+        sys.exit("Error: --search is required.")
     results = run_search(dll, args.search, args.offset, args.count, all_fields=args.all_fields)
     if args.json:
         print(json.dumps(results, ensure_ascii=False, indent=2))
