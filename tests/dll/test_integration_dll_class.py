@@ -17,7 +17,8 @@ import pytest
 
 def _dll_present() -> bool:
     """Return True if Everything64.dll exists in the package bin dir."""
-    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    # Adjust repo_root to point to the actual project root
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
     dll_path = os.path.join(repo_root, "pyeverything", "bin", "Everything64.dll")
     return os.path.isfile(dll_path)
 

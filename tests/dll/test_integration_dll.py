@@ -17,7 +17,8 @@ import pytest
 
 def _dll_present() -> bool:
     """Return True if Everything64.dll exists in the package bin dir."""
-    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    # Adjust repo_root to point to the actual project root
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
     dll_path = os.path.join(repo_root, "pyeverything", "bin", "Everything64.dll")
     return os.path.isfile(dll_path)
 
@@ -37,8 +38,6 @@ def run_command(args: list[str]) -> tuple[str, str, int]:
 @requires_dll
 def test_connectivity_text_via_search() -> None:
     import pytest
-    pytest.skip("Duplicated by tests/test_cli_connectivity.py; de-duplicated here.")
-    # Use a universal Windows system file and a robust tokenized query
     query = "windows system32 drivers etc hosts"
     stdout, stderr, rc = run_command(["--search", query, "--json"]) 
     assert rc == 0, f"--search --json failed rc={rc}, stderr={stderr}\nstdout={stdout}"
