@@ -39,6 +39,11 @@ def parse_args():
         help="Print resolved es.exe path and exit",
     )
     parser.add_argument(
+        "--es-help",
+        action="store_true",
+        help="Invoke es.exe --help and print its output",
+    )
+    parser.add_argument(
         "--search", required=False,
         help="Search pattern (Everything query syntax)"
     )
@@ -233,6 +238,20 @@ def main():
         except SystemExit as e:
             # propagate error message from locate_es
             raise
+        sys.exit(0)
+
+    # Handle --es-help early (does not require --search)
+    if args.es_help:
+        es_cmd = locate_es()
+        try:
+            result = subprocess.run([es_cmd, "--help"], capture_output=True, text=True)
+        except Exception as e:
+            sys.exit(f"Error invoking es.exe --help: {e}")
+        # Print both stdout and stderr to mirror native behavior
+        if result.stdout:
+            print(result.stdout.strip())
+        if result.stderr:
+            print(result.stderr.strip())
         sys.exit(0)
 
     es_cmd = locate_es()
