@@ -25,6 +25,7 @@ import subprocess
 import sys
 import json
 import csv
+import shlex
 import io
 
 
@@ -190,19 +191,21 @@ def main():
 
     use_csv = args.csv or args.json
     field_flags, field_names = build_field_config(args.all_fields)
+    # Tokenize the search string into es.exe tokens (preserve quoted segments)
+    tokens = shlex.split(args.search, posix=False) if args.search else []
 
     records = []
     if use_csv:
         # CSV export with full path column for reliable parsing
-        cmd = [es_cmd, *field_flags, args.search]
+        cmd = [es_cmd, "-n", str(args.count), *field_flags, *tokens]
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         except subprocess.CalledProcessError as e:
             sys.exit(f"Error exporting CSV: {e.stderr.strip()}")
         records = parse_csv_text(result.stdout, field_names)
     else:
-        # Plain text mode: print full paths directly using -p and limit count
-        cmd = [es_cmd, "-p", "-n", str(args.count), args.search]
+        # Plain text mode: enable path matching (-p), pass tokenized query, limit results
+        cmd = [es_cmd, "-p", "-n", str(args.count), *tokens]
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         except subprocess.CalledProcessError as e:
