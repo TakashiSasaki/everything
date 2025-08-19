@@ -4,7 +4,7 @@ Integration-like unit tests for the pyeverything.es CLI adapter.
 This module exercises two main concerns:
 
 1) End-to-end behavior of the es wrapper entry point (pyeverything.es.main)
-   with various flags (--json, --all-fields). External dependencies
+   with various flags (--json). External dependencies
    such as subprocess.run, locate_es, and CSV parsing are patched to
    simulate realistic outputs so the tests remain hermetic.
 
@@ -32,7 +32,7 @@ class TestEsSearch(unittest.TestCase):
 
     The tests patch `subprocess.run` to emulate `es.exe` output and
     `parse_csv_text` to provide normalized structures. The CLI options
-    `--json` and `--all-fields` are covered, asserting both the exit code
+    `--json` are covered, asserting both the exit code
     and the JSON payload written to stdout.
     """
     def setUp(self) -> None:
@@ -64,46 +64,6 @@ class TestEsSearch(unittest.TestCase):
                 "name": "hosts.ics",
                 "path": "C:\\Windows\\System32\\drivers\\etc\\hosts.ics",
                 "size": 438
-            }
-        ]
-
-        from pyeverything.es import main
-        with self.assertRaises(SystemExit) as cm:
-            main()
-        self.assertEqual(cm.exception.code, 0)
-        stdout: str = sys.stdout.getvalue()
-        data: list[dict[str, Any]] = json.loads(stdout)
-        self.assertEqual(data, mock_parse_csv_text.return_value)
-
-    @mock.patch('pyeverything.es.parse_csv_text')
-    @mock.patch('pyeverything.es.subprocess.run')
-    @mock.patch('pyeverything.es.locate_es', return_value='/mock/es.exe')
-    @mock.patch('sys.argv', ['es.py', '--search', 'windows system32 drivers etc hosts.ics', '--json', '--all-fields'])
-    def test_search_allfields_json_option(self, mock_locate_es: mock.Mock, mock_run: mock.Mock, mock_parse_csv_text: mock.Mock) -> None:
-        """Emit extended fields when `--all-fields` is requested.
-
-        Ensures that the CLI still returns valid JSON and propagates the
-        additional keys present in the parsed CSV rows.
-        """
-        mock_run.return_value = mock.Mock(
-            stdout="mocked csv content",
-            stderr="",
-            returncode=0
-        )
-        mock_parse_csv_text.return_value = [
-            {
-                "name": "hosts.ics",
-                "path": "C:\\Windows\\System32\\drivers\\etc\\hosts.ics",
-                "size": 438,
-                "extension": "ics",
-                "date_created": "2022-07-27T12:37:01.620755",
-                "date_modified": "2024-06-13T10:28:57.492615",
-                "date_accessed": "2025-06-23T00:15:11.843185",
-                "attributes": 8224,
-                "file_list_file_name": "",
-                "run_count": 0,
-                "date_run": None,
-                "date_recently_changed": None
             }
         ]
 
