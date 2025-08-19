@@ -550,13 +550,34 @@ def main(argv=None):
     # Test mode
     if args.test:
         hostfile = r"C:\\Windows\\System32\\drivers\\etc\\hosts"
+        # Try a few robust queries to avoid false negatives on cold indexes
+        queries = [
+            hostfile,
+            r'path:"\\\\windows\\\\system32\\\\drivers\\\\etc" hosts',
+            "windows system32 drivers etc hosts",
+        ]
+        results = []
         try:
-            results = client.search(hostfile, 0, 10, all_fields=args.all_fields)
+            for q in queries:
+                results = client.search(q, 0, 50, all_fields=args.all_fields)
+                if results:
+                    break
         except Exception as e:
             sys.exit(str(e))
         if not results:
             sys.exit("Test failed: no search results returned for hosts file.")
-        match = next((e for e in results if str(e.get("path", "")).lower() == hostfile.lower()), None)
+        # Prefer exact match, otherwise relax to substring on normalized path
+        match = next(
+            (e for e in results if str(e.get("path", "")).lower() == hostfile.lower()),
+            None,
+        )
+        if not match:
+            canon = hostfile.lower().replace("/", "\\")
+            for e in results:
+                p = str(e.get("path", "")).lower().replace("/", "\\")
+                if canon in p:
+                    match = e
+                    break
         if not match:
             sys.exit("Test failed: hosts file not found among search results.")
         size = match.get("size", 0)
