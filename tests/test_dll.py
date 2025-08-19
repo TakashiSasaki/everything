@@ -83,7 +83,7 @@ class TestDllList(unittest.TestCase):
             with mock.patch('sys.stdout', new=captured_output):
                 dll_list.main()
             output = captured_output.getvalue().strip().lower().replace('/', '\\')
-            assert r"windows\\system32\\drivers\\etc\\hosts" in output
+            assert r"windows\system32\drivers\etc\hosts" in output
 
     @mock.patch('pyeverything.dll.load_everything_dll')
     @mock.patch('pyeverything.dll.init_functions')
@@ -99,7 +99,7 @@ class TestDllList(unittest.TestCase):
                 dll_list.main()
             data = json.loads(captured_output.getvalue().strip())
             assert isinstance(data, list) and data
-            assert any(r"windows\\system32\\drivers\\etc\\hosts" in e.get('path', '').lower() for e in data)
+            assert any(r"windows\system32\drivers\etc\hosts" in e.get('path', '').lower() for e in data)
 
     @mock.patch('pyeverything.dll.load_everything_dll')
     @mock.patch('pyeverything.dll.init_functions')
