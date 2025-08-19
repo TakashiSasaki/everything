@@ -30,7 +30,7 @@ import io
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Use es.exe to list files, run a connectivity test, or output in various formats"
+        description="Use es.exe to list files or output in various formats"
     )
     parser.add_argument(
         "--search", required=False,
@@ -55,10 +55,6 @@ def parse_args():
     parser.add_argument(
         "--csv", action="store_true",
         help="Export results via -csv and parse CSV"
-    )
-    parser.add_argument(
-        "--test", action="store_true",
-        help="Run connectivity test against es.exe"
     )
     return parser.parse_args()
 
@@ -107,24 +103,7 @@ def locate_es():
 
 
 def run_test(es_cmd):
-    test_query = "C:\\Windows\\System32\\drivers\\etc\\hosts"
-    cmd = [es_cmd, "-size", "-n", "1", test_query]
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    except subprocess.CalledProcessError as e:
-        sys.exit(f"Test failed: es.exe error: {e.stderr.strip()}")
-
-    output = result.stdout.strip()
-    size_token = output.split()[0] if output else "0"
-    try:
-        size = int(size_token)
-    except (ValueError, TypeError):
-        sys.exit(f"Test failed: invalid size '{size_token}' from output '{output}'")
-
-    if size > 1:
-        return {"passed": True, "size": size, "message": f"Test passed: hosts file found with size {size}."}
-    else:
-        return {"passed": False, "size": size, "message": f"Test failed: hosts file size is {size}, expected > 1."}
+    raise RuntimeError("--test has been removed; use pytest connectivity tests instead.")
 
 
 def build_field_config(all_fields):
@@ -201,19 +180,8 @@ def main():
     args = parse_args()
     es_cmd = locate_es()
 
-    if args.test:
-        test_result = run_test(es_cmd)
-        if args.json:
-            json.dump(test_result, sys.stdout, ensure_ascii=False, indent=2)
-            sys.stdout.write('\n')
-            sys.exit(0)
-        else:
-            print(test_result["message"])
-            sys.exit(0)
-        
-
     if not args.search:
-        sys.exit("Error: --search is required unless --test is specified.")
+        sys.exit("Error: --search is required.")
 
     use_csv = args.csv or args.json
     field_flags, field_names = build_field_config(args.all_fields)

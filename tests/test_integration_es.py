@@ -70,20 +70,12 @@ def es_json(query: str, all_fields: bool = False) -> list[dict[str, object]]:
 
 @requires_windows
 @requires_es
-def test_test_option_text() -> None:
-    stdout, stderr, rc = run_es(["--test"]) 
-    assert rc == 0, f"--test failed rc={rc}, stderr={stderr}\nstdout={stdout}"
-    assert "Test passed: hosts file found with size" in stdout
-
-
-@requires_windows
-@requires_es
-def test_test_option_json() -> None:
-    stdout, stderr, rc = run_es(["--test", "--json"]) 
-    assert rc == 0, f"--test --json failed rc={rc}, stderr={stderr}\nstdout={stdout}"
-    data = json.loads(stdout)
-    assert data.get("passed") is True
-    assert isinstance(data.get("size"), int)
+def test_connectivity_text_via_search() -> None:
+    # Validate connectivity using a robust tokenized search in text mode
+    query = "windows system32 drivers etc hosts"
+    stdout, stderr, rc = run_es(["--search", query]) 
+    assert rc == 0, f"--search failed rc={rc}, stderr={stderr}\nstdout={stdout}"
+    assert r"windows\system32\drivers\etc\hosts" in stdout.lower().replace("/", "\\")
 
 
 @requires_windows
