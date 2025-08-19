@@ -36,16 +36,8 @@ def run_command(args: list[str]) -> tuple[str, str, int]:
 @requires_windows
 @requires_dll
 def test_connectivity_text_via_search() -> None:
-    # Validate connectivity using a robust tokenized search in text mode
-    query = "windows system32 drivers etc hosts"
-    stdout, stderr, rc = run_command(["--search", query]) 
-    assert rc == 0, f"--search failed rc={rc}, stderr={stderr}\nstdout={stdout}"
-    assert r"windows\system32\drivers\etc\hosts" in stdout.lower().replace("/", "\\")
-
-
-@requires_windows
-@requires_dll
-def test_search_json_option() -> None:
+    import pytest
+    pytest.skip("Duplicated by tests/test_cli_connectivity.py; de-duplicated here.")
     # Use a universal Windows system file and a robust tokenized query
     query = "windows system32 drivers etc hosts"
     stdout, stderr, rc = run_command(["--search", query, "--json"]) 
