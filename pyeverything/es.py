@@ -34,6 +34,11 @@ def parse_args():
         description="Use es.exe to list files or output in various formats"
     )
     parser.add_argument(
+        "--locate",
+        action="store_true",
+        help="Print resolved es.exe path and exit",
+    )
+    parser.add_argument(
         "--search", required=False,
         help="Search pattern (Everything query syntax)"
     )
@@ -221,6 +226,15 @@ def parse_csv_text(csv_text, field_names):
 
 def main():
     args = parse_args()
+    # Handle --locate early (does not require --search)
+    if args.locate:
+        try:
+            print(locate_es())
+        except SystemExit as e:
+            # propagate error message from locate_es
+            raise
+        sys.exit(0)
+
     es_cmd = locate_es()
 
     if not args.search:
