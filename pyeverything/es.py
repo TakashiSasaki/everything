@@ -141,9 +141,19 @@ def build_field_config(all_fields):
 
 
 def parse_csv_text(csv_text, field_names):
+    """Parse es.exe CSV output with or without header.
+
+    If a header row is present, use it; otherwise map columns in the
+    same order as the requested field_names.
+    """
     records = []
     f = io.StringIO(csv_text)
-    reader = csv.DictReader(f)
+    reader = csv.reader(f)
+    try:
+        first = next(reader)
+    except StopIteration:
+        return []
+
     # Map CSV headers (with spaces) to internal field names
     header_mapping = {
         'Name': 'name',
@@ -159,12 +169,39 @@ def parse_csv_text(csv_text, field_names):
         'File List File Name': 'file_list_file_name',
         'Run Count': 'run_count',
         'Date Run': 'date_run',
-        'Date Recently Changed': 'date_recently_changed'
+        'Date Recently Changed': 'date_recently_changed',
     }
-    for row in reader:
+
+    # Determine if the first row is a header
+    mapped = [header_mapping.get(h) for h in first]
+    has_header = any(m is not None for m in mapped)
+
+    # Build column keys
+    if has_header:
+        keys = [header_mapping.get(h, None) for h in first]
+    else:
+        # Use provided field_names (order must match flags)
+        keys = list(field_names)
+        # Treat the first row as data
+        row_iter = [first]
+        row_iter.extend(list(reader))
+        reader = row_iter
+
+    # Iterate rows
+    if has_header:
+        rows = reader
+    else:
+        rows = reader
+
+    for row in rows:
+        # Skip malformed rows
+        if not isinstance(row, (list, tuple)):
+            continue
         rec = {}
-        for orig, val in row.items():
-            key = header_mapping.get(orig)
+        for i, val in enumerate(row):
+            if i >= len(keys):
+                break
+            key = keys[i]
             if key:
                 rec[key] = val
         # Normalize to full path in 'path'. Prefer full-path column if present;
