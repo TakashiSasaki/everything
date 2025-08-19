@@ -14,6 +14,8 @@ Output conventions (kept consistent with current DLL CLI):
   optional metadata when all_fields=True.
 """
 import ctypes
+import argparse
+import json
 import datetime
 import os
 import sys
@@ -494,5 +496,101 @@ __all__ = [
     "EVERYTHING_SORT_DATE_RUN_DESCENDING",
     # Utils
     "filetime_to_dt",
+    # CLI
+    "main",
 ]
 
+
+def _parse_args(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Use Everything DLL to list files or run a connectivity test",
+    )
+    parser.add_argument(
+        "--search",
+        required=False,
+        help="Search pattern (Everything query syntax)",
+    )
+    parser.add_argument(
+        "--offset",
+        type=int,
+        default=0,
+        help="Result offset (zero-based)",
+    )
+    parser.add_argument(
+        "--count",
+        type=int,
+        default=100,
+        help="Maximum number of results to return",
+    )
+    parser.add_argument(
+        "--all-fields",
+        action="store_true",
+        help="Request all available fields from the Everything SDK",
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results in JSON format",
+    )
+    parser.add_argument(
+        "--test",
+        action="store_true",
+        help="Run connectivity test against hosts file",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
+    args = _parse_args(argv)
+    try:
+        client = EverythingDLL()
+    except Exception as e:
+        sys.exit(str(e))
+
+    # Test mode
+    if args.test:
+        hostfile = r"C:\\Windows\\System32\\drivers\\etc\\hosts"
+        try:
+            results = client.search(hostfile, 0, 10, all_fields=args.all_fields)
+        except Exception as e:
+            sys.exit(str(e))
+        if not results:
+            sys.exit("Test failed: no search results returned for hosts file.")
+        match = next((e for e in results if str(e.get("path", "")).lower() == hostfile.lower()), None)
+        if not match:
+            sys.exit("Test failed: hosts file not found among search results.")
+        size = match.get("size", 0)
+        if size == 0:
+            actual = os.path.getsize(hostfile) if os.path.isfile(hostfile) else 0
+            if actual > 1:
+                msg = {"warning": f"indexed size 0, actual size {actual}."}
+                if args.json:
+                    print(json.dumps(msg, ensure_ascii=False, indent=2))
+                else:
+                    print(f"Warning: indexed size 0, actual size {actual}.")
+                sys.exit(0)
+            sys.exit("Test failed: hosts file size is zero both in index and on disk.")
+        if args.json:
+            print(json.dumps({"passed": True, "size": size}, ensure_ascii=False, indent=2))
+        else:
+            print(f"Test passed: hosts file found, size {size}.")
+        sys.exit(0)
+
+    # Normal mode
+    if not args.search:
+        sys.exit("Error: --search is required unless --test is specified.")
+    try:
+        results = client.search(
+            args.search, args.offset, args.count, all_fields=args.all_fields
+        )
+    except Exception as e:
+        sys.exit(str(e))
+    if args.json:
+        print(json.dumps(results, ensure_ascii=False, indent=2))
+    else:
+        for entry in results:
+            print("\t".join(str(v) for v in entry.values()))
+
+
+if __name__ == "__main__":
+    main()
