@@ -244,7 +244,7 @@ def main():
 
     # Always run EFU CSV export by default (-efu). Text mode prints EFU text,
     # JSON mode parses EFU into structured objects.
-    cmd = [es_cmd, "-efu", "-n", str(args.count), *tokens]
+    cmd = [es_cmd, "-p", "-efu", "-n", str(args.count), *tokens]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
     except subprocess.CalledProcessError as e:
