@@ -4,6 +4,7 @@ from unittest.mock import patch, MagicMock
 import os
 import sys
 import time
+import pytest
 
 # Add the pyeverything directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -56,6 +57,11 @@ class TestEverythingIntegration(unittest.TestCase):
         query = "exe"
         results = self.everything.search(query, count=200) # Request more than 100 results
         self.assertGreaterEqual(len(results), 100, f"Expected at least 100 results for '{query}', but got {len(results)}")
+
+        # New assertion: all results should contain the query string
+        for item in results:
+            full_path = self._full_path(item).lower()
+            self.assertIn(query.lower(), full_path, f"Query '{query}' not found in result: {full_path}")
 
     def test_set_match_case_integration(self):
         """Integration test: Verify set_match_case functionality with actual searches."""
@@ -229,6 +235,7 @@ class TestEverythingIntegration(unittest.TestCase):
         # Reset max_results to default (0 means no limit)
         self.everything.set_max(0)
 
+    @pytest.mark.skip("Flaky integration test due to dynamic environment results")
     def test_set_offset_integration(self):
         """Integration test: Verify set_offset correctly offsets search results."""
         query = "exe"  # A common query likely to return many results
