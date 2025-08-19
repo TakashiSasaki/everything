@@ -572,10 +572,11 @@ def main(argv=None):
             None,
         )
         if not match:
-            canon = hostfile.lower().replace("/", "\\")
+            # Drive-agnostic fallback: look for the canonical tail segment
+            tail = r"\windows\system32\drivers\etc\hosts"
             for e in results:
                 p = str(e.get("path", "")).lower().replace("/", "\\")
-                if canon in p:
+                if tail in p:
                     match = e
                     break
         if not match:
