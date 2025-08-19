@@ -35,20 +35,12 @@ def run_command(args: list[str]) -> tuple[str, str, int]:
 
 @requires_windows
 @requires_dll
-def test_test_option_text() -> None:
-    stdout, stderr, rc = run_command(["--test"]) 
-    assert rc == 0, f"--test failed rc={rc}, stderr={stderr}\nstdout={stdout}"
-    assert stdout.startswith("Test passed: hosts file found, size "), "Unexpected --test text output"
-
-
-@requires_windows
-@requires_dll
-def test_test_option_json() -> None:
-    stdout, stderr, rc = run_command(["--test", "--json"]) 
-    assert rc == 0, f"--test --json failed rc={rc}, stderr={stderr}\nstdout={stdout}"
-    data = json.loads(stdout)
-    assert data.get("passed") is True
-    assert isinstance(data.get("size"), int) and data["size"] > 0
+def test_connectivity_text_via_search() -> None:
+    # Validate connectivity using a robust tokenized search in text mode
+    query = "windows system32 drivers etc hosts"
+    stdout, stderr, rc = run_command(["--search", query]) 
+    assert rc == 0, f"--search failed rc={rc}, stderr={stderr}\nstdout={stdout}"
+    assert r"windows\system32\drivers\etc\hosts" in stdout.lower().replace("/", "\\")
 
 
 @requires_windows
@@ -59,7 +51,7 @@ def test_search_json_option() -> None:
     stdout, stderr, rc = run_command(["--search", query, "--json"]) 
     assert rc == 0, f"--search --json failed rc={rc}, stderr={stderr}\nstdout={stdout}"
     data = json.loads(stdout)
-    assert isinstance(data, list) and len(data) >= 0
+    assert isinstance(data, list)
     found = any(
         str(entry.get("name", "")).lower() == "hosts" and
         r"windows\system32\drivers\etc\hosts" in str(entry.get("path", "")).lower()

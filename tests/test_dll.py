@@ -71,42 +71,35 @@ class TestDllList(unittest.TestCase):
     @mock.patch('pyeverything.dll.load_everything_dll')
     @mock.patch('pyeverything.dll.init_functions')
     @mock.patch('pyeverything.dll.run_search')
-    def test_test_option_output_text(self, mock_run_search: mock.Mock, mock_init: mock.Mock, mock_load: mock.Mock) -> None:
+    def test_connectivity_via_search_text(self, mock_run_search: mock.Mock, mock_init: mock.Mock, mock_load: mock.Mock) -> None:
         # Simulate a search result for the hosts file
         mock_run_search.return_value = [
             {'path': r'C:\Windows\System32\drivers\etc\hosts', 'size': 959}
         ]
         # Prepare argv for --test
-        test_args = ['dll_list.py', '--test']
+        test_args = ['dll_list.py', '--search', 'windows system32 drivers etc hosts']
         with mock.patch.object(sys, 'argv', test_args):
             captured_output = StringIO()
             with mock.patch('sys.stdout', new=captured_output):
-                with self.assertRaises(SystemExit) as cm:
-                    dll_list.main()
-            self.assertEqual(cm.exception.code, 0)
-            output = captured_output.getvalue().strip()
-            self.assertRegex(
-                output,
-                r'^Test passed: hosts file found, size \d+\.$'
-            )
+                dll_list.main()
+            output = captured_output.getvalue().strip().lower().replace('/', '\\')
+            assert r"windows\\system32\\drivers\\etc\\hosts" in output
 
     @mock.patch('pyeverything.dll.load_everything_dll')
     @mock.patch('pyeverything.dll.init_functions')
     @mock.patch('pyeverything.dll.run_search')
-    def test_test_option_output_json(self, mock_run_search: mock.Mock, mock_init: mock.Mock, mock_load: mock.Mock) -> None:
+    def test_connectivity_via_search_json(self, mock_run_search: mock.Mock, mock_init: mock.Mock, mock_load: mock.Mock) -> None:
         mock_run_search.return_value = [
-            {'path': r'C:\Windows\System32\drivers\etc\hosts', 'size': 959}
+            {'name': 'hosts', 'path': r'C:\Windows\System32\drivers\etc\hosts', 'size': 959}
         ]
-        test_args = ['dll_list.py', '--test', '--json']
+        test_args = ['dll_list.py', '--search', 'windows system32 drivers etc hosts', '--json']
         with mock.patch.object(sys, 'argv', test_args):
             captured_output = StringIO()
             with mock.patch('sys.stdout', new=captured_output):
-                with self.assertRaises(SystemExit) as cm:
-                    dll_list.main()
-            self.assertEqual(cm.exception.code, 0)
+                dll_list.main()
             data = json.loads(captured_output.getvalue().strip())
-            self.assertTrue(data.get("passed") is True)
-            self.assertIsInstance(data.get("size"), int)
+            assert isinstance(data, list) and data
+            assert any(r"windows\\system32\\drivers\\etc\\hosts" in e.get('path', '').lower() for e in data)
 
     @mock.patch('pyeverything.dll.load_everything_dll')
     @mock.patch('pyeverything.dll.init_functions')
