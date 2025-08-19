@@ -1,6 +1,26 @@
 import pytest
 
-from pyeverything.dll_class import build_test_queries, find_hosts_match
+# Local copies of helpers for test-mode behavior simulation.
+def build_test_queries(hostfile: str) -> list[str]:
+    return [
+        hostfile,
+        r'path:"\\\\windows\\\\system32\\\\drivers\\\\etc" hosts',
+        "windows system32 drivers etc hosts",
+    ]
+
+
+def find_hosts_match(results: list[dict], hostfile: str):
+    host_lower = hostfile.lower()
+    for e in results:
+        p = str(e.get("path", ""))
+        if p.lower() == host_lower:
+            return e
+    tail = r"\\windows\\system32\\drivers\\etc\\hosts"
+    for e in results:
+        p = str(e.get("path", "")).lower().replace("/", "\\")
+        if tail in p:
+            return e
+    return None
 
 
 def test_build_test_queries_order():

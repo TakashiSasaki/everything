@@ -503,7 +503,7 @@ __all__ = [
 
 def _parse_args(argv=None):
     parser = argparse.ArgumentParser(
-        description="Use Everything DLL to list files or run a connectivity test",
+        description="Use Everything DLL to list files via the Everything SDK",
     )
     parser.add_argument(
         "--search",
@@ -532,48 +532,8 @@ def _parse_args(argv=None):
         action="store_true",
         help="Output results in JSON format",
     )
-    parser.add_argument(
-        "--test",
-        action="store_true",
-        help="Run connectivity test against hosts file",
-    )
     return parser.parse_args(argv)
 
-
-"""
-Test helpers used by --test mode (defined before main to avoid NameError when
-the module is executed as a script via `python -m pyeverything.dll_class`).
-"""
-def build_test_queries(hostfile: str) -> list[str]:
-    """Return a list of robust queries for the hosts file.
-
-    Order matters: absolute path, path: filtered query, then tokenized form.
-    """
-    return [
-        hostfile,
-        r'path:"\\windows\\system32\\drivers\\etc" hosts',
-        "windows system32 drivers etc hosts",
-    ]
-
-
-def find_hosts_match(results: list[dict], hostfile: str) -> Optional[dict]:
-    """Find a matching hosts entry within Everything results.
-
-    Prefers exact full path match; falls back to drive-agnostic tail match.
-    """
-    host_lower = hostfile.lower()
-    # Exact full-path match
-    for e in results:
-        p = str(e.get("path", ""))
-        if p.lower() == host_lower:
-            return e
-    # Drive-agnostic tail match
-    tail = r"\windows\system32\drivers\etc\hosts"
-    for e in results:
-        p = str(e.get("path", "")).lower().replace("/", "\\")
-        if tail in p:
-            return e
-    return None
 
 
 def main(argv=None):
@@ -583,49 +543,9 @@ def main(argv=None):
     except Exception as e:
         sys.exit(str(e))
 
-    # Test mode
-    if args.test:
-        hostfile = r"C:\\Windows\\System32\\drivers\\etc\\hosts"
-        # Try a few robust queries to avoid false negatives on cold indexes
-        queries = [
-            hostfile,
-            r'path:"\\\\windows\\\\system32\\\\drivers\\\\etc" hosts',
-            "windows system32 drivers etc hosts",
-        ]
-        results = []
-        try:
-            for q in queries:
-                results = client.search(q, 0, 50, all_fields=args.all_fields)
-                if results:
-                    break
-        except Exception as e:
-            sys.exit(str(e))
-        if not results:
-            sys.exit("Test failed: no search results returned for hosts file.")
-        # Prefer exact match; fall back to helper for robust matching
-        match = find_hosts_match(results, hostfile)
-        if not match:
-            sys.exit("Test failed: hosts file not found among search results.")
-        size = match.get("size", 0)
-        if size == 0:
-            actual = os.path.getsize(hostfile) if os.path.isfile(hostfile) else 0
-            if actual > 1:
-                msg = {"warning": f"indexed size 0, actual size {actual}."}
-                if args.json:
-                    print(json.dumps(msg, ensure_ascii=False, indent=2))
-                else:
-                    print(f"Warning: indexed size 0, actual size {actual}.")
-                sys.exit(0)
-            sys.exit("Test failed: hosts file size is zero both in index and on disk.")
-        if args.json:
-            print(json.dumps({"passed": True, "size": size}, ensure_ascii=False, indent=2))
-        else:
-            print(f"Test passed: hosts file found, size {size}.")
-        sys.exit(0)
-
     # Normal mode
     if not args.search:
-        sys.exit("Error: --search is required unless --test is specified.")
+        sys.exit("Error: --search is required.")
     try:
         results = client.search(
             args.search, args.offset, args.count, all_fields=args.all_fields
