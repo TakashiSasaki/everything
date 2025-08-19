@@ -106,7 +106,7 @@ def build_field_config(all_fields):
     if all_fields:
         flags = [
             "-name",
-            "-path",
+            "-full-path-and-name",
             "-extension",
             "-size",
             "-date-created",
@@ -134,7 +134,7 @@ def build_field_config(all_fields):
             "date_recently_changed"
         ]
     else:
-        flags = ["-name", "-path", "-size", "-csv"]
+        flags = ["-name", "-full-path-and-name", "-size", "-csv"]
         names = ["name", "path", "size"]
         return flags, names
 
@@ -148,6 +148,7 @@ def parse_csv_text(csv_text, field_names):
         'Name': 'name',
         'Filename': 'name',
         'Path': 'path',
+        'Full Path and Name': 'path',
         'Extension': 'extension',
         'Size': 'size',
         'Date Created': 'date_created',
@@ -165,8 +166,9 @@ def parse_csv_text(csv_text, field_names):
             key = header_mapping.get(orig)
             if key:
                 rec[key] = val
-        # Normalize to full path in 'path' by combining directory path + name
-        if rec.get('path') and rec.get('name'):
+        # Normalize to full path in 'path'. Prefer full-path column if present;
+        # otherwise join directory Path + Name.
+        if rec.get('path') and rec.get('name') and '\\' not in rec['path'] and '/' not in rec['path']:
             try:
                 full_path = os.path.join(rec['path'], rec['name'])
             except Exception:
