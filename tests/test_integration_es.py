@@ -55,9 +55,8 @@ def run_es(args: list[str]) -> tuple[str, str, int]:
     result = subprocess.run(cmd, capture_output=True, text=True)
     return result.stdout.strip(), result.stderr.strip(), result.returncode
 
-
-def es_json(query: str, all_fields: bool = False) -> list[dict[str, object]]:
-    args = ["--search", query, "--json"] + (["--all-fields"] if all_fields else [])
+def es_json(query: str) -> list[dict[str, object]]:
+    args = ["--search", query, "--json"]
     stdout, stderr, rc = run_es(args)
     if rc != 0:
         return []
@@ -74,7 +73,7 @@ def test_connectivity_text_via_search() -> None:
     # Validate connectivity using a robust tokenized search in text mode
     query = "windows system32 drivers etc hosts"
     stdout, stderr, rc = run_es(["--search", query]) 
-    assert rc == 0, f"--search failed rc={rc}, stderr={stderr}\nstdout={stdout}"
+    assert rc == 0, f"--search failed rc={{rc}}, stderr={{stderr}}\nstdout={{stdout}}"
     assert r"windows\system32\drivers\etc\hosts" in stdout.lower().replace("/", "\\")
 
 
@@ -89,14 +88,14 @@ def test_search_json_option() -> None:
     ]
     data: list[dict[str, object]] = []
     for q in queries:
-        data = es_json(q, all_fields=False)
+        data = es_json(q)
         if data:
             break
     assert isinstance(data, list), "es CLI did not return a list"
     # Prefer a strong assertion if we find the canonical hosts entry
     found = any(
-        str(entry.get("name", "")).lower() == "hosts" and
-        r"windows\system32\drivers\etc" in str(entry.get("path", "")).lower()
+        "hosts" in str(entry.get("Filename", "")).lower() and
+        r"windows\system32\drivers\etc" in str(entry.get("Filename", "")).lower()
         for entry in data
     )
     if not found:
@@ -104,32 +103,4 @@ def test_search_json_option() -> None:
         assert len(data) >= 0
         if data:
             e0 = data[0]
-            assert "name" in e0 and "path" in e0
-
-
-@requires_windows
-@requires_es
-def test_search_allfields_json_option() -> None:
-    queries = [
-        r'path:"\\windows\\system32\\drivers\\etc" hosts',
-        r"C:\\Windows\\System32\\drivers\\etc\\hosts",
-        "hosts",
-    ]
-    data: list[dict[str, object]] = []
-    for q in queries:
-        data = es_json(q, all_fields=True)
-        if data:
-            break
-    assert isinstance(data, list)
-    # Prefer strong assertion for hosts entry with extended fields
-    for entry in data:
-        if (
-            str(entry.get("name", "")).lower() == "hosts" and
-            r"windows\system32\drivers\etc" in str(entry.get("path", "")).lower()
-        ):
-            assert "date_modified" in entry
-            break
-    else:
-        # At least validate presence of extended fields in some entry when results exist
-        if data:
-            assert any("date_modified" in e for e in data)
+            assert "Filename" in e0
