@@ -56,6 +56,18 @@ class TestEverythingIntegration(unittest.TestCase):
         """Integration test: Search for a common string and ensure many results are returned."""
         query = "exe"
         results = self.everything.search(query, count=200) # Request more than 100 results
+        # Type assertions for results
+        self.assertIsInstance(results, list, "Results should be a list")
+        self.assertGreater(len(results), 0, "Expected non-empty results for common query")
+        for item in results:
+            self.assertIsInstance(item, dict, "Each result should be a dict")
+            self.assertIn("name", item, "Result missing 'name'")
+            self.assertIn("path", item, "Result missing 'path'")
+            self.assertIn("size", item, "Result missing 'size'")
+            self.assertIsInstance(item["name"], str, "'name' should be a string")
+            self.assertIsInstance(item["path"], str, "'path' should be a string")
+            self.assertIsInstance(item["size"], int, "'size' should be an int")
+            self.assertGreaterEqual(item["size"], 0, "'size' should be non-negative")
         self.assertGreaterEqual(len(results), 100, f"Expected at least 100 results for '{query}', but got {len(results)}")
 
         # New assertion: all results should contain the query string
