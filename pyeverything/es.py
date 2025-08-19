@@ -243,15 +243,32 @@ def main():
     # Handle --es-help early (does not require --search)
     if args.es_help:
         es_cmd = locate_es()
-        try:
-            result = subprocess.run([es_cmd, "--help"], capture_output=True, text=True)
-        except Exception as e:
-            sys.exit(f"Error invoking es.exe --help: {e}")
-        # Print both stdout and stderr to mirror native behavior
-        if result.stdout:
-            print(result.stdout.strip())
-        if result.stderr:
-            print(result.stderr.strip())
+        # Try common help invocations, preferring clean stdout without error lines.
+        attempts = [
+            [es_cmd, "-help"],
+            [es_cmd, "--help"],
+            [es_cmd, "/?"],
+            [es_cmd],  # some versions print help with no args
+        ]
+        for cmd in attempts:
+            try:
+                result = subprocess.run(cmd, capture_output=True, text=True)
+            except Exception as e:
+                continue
+            out = (result.stdout or "").strip()
+            err = (result.stderr or "").strip()
+            # Prefer stdout if it looks like help; suppress error noise like "Unknown switch".
+            if out:
+                print(out)
+                sys.exit(0)
+            if err and "Unknown switch" not in err:
+                print(err)
+                sys.exit(0)
+        # Fallback: best-effort print of any output from the last attempt
+        if out:
+            print(out)
+        if err:
+            print(err)
         sys.exit(0)
 
     es_cmd = locate_es()
