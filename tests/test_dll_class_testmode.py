@@ -7,7 +7,8 @@ def test_build_test_queries_order():
     host = r"C:\\Windows\\System32\\drivers\\etc\\hosts"
     q = build_test_queries(host)
     assert q[0] == host
-    assert "path:\\" in q[1].lower() and "hosts" in q[1].lower()
+    q1 = q[1].lower()
+    assert q1.startswith("path:") and "hosts" in q1
     assert "windows" in q[2].lower()
 
 
@@ -33,4 +34,3 @@ def test_find_hosts_match_none():
     host = r"C:\\Windows\\System32\\drivers\\etc\\hosts"
     m = find_hosts_match([], host)
     assert m is None
-
