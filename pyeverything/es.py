@@ -8,7 +8,6 @@ matching a given search query, runs a connectivity test, and supports various ou
 Features:
   - Perform search by invoking es.exe as a subprocess
   - Support --search, --offset, --count options
-  - Support --all-fields option to display all available fields
   - Support --json option to output results in JSON format (uses CSV export internally for accurate parsing)
   - Support --csv option to export CSV from Everything and parse it
   - Test mode (--test) verifies es.exe by searching for
@@ -54,10 +53,6 @@ def parse_args():
     parser.add_argument(
         "--count", type=int, default=100,
         help="Maximum number of results to return"
-    )
-    parser.add_argument(
-        "--all-fields", action="store_true",
-        help="Include all available fields in output"
     )
     parser.add_argument(
         "--json", action="store_true",
