@@ -193,6 +193,7 @@ def main():
 
     records = []
     if use_csv:
+        # CSV export with full path column for reliable parsing
         cmd = [es_cmd, *field_flags, args.search]
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
@@ -200,14 +201,18 @@ def main():
             sys.exit(f"Error exporting CSV: {e.stderr.strip()}")
         records = parse_csv_text(result.stdout, field_names)
     else:
-        # Build via CSV too (for consistent full-path handling), then print text
-        text_flags, text_names = build_field_config(False)
-        cmd = [es_cmd, *text_flags, args.search]
+        # Plain text mode: print full paths directly using -p and limit count
+        cmd = [es_cmd, "-p", "-n", str(args.count), args.search]
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         except subprocess.CalledProcessError as e:
             sys.exit(f"Error running es.exe: {e.stderr.strip()}")
-        records = parse_csv_text(result.stdout, text_names)
+        out = result.stdout.strip()
+        if out:
+            print(out)
+        else:
+            print("No results found.")
+        sys.exit(0)
 
     if args.json:
         json.dump(records, sys.stdout, ensure_ascii=False, indent=2)
