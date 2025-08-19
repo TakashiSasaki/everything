@@ -63,10 +63,7 @@ def parse_args():
         "--json", action="store_true",
         help="Output results in JSON format (uses CSV export internally)"
     )
-    parser.add_argument(
-        "--csv", action="store_true",
-        help="Export results via -csv and parse CSV"
-    )
+    # --csv removed: EFU CSV (-efu) is used by default
     return parser.parse_args()
 
 
@@ -113,41 +110,7 @@ def locate_es():
     return es_cmd
 
 
-def build_field_config(all_fields):
-    if all_fields:
-        flags = [
-            "-name",
-            "-full-path-and-name",
-            "-extension",
-            "-size",
-            "-date-created",
-            "-date-modified",
-            "-date-accessed",
-            "-attributes",
-            "-file-list-file-name",
-            "-run-count",
-            "-date-run",
-            "-date-recently-changed",
-            "-csv"
-        ]
-        names = [
-            "name",
-            "path",
-            "extension",
-            "size",
-            "date_created",
-            "date_modified",
-            "date_accessed",
-            "attributes",
-            "file_list_file_name",
-            "run_count",
-            "date_run",
-            "date_recently_changed"
-        ]
-    else:
-        flags = ["-name", "-full-path-and-name", "-size", "-csv"]
-        names = ["name", "path", "size"]
-        return flags, names
+# No build_field_config: we standardize on EFU CSV (-efu) for export.
 
 
 def parse_csv_text(csv_text, field_names):
@@ -276,54 +239,27 @@ def main():
     if not args.search:
         sys.exit("Error: --search is required.")
 
-    use_csv = args.csv or args.json
-    field_flags, field_names = build_field_config(args.all_fields)
     # Tokenize the search string into es.exe tokens (preserve quoted segments)
     tokens = shlex.split(args.search, posix=False) if args.search else []
 
-    records = []
-    if use_csv:
-        # CSV export with reliable, documented columns.
-        if args.all_fields:
-            cmd = [es_cmd, "-n", str(args.count), *field_flags, *tokens]
-            expected = field_names
-        else:
-            # Use combined option -efu (single token) to output:
-            # Filename,Size,Date Modified,Date Created,Attributes
-            cmd = [es_cmd, "-efu", "-n", str(args.count), *tokens]
-            expected = ["path", "size", "date_modified", "date_created", "attributes"]
-        try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-        except subprocess.CalledProcessError as e:
-            sys.exit(f"Error exporting CSV: {e.stderr.strip()}")
-        records = parse_csv_text(result.stdout, expected)
-    else:
-        # Plain text mode: enable path matching (-p), pass tokenized query, limit results
-        cmd = [es_cmd, "-p", "-n", str(args.count), *tokens]
-        try:
-            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-        except subprocess.CalledProcessError as e:
-            sys.exit(f"Error running es.exe: {e.stderr.strip()}")
-        out = result.stdout.strip()
-        if out:
-            print(out)
-        else:
-            print("No results found.")
-        sys.exit(0)
+    # Always run EFU CSV export by default (-efu). Text mode prints EFU text,
+    # JSON mode parses EFU into structured objects.
+    cmd = [es_cmd, "-efu", "-n", str(args.count), *tokens]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+    except subprocess.CalledProcessError as e:
+        sys.exit(f"Error running es.exe: {e.stderr.strip()}")
 
     if args.json:
+        records = parse_csv_text(result.stdout, ["path", "size", "date_modified", "date_created", "attributes"])
         json.dump(records, sys.stdout, ensure_ascii=False, indent=2)
         sys.stdout.write('\n')
         sys.exit(0)
-    elif not records:
-        print("No results found.")
     else:
-        for rec in records:
-            if args.all_fields:
-                print("\t".join(str(rec.get(n, '')) for n in field_names))
-            else:
-                # Print the full path for connectivity-friendly text output
-                print(rec.get('path', ''))
+        # Print EFU CSV as-is (includes header + rows)
+        out = (result.stdout or "").strip()
+        print(out)
+        sys.exit(0)
 
 if __name__ == "__main__":
     main()
