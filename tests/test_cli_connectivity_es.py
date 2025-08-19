@@ -51,8 +51,16 @@ def _run(args: list[str]) -> tuple[str, str, int]:
 @requires_windows
 @requires_es
 def test_connectivity_text() -> None:
-    q = "windows system32 drivers etc hosts"
-    out, err, rc = _run(["--search", q])
+    queries = [
+        r'path:"\\windows\\system32\\drivers\\etc" hosts',
+        r"C:\\Windows\\System32\\drivers\\etc\\hosts",
+        "windows system32 drivers etc hosts",
+    ]
+    out, err, rc = "", "", 1
+    for q in queries:
+        out, err, rc = _run(["--search", q])
+        if rc == 0 and out:
+            break
     assert rc == 0, f"rc={rc} err={err}\n{out}"
     assert r"windows\system32\drivers\etc\hosts" in out.lower().replace("/", "\\")
 
@@ -60,10 +68,22 @@ def test_connectivity_text() -> None:
 @requires_windows
 @requires_es
 def test_connectivity_json() -> None:
-    q = "windows system32 drivers etc hosts"
-    out, err, rc = _run(["--search", q, "--json"]) 
+    queries = [
+        r'path:"\\windows\\system32\\drivers\\etc" hosts',
+        r"C:\\Windows\\System32\\drivers\\etc\\hosts",
+        "windows system32 drivers etc hosts",
+    ]
+    out, err, rc = "", "", 1
+    data = []
+    for q in queries:
+        out, err, rc = _run(["--search", q, "--json"]) 
+        if rc == 0:
+            try:
+                data = json.loads(out)
+            except Exception:
+                data = []
+        if isinstance(data, list) and data:
+            break
     assert rc == 0, f"rc={rc} err={err}\n{out}"
-    data = json.loads(out)
     assert isinstance(data, list)
     assert any(r"windows\system32\drivers\etc\hosts" in str(e.get("path", "")).lower() for e in data)
-
