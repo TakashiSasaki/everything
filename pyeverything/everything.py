@@ -42,7 +42,12 @@ class Everything:
         )
         self.dll.Everything_SetRequestFlags(flags)
         self.dll.Everything_SetOffset(offset)
-        self.dll.Everything_SetMax(count)
+        # Handle count=0 to mean "no limit" for Everything_SetMax
+        everything_max_count = count
+        if count == 0:
+            everything_max_count = 0xFFFFFFFF  # Use max DWORD value for "no limit"
+
+        self.dll.Everything_SetMax(everything_max_count)
         if not self.dll.Everything_QueryW(True):
             sys.exit("Error: Everything query failed.")
         total = self.dll.Everything_GetNumResults()
@@ -110,8 +115,6 @@ class Everything:
                 })
             else:
                 results.append({"name": name, "path": path, "size": size})
-        self.dll.Everything_CleanUp()
-        self.dll.Everything_Reset()
         return results
 
     def set_match_case(self, enable: bool):
