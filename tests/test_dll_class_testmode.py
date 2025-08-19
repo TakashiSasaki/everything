@@ -15,7 +15,7 @@ def find_hosts_match(results: list[dict], hostfile: str):
         p = str(e.get("path", ""))
         if p.lower() == host_lower:
             return e
-    tail = r"\\windows\\system32\\drivers\\etc\\hosts"
+    tail = r"\windows\system32\drivers\etc\hosts"
     for e in results:
         p = str(e.get("path", "")).lower().replace("/", "\\")
         if tail in p:
