@@ -191,17 +191,18 @@ def main():
             sys.exit(f"Error exporting CSV: {e.stderr.strip()}")
         records = parse_csv_text(result.stdout, field_names)
     else:
-        # Fallback to default text output
-        text_flags, text_names = build_field_config(False)
+        # Fallback to default text output (no CSV header)
+        text_flags = ["-name", "-path-column", "-size"]
         cmd = [es_cmd, *text_flags, args.search]
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         except subprocess.CalledProcessError as e:
             sys.exit(f"Error running es.exe: {e.stderr.strip()}")
-        for line in result.stdout.splitlines():
-            parts = line.split()
-            rec = {text_names[i]: parts[i] if i < len(parts) else None for i in range(len(text_names))}
-            records.append(rec)
+        # Print raw output so consumers (and tests) can see the full path
+        out = result.stdout.strip()
+        if out:
+            print(out)
+        sys.exit(0)
 
     if args.json:
         json.dump(records, sys.stdout, ensure_ascii=False, indent=2)
