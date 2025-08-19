@@ -102,10 +102,6 @@ def locate_es():
     return es_cmd
 
 
-def run_test(es_cmd):
-    raise RuntimeError("--test has been removed; use pytest connectivity tests instead.")
-
-
 def build_field_config(all_fields):
     if all_fields:
         flags = [
