@@ -113,83 +113,23 @@ def locate_es():
 # No build_field_config: we standardize on EFU CSV (-efu) for export.
 
 
-def parse_csv_text(csv_text, field_names):
-    """Parse es.exe CSV output with or without header.
-
-    If a header row is present, use it; otherwise map columns in the
-    same order as the requested field_names.
-    """
-    records = []
-    f = io.StringIO(csv_text)
-    reader = csv.reader(f)
-    try:
-        first = next(reader)
-    except StopIteration:
+def parse_csv_text(csv_text):
+    """Parse es.exe CSV output with a header and validate mandatory columns."""
+    if not csv_text.strip():
         return []
 
-    # Map CSV headers (with spaces) to internal field names
-    header_mapping = {
-        'Name': 'name',
-        'Filename': 'path',
-        'Path': 'path',
-        'Full Path and Name': 'path',
-        'Extension': 'extension',
-        'Size': 'size',
-        'Date Created': 'date_created',
-        'Date Modified': 'date_modified',
-        'Date Accessed': 'date_accessed',
-        'Attributes': 'attributes',
-        'File List File Name': 'file_list_file_name',
-        'Run Count': 'run_count',
-        'Date Run': 'date_run',
-        'Date Recently Changed': 'date_recently_changed',
-    }
+    f = io.StringIO(csv_text)
+    reader = csv.DictReader(f)
 
-    # Determine if the first row is a header
-    mapped = [header_mapping.get(h) for h in first]
-    has_header = any(m is not None for m in mapped)
+    # The fieldnames are read from the first row.
+    header = reader.fieldnames
 
-    # Build column keys
-    if has_header:
-        keys = [header_mapping.get(h, None) for h in first]
-    else:
-        # Use provided field_names (order must match flags)
-        keys = list(field_names)
-        # Treat the first row as data
-        row_iter = [first]
-        row_iter.extend(list(reader))
-        reader = row_iter
+    mandatory_columns = ['Filename', 'Size', 'Date Modified', 'Date Created', 'Attributes']
 
-    # Iterate rows
-    if has_header:
-        rows = reader
-    else:
-        rows = reader
+    if header != mandatory_columns:
+        sys.exit(f"Error: CSV header does not match expected EFU format. Expected: {mandatory_columns}, Got: {header}")
 
-    for row in rows:
-        # Skip malformed rows
-        if not isinstance(row, (list, tuple)):
-            continue
-        rec = {}
-        for i, val in enumerate(row):
-            if i >= len(keys):
-                break
-            key = keys[i]
-            if key:
-                rec[key] = val
-        # Normalize to full path in 'path'. Prefer full-path column if present;
-        # otherwise join directory Path + Name.
-        if rec.get('path') and rec.get('name') and '\\' not in rec['path'] and '/' not in rec['path']:
-            try:
-                full_path = os.path.join(rec['path'], rec['name'])
-            except Exception:
-                full_path = f"{rec['path']}\\{rec['name']}"
-            rec['path'] = full_path
-        # Ensure all requested fields exist
-        for name in field_names:
-            rec.setdefault(name, None)
-        records.append(rec)
-    return records
+    return list(reader)
 
 
 def main():
@@ -251,7 +191,7 @@ def main():
         sys.exit(f"Error running es.exe: {e.stderr.strip()}")
 
     if args.json:
-        records = parse_csv_text(result.stdout, ["path", "size", "date_modified", "date_created", "attributes"])
+        records = parse_csv_text(result.stdout)
         json.dump(records, sys.stdout, ensure_ascii=False, indent=2)
         sys.stdout.write('\n')
         sys.exit(0)
