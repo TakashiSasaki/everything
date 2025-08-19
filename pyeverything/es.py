@@ -165,6 +165,13 @@ def parse_csv_text(csv_text, field_names):
             key = header_mapping.get(orig)
             if key:
                 rec[key] = val
+        # Normalize to full path in 'path' by combining directory path + name
+        if rec.get('path') and rec.get('name'):
+            try:
+                full_path = os.path.join(rec['path'], rec['name'])
+            except Exception:
+                full_path = f"{rec['path']}\\{rec['name']}"
+            rec['path'] = full_path
         # Ensure all requested fields exist
         for name in field_names:
             rec.setdefault(name, None)
@@ -191,17 +198,14 @@ def main():
             sys.exit(f"Error exporting CSV: {e.stderr.strip()}")
         records = parse_csv_text(result.stdout, field_names)
     else:
-        # Fallback to default text output (print full paths); limit count
-        cmd = [es_cmd, "-n", str(args.count), args.search]
+        # Build via CSV too (for consistent full-path handling), then print text
+        text_flags, text_names = build_field_config(False)
+        cmd = [es_cmd, *text_flags, args.search]
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         except subprocess.CalledProcessError as e:
             sys.exit(f"Error running es.exe: {e.stderr.strip()}")
-        # Print raw output so consumers (and tests) can see the full path
-        out = result.stdout.strip()
-        if out:
-            print(out)
-        sys.exit(0)
+        records = parse_csv_text(result.stdout, text_names)
 
     if args.json:
         json.dump(records, sys.stdout, ensure_ascii=False, indent=2)
@@ -214,7 +218,8 @@ def main():
             if args.all_fields:
                 print("\t".join(str(rec.get(n, '')) for n in field_names))
             else:
-                print(rec.get('name', ''))
+                # Print the full path for connectivity-friendly text output
+                print(rec.get('path', ''))
 
 if __name__ == "__main__":
     main()
