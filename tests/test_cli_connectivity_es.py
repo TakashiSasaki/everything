@@ -90,4 +90,4 @@ def test_connectivity_json() -> None:
     assert rc == 0, f"rc={rc} err={err}\n{out}"
     if not isinstance(data, list) or not data:
         pytest.skip("Everything index not ready; skipping JSON connectivity for es.exe")
-    assert any(r"windows\system32\drivers\etc\hosts" in str(e.get("path", "")).lower() for e in data)
+    assert any(r"windows\system32\drivers\etc\hosts" in str(ee.get("Filename", "")).lower() for e in data)
