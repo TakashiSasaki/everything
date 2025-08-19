@@ -7,7 +7,7 @@ matching a given search query, runs a connectivity test, and supports various ou
 
 Features:
   - Perform search by invoking es.exe as a subprocess
-  - Support --search, --offset, --count options
+  - Support --search, --count options
   - Support --json option to output results in JSON format (uses CSV export internally for accurate parsing)
   - Support --csv option to export CSV from Everything and parse it
   - Test mode (--test) verifies es.exe by searching for
@@ -45,10 +45,6 @@ def parse_args():
     parser.add_argument(
         "--search", required=False,
         help="Search pattern (Everything query syntax)"
-    )
-    parser.add_argument(
-        "--offset", type=int, default=0,
-        help="Result offset (zero-based)"
     )
     parser.add_argument(
         "--count", type=int, default=100,
