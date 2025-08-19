@@ -106,7 +106,7 @@ def build_field_config(all_fields):
     if all_fields:
         flags = [
             "-name",
-            "-path-column",
+            "-path",
             "-extension",
             "-size",
             "-date-created",
@@ -134,9 +134,9 @@ def build_field_config(all_fields):
             "date_recently_changed"
         ]
     else:
-        flags = ["-name", "-path-column", "-size", "-csv"]
+        flags = ["-name", "-path", "-size", "-csv"]
         names = ["name", "path", "size"]
-    return flags, names
+        return flags, names
 
 
 def parse_csv_text(csv_text, field_names):
@@ -191,9 +191,8 @@ def main():
             sys.exit(f"Error exporting CSV: {e.stderr.strip()}")
         records = parse_csv_text(result.stdout, field_names)
     else:
-        # Fallback to default text output (no CSV header)
-        text_flags = ["-name", "-path-column", "-size"]
-        cmd = [es_cmd, *text_flags, args.search]
+        # Fallback to default text output (print full paths); limit count
+        cmd = [es_cmd, "-n", str(args.count), args.search]
         try:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         except subprocess.CalledProcessError as e:
