@@ -130,7 +130,7 @@ Lifecycle
 - cleanup SDK allocations: [Everything_CleanUp](#everything_cleanup)
 - request exit: [Everything_Exit](#everything_exit)
 
-## Non-IPC Function Index
+## Non-IPC State Function Index
 
 ### Global Maintenance
 - [Everything_CleanUp](#everything_cleanup)
