@@ -79,6 +79,58 @@
 <!-- TOC END -->
 
 
+## IPC State Cheat Sheet
+
+Search parameters
+- search: [Everything_SetSearch](#everything_setsearch) / [Everything_GetSearch](#everything_getsearch)
+- match_case: [Everything_SetMatchCase](#everything_setmatchcase) / [Everything_GetMatchCase](#everything_getmatchcase)
+- match_path: [Everything_SetMatchPath](#everything_setmatchpath) / [Everything_GetMatchPath](#everything_getmatchpath)
+- match_whole_word: [Everything_SetMatchWholeWord](#everything_setmatchwholeword) / [Everything_GetMatchWholeWord](#everything_getmatchwholeword)
+- regex: [Everything_SetRegex](#everything_setregex) / [Everything_GetRegex](#everything_getregex)
+
+Paging
+- max results: [Everything_SetMax](#everything_setmax) / [Everything_GetMax](#everything_getmax)
+- offset: [Everything_SetOffset](#everything_setoffset) / [Everything_GetOffset](#everything_getoffset)
+
+Sorting
+- query sort mode: [Everything_SetSort](#everything_setsort) / [Everything_GetSort](#everything_getsort)
+- result list sort: [Everything_GetResultListSort](#everything_getresultlistsort)
+- in-place helper: [Everything_SortResultsByPath](#everything_sortresultsbypath)
+
+Result payload flags
+- request_flags (what to populate): [Everything_SetRequestFlags](#everything_setrequestflags) / [Everything_GetRequestFlags](#everything_getrequestflags)
+- result_list_request_flags (what was used): [Everything_GetResultListRequestFlags](#everything_getresultlistrequestflags)
+
+IPC reply/notifications
+- reply_window (HWND): [Everything_SetReplyWindow](#everything_setreplywindow) / [Everything_GetReplyWindow](#everything_getreplywindow)
+- reply_id (correlation): [Everything_SetReplyID](#everything_setreplyid) / [Everything_GetReplyID](#everything_getreplyid)
+
+Query and results
+- execute query: [Everything_Query](#everything_query)
+- reset state: [Everything_Reset](#everything_reset)
+- counts (paged): [Everything_GetNumResults](#everything_getnumresults), [Everything_GetNumFileResults](#everything_getnumfileresults), [Everything_GetNumFolderResults](#everything_getnumfolderresults)
+- totals (unpaged): [Everything_GetTotResults](#everything_gettotresults), [Everything_GetTotFileResults](#everything_gettotfileresults), [Everything_GetTotFolderResults](#everything_gettotfolderresults)
+- per-item getters: name/path/full path/extension/size/attributes/dates/run count/highlighted variants via [Everything_GetResult...](#everything_getresultattributes)
+
+Run history (global)
+- get/set/inc file run count: [Everything_GetRunCountFromFileName](#everything_getruncountfromfilename), [Everything_SetRunCountFromFileName](#everything_setruncountfromfilename), [Everything_IncRunCountFromFileName](#everything_incruncountfromfilename)
+- maintenance: [Everything_SaveRunHistory](#everything_saverunhistory), [Everything_DeleteRunHistory](#everything_deleterunhistory)
+
+Database maintenance (global)
+- save database: [Everything_SaveDB](#everything_savedb)
+- rebuild database: [Everything_RebuildDB](#everything_rebuilddb)
+- update folder indexes: [Everything_UpdateAllFolderIndexes](#everything_updateallfolderindexes)
+
+Process/application state (read-only)
+- version: [Everything_GetMajorVersion](#everything_getmajorversion), [Everything_GetMinorVersion](#everything_getminorversion), [Everything_GetRevision](#everything_getrevision), [Everything_GetBuildNumber](#everything_getbuildnumber)
+- environment/capabilities: [Everything_IsAdmin](#everything_isadmin), [Everything_IsAppData](#everything_isappdata), [Everything_IsDBLoaded](#everything_isdbloaded), [Everything_IsFastSort](#everything_isfastsort), [Everything_IsFileInfoIndexed](#everything_isfileinfoindexed)
+- target machine id: [Everything_GetTargetMachine](#everything_gettargetmachine)
+
+Lifecycle
+- cleanup SDK allocations: [Everything_CleanUp](#everything_cleanup)
+- request exit: [Everything_Exit](#everything_exit)
+
+
 This document aggregates function reference pages from the Everything wiki.
 
 ## everything cleanup
@@ -4027,4 +4079,3 @@ Everything_UpdateAllFolderIndexes();
 Requires Everything 1.4.1 or later.
 
 ### See Also
-
