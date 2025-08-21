@@ -144,6 +144,7 @@ def init_functions(dll):
     dll.Everything_SetRequestFlags.argtypes              = [wintypes.DWORD]
     dll.Everything_SetSort.argtypes                      = [wintypes.DWORD]
     dll.Everything_SetReplyWindow.argtypes               = [wintypes.HWND]
+    dll.Everything_SetReplyID.argtypes                   = [wintypes.DWORD]
 
     # Getters
     dll.Everything_GetMatchPath.restype                  = wintypes.BOOL
@@ -157,8 +158,14 @@ def init_functions(dll):
     dll.Everything_GetSearchW.restype                    = wintypes.LPCWSTR
     dll.Everything_GetSearchA.restype                    = wintypes.LPCSTR
     dll.Everything_GetNumResults.restype                 = wintypes.DWORD
+    dll.Everything_GetNumFileResults.restype             = wintypes.DWORD
+    dll.Everything_GetNumFolderResults.restype           = wintypes.DWORD
+    dll.Everything_GetTotResults.restype                 = wintypes.DWORD
+    dll.Everything_GetTotFileResults.restype             = wintypes.DWORD
+    dll.Everything_GetTotFolderResults.restype           = wintypes.DWORD
     dll.Everything_GetLastError.restype                  = wintypes.DWORD
     dll.Everything_GetReplyWindow.restype                = wintypes.HWND
+    dll.Everything_GetReplyID.restype                    = wintypes.DWORD
     dll.Everything_GetTargetMachine.restype              = wintypes.DWORD
 
     # Query
@@ -171,10 +178,16 @@ def init_functions(dll):
 
     # Results
     dll.Everything_SortResultsByPath.argtypes            = []
+    dll.Everything_GetResultListRequestFlags.restype     = wintypes.DWORD
+    dll.Everything_GetResultListSort.restype             = wintypes.DWORD
     dll.Everything_GetResultFullPathNameW.argtypes       = [wintypes.DWORD, wintypes.LPWSTR, wintypes.DWORD]
     dll.Everything_GetResultFullPathNameW.restype        = wintypes.DWORD
     dll.Everything_GetResultFullPathNameA.argtypes       = [wintypes.DWORD, wintypes.LPSTR, wintypes.DWORD]
     dll.Everything_GetResultFullPathNameA.restype        = wintypes.DWORD
+    dll.Everything_GetResultPathW.argtypes               = [wintypes.DWORD]
+    dll.Everything_GetResultPathW.restype                = wintypes.LPCWSTR
+    dll.Everything_GetResultPathA.argtypes               = [wintypes.DWORD]
+    dll.Everything_GetResultPathA.restype                = wintypes.LPCSTR
     dll.Everything_GetResultFileNameW.argtypes           = [wintypes.DWORD]
     dll.Everything_GetResultFileNameW.restype            = wintypes.LPCWSTR
     dll.Everything_GetResultFileNameA.argtypes           = [wintypes.DWORD]
@@ -218,11 +231,46 @@ def init_functions(dll):
     dll.Everything_IsDBLoaded.restype                    = wintypes.BOOL
     dll.Everything_IsAdmin.restype                       = wintypes.BOOL
     dll.Everything_IsAppData.restype                     = wintypes.BOOL
+    dll.Everything_IsFastSort.argtypes                   = [wintypes.DWORD]
+    dll.Everything_IsFastSort.restype                    = wintypes.BOOL
+    dll.Everything_IsFileInfoIndexed.argtypes            = [wintypes.DWORD]
+    dll.Everything_IsFileInfoIndexed.restype             = wintypes.BOOL
+    dll.Everything_IsFileResult.argtypes                 = [wintypes.DWORD]
+    dll.Everything_IsFileResult.restype                  = wintypes.BOOL
+    dll.Everything_IsFolderResult.argtypes               = [wintypes.DWORD]
+    dll.Everything_IsFolderResult.restype                = wintypes.BOOL
+    dll.Everything_IsVolumeResult.argtypes               = [wintypes.DWORD]
+    dll.Everything_IsVolumeResult.restype                = wintypes.BOOL
 
     # Control
     dll.Everything_CleanUp.argtypes                      = []
     dll.Everything_Reset.argtypes                        = []
     dll.Everything_Exit.argtypes                         = []
+    dll.Everything_Exit.restype                          = wintypes.BOOL
+    dll.Everything_SaveDB.argtypes                       = []
+    dll.Everything_SaveDB.restype                        = wintypes.BOOL
+    dll.Everything_RebuildDB.argtypes                    = []
+    dll.Everything_RebuildDB.restype                     = wintypes.BOOL
+    dll.Everything_UpdateAllFolderIndexes.argtypes       = []
+    dll.Everything_UpdateAllFolderIndexes.restype        = wintypes.BOOL
+    dll.Everything_SaveRunHistory.argtypes               = []
+    dll.Everything_SaveRunHistory.restype                = wintypes.BOOL
+    dll.Everything_DeleteRunHistory.argtypes             = []
+    dll.Everything_DeleteRunHistory.restype              = wintypes.BOOL
+
+    # Run history by filename (W and A variants where applicable)
+    dll.Everything_GetRunCountFromFileNameW.argtypes     = [wintypes.LPCWSTR]
+    dll.Everything_GetRunCountFromFileNameW.restype      = wintypes.DWORD
+    dll.Everything_GetRunCountFromFileNameA.argtypes     = [wintypes.LPCSTR]
+    dll.Everything_GetRunCountFromFileNameA.restype      = wintypes.DWORD
+    dll.Everything_SetRunCountFromFileNameW.argtypes     = [wintypes.LPCWSTR, wintypes.DWORD]
+    dll.Everything_SetRunCountFromFileNameW.restype      = wintypes.BOOL
+    dll.Everything_SetRunCountFromFileNameA.argtypes     = [wintypes.LPCSTR, wintypes.DWORD]
+    dll.Everything_SetRunCountFromFileNameA.restype      = wintypes.BOOL
+    dll.Everything_IncRunCountFromFileNameW.argtypes     = [wintypes.LPCWSTR]
+    dll.Everything_IncRunCountFromFileNameW.restype      = wintypes.DWORD
+    dll.Everything_IncRunCountFromFileNameA.argtypes     = [wintypes.LPCSTR]
+    dll.Everything_IncRunCountFromFileNameA.restype      = wintypes.DWORD
 
 def parse_args():
     parser = argparse.ArgumentParser(
