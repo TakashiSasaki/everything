@@ -130,6 +130,70 @@ Lifecycle
 - cleanup SDK allocations: [Everything_CleanUp](#everything_cleanup)
 - request exit: [Everything_Exit](#everything_exit)
 
+## Non-IPC Function Index
+
+### Global Maintenance
+- [Everything_CleanUp](#everything_cleanup)
+- [Everything_Exit](#everything_exit)
+- [Everything_SaveDB](#everything_savedb)
+- [Everything_RebuildDB](#everything_rebuilddb)
+- [Everything_UpdateAllFolderIndexes](#everything_updateallfolderindexes)
+- [Everything_SaveRunHistory](#everything_saverunhistory)
+- [Everything_DeleteRunHistory](#everything_deleterunhistory)
+
+### Version & Environment
+- [Everything_GetMajorVersion](#everything_getmajorversion)
+- [Everything_GetMinorVersion](#everything_getminorversion)
+- [Everything_GetRevision](#everything_getrevision)
+- [Everything_GetBuildNumber](#everything_getbuildnumber)
+- [Everything_IsAdmin](#everything_isadmin)
+- [Everything_IsAppData](#everything_isappdata)
+- [Everything_IsDBLoaded](#everything_isdbloaded)
+- [Everything_IsFastSort](#everything_isfastsort)
+- [Everything_IsFileInfoIndexed](#everything_isfileinfoindexed)
+- [Everything_GetTargetMachine](#everything_gettargetmachine)
+- [Everything_GetLastError](#everything_getlasterror)
+
+### Run History API
+- [Everything_GetRunCountFromFileName](#everything_getruncountfromfilename)
+- [Everything_SetRunCountFromFileName](#everything_setruncountfromfilename)
+- [Everything_IncRunCountFromFileName](#everything_incruncountfromfilename)
+
+### Result Set Metrics (read-only)
+- [Everything_GetNumResults](#everything_getnumresults)
+- [Everything_GetNumFileResults](#everything_getnumfileresults)
+- [Everything_GetNumFolderResults](#everything_getnumfolderresults)
+- [Everything_GetTotResults](#everything_gettotresults)
+- [Everything_GetTotFileResults](#everything_gettotfileresults)
+- [Everything_GetTotFolderResults](#everything_gettotfolderresults)
+
+### Per-Item Result Accessors
+- [Everything_GetResultPath](#everything_getresultpath)
+- [Everything_GetResultFileName](#everything_getresultfilename)
+- [Everything_GetResultFullPathName](#everything_getresultfullpathname)
+- [Everything_GetResultExtension](#everything_getresultextension)
+- [Everything_GetResultSize](#everything_getresultsize)
+- [Everything_GetResultAttributes](#everything_getresultattributes)
+- [Everything_GetResultDateAccessed](#everything_getresultdateaccessed)
+- [Everything_GetResultDateCreated](#everything_getresultdatecreated)
+- [Everything_GetResultDateModified](#everything_getresultdatemodified)
+- [Everything_GetResultDateRecentlyChanged](#everything_getresultdaterecentlychanged)
+- [Everything_GetResultDateRun](#everything_getresultdaterun)
+- [Everything_GetResultRunCount](#everything_getresultruncount)
+- [Everything_GetResultFileListFileName](#everything_getresultfilelistfilename)
+- [Everything_GetResultHighlightedFileName](#everything_getresulthighlightedfilename)
+- [Everything_GetResultHighlightedFullPathAndFileName](#everything_getresulthighlightedfullpathandfilename)
+- [Everything_GetResultHighlightedPath](#everything_getresulthighlightedpath)
+
+### Results Meta & Helpers
+- [Everything_GetResultListSort](#everything_getresultlistsort)
+- [Everything_GetResultListRequestFlags](#everything_getresultlistrequestflags)
+- [Everything_SortResultsByPath](#everything_sortresultsbypath)
+- [Everything_IsFileResult](#everything_isfileresult)
+- [Everything_IsFolderResult](#everything_isfolderresult)
+- [Everything_IsVolumeResult](#everything_isvolumeresult)
+- [Everything_IsQueryReply](#everything_isqueryreply)
+
 
 This document aggregates function reference pages from the Everything wiki.
 
