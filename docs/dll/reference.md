@@ -85,8 +85,8 @@ This document aggregates function reference pages from the Everything wiki.
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_cleanup
 
-## Everything_CleanUp
-The Everything_CleanUp function frees any allocated memory by the library.
+## [Everything_CleanUp](#everything_cleanup)
+The [Everything_CleanUp](#everything_cleanup) function frees any allocated memory by the library.
 
 ### Syntax
 ```
@@ -100,17 +100,17 @@ This function has no parameters.
 This function has no return value.
 
 ### Remarks
-You should call Everything_CleanUp to free any memory allocated by the Everything SDK.
+You should call [Everything_CleanUp](#everything_cleanup) to free any memory allocated by the Everything SDK.
 
-Everything_CleanUp should be the last call to the Everything SDK.
+[Everything_CleanUp](#everything_cleanup) should be the last call to the Everything SDK.
 
-Call Everything_Reset to free any allocated memory for the current search and results.
+Call [Everything_Reset](#everything_reset) to free any allocated memory for the current search and results.
 
-Everything_Reset will also reset the search and result state to their defaults.
+[Everything_Reset](#everything_reset) will also reset the search and result state to their defaults.
 
-Calling Everything_SetSearch frees the old search and allocates the new search string.
+Calling [Everything_SetSearch](#everything_setsearch) frees the old search and allocates the new search string.
 
-Calling Everything_Query frees the old result list and allocates the new result list.
+Calling [Everything_Query](#everything_query) frees the old result list and allocates the new result list.
 
 ### Example
 ```
@@ -118,16 +118,16 @@ Everything_CleanUp();
 ```
 
 ### See Also
-- Everything_SetSearch
-- Everything_Reset
-- Everything_Query
+- [Everything_SetSearch](#everything_setsearch)
+- [Everything_Reset](#everything_reset)
+- [Everything_Query](#everything_query)
 
 ## everything deleterunhistory
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_deleterunhistory
 
-## Everything_DeleteRunHistory
-The Everything_DeleteRunHistory function deletes all run history.
+## [Everything_DeleteRunHistory](#everything_deleterunhistory)
+The [Everything_DeleteRunHistory](#everything_deleterunhistory) function deletes all run history.
 
 ### Syntax
 ```
@@ -140,7 +140,7 @@ No parameters.
 ### Return Value
 The function returns non-zero if run history is cleared.
 
-The function returns 0 if an error occurred. To get extended error information, call Everything_GetLastError
+The function returns 0 if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -159,16 +159,16 @@ Everything_DeleteRunHistory();
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_GetRunCountFromFileName
-- Everything_SetRunCountFromFileName
-- Everything_IncRunCountFromFileName
+- [Everything_GetRunCountFromFileName](#everything_getruncountfromfilename)
+- [Everything_SetRunCountFromFileName](#everything_setruncountfromfilename)
+- [Everything_IncRunCountFromFileName](#everything_incruncountfromfilename)
 
 ## everything exit
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_exit
 
-## Everything_Exit
-The Everything_Exit function requests Everything to exit.
+## [Everything_Exit](#everything_exit)
+The [Everything_Exit](#everything_exit) function requests Everything to exit.
 
 ### Syntax
 ```
@@ -181,7 +181,7 @@ No parameters.
 ### Return Value
 The function returns non-zero if the exit request was successful.
 
-The function returns 0 if the request failed. To get extended error information, call Everything_GetLastError
+The function returns 0 if the request failed. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -205,8 +205,8 @@ Requires Everything 1.4.1 or later.
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getbuildnumber
 
-## Everything_GetBuildNumber
-The Everything_GetBuildNumber function retrieves the build number of Everything.
+## [Everything_GetBuildNumber](#everything_getbuildnumber)
+The [Everything_GetBuildNumber](#everything_getbuildnumber) function retrieves the build number of Everything.
 
 ### Syntax
 ```
@@ -219,7 +219,7 @@ No parameters.
 ### Return Value
 The function returns the build number.
 
-The function returns 0 if build information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns 0 if build information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -247,17 +247,17 @@ if (buildNumber >= 686)
 Requires Everything 1.0.0.0 or later.
 
 ### See Also
-- Everything_GetMajorVersion
-- Everything_GetMinorVersion
-- Everything_GetRevision
-- Everything_GetTargetMachine
+- [Everything_GetMajorVersion](#everything_getmajorversion)
+- [Everything_GetMinorVersion](#everything_getminorversion)
+- [Everything_GetRevision](#everything_getrevision)
+- [Everything_GetTargetMachine](#everything_gettargetmachine)
 
 ## everything getlasterror
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getlasterror
 
-## Everything_GetLastError
-The Everything_GetLastError function retrieves the last-error code value.
+## [Everything_GetLastError](#everything_getlasterror)
+The [Everything_GetLastError](#everything_getlasterror) function retrieves the last-error code value.
 
 ### Syntax
 ```
@@ -312,8 +312,8 @@ if (!Everything_Query(true))
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getmajorversion
 
-## Everything_GetMajorVersion
-The Everything_GetMajorVersion function retrieves the major version number of Everything.
+## [Everything_GetMajorVersion](#everything_getmajorversion)
+The [Everything_GetMajorVersion](#everything_getmajorversion) function retrieves the major version number of Everything.
 
 ### Syntax
 ```
@@ -326,7 +326,7 @@ No parameters.
 ### Return Value
 The function returns the major version number.
 
-The function returns 0 if major version information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns 0 if major version information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -358,17 +358,17 @@ if ((majorVersion > 1) || ((majorVersion == 1) && (minorVersion > 3)) || ((major
 Requires Everything 1.0.0.0 or later.
 
 ### See Also
-- Everything_GetMinorVersion
-- Everything_GetRevision
-- Everything_GetBuildNumber
-- Everything_GetTargetMachine
+- [Everything_GetMinorVersion](#everything_getminorversion)
+- [Everything_GetRevision](#everything_getrevision)
+- [Everything_GetBuildNumber](#everything_getbuildnumber)
+- [Everything_GetTargetMachine](#everything_gettargetmachine)
 
 ## everything getmatchcase
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getmatchcase
 
-## Everything_GetMatchCase
-The Everything_GetMatchCase function returns the match case state.
+## [Everything_GetMatchCase](#everything_getmatchcase)
+The [Everything_GetMatchCase](#everything_getmatchcase) function returns the match case state.
 
 ### Syntax
 ```
@@ -393,15 +393,15 @@ BOOL bEnabled = Everything_GetMatchCase();
 ```
 
 ### See Also
-- Everything_SetMatchCase
-- Everything_Query
+- [Everything_SetMatchCase](#everything_setmatchcase)
+- [Everything_Query](#everything_query)
 
 ## everything getmatchpath
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getmatchpath
 
-## Everything_GetMatchPath
-The Everything_GetMatchPath function returns the state of the match full path switch.
+## [Everything_GetMatchPath](#everything_getmatchpath)
+The [Everything_GetMatchPath](#everything_getmatchpath) function returns the state of the match full path switch.
 
 ### Syntax
 ```
@@ -426,15 +426,15 @@ BOOL bEnabled = Everything_GetMatchPath();
 ```
 
 ### See Also
-- Everything_SetMatchPath
-- Everything_Query
+- [Everything_SetMatchPath](#everything_setmatchpath)
+- [Everything_Query](#everything_query)
 
 ## everything getmatchwholeword
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getmatchwholeword
 
-## Everything_GetMatchWholeWord
-The Everything_GetMatchWholeWord function returns the match whole word state.
+## [Everything_GetMatchWholeWord](#everything_getmatchwholeword)
+The [Everything_GetMatchWholeWord](#everything_getmatchwholeword) function returns the match whole word state.
 
 ### Syntax
 ```
@@ -457,15 +457,15 @@ BOOL bEnabled = Everything_GetMatchWholeWord();
 ```
 
 ### See Also
-- Everything_SetMatchWholeWord
-- Everything_Query
+- [Everything_SetMatchWholeWord](#everything_setmatchwholeword)
+- [Everything_Query](#everything_query)
 
 ## everything getmax
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getmax
 
-## Everything_GetMax
-The Everything_GetMax function returns the maximum number of results state.
+## [Everything_GetMax](#everything_getmax)
+The [Everything_GetMax](#everything_getmax) function returns the maximum number of results state.
 
 ### Syntax
 ```
@@ -486,15 +486,15 @@ DWORD dwMaxResults = Everything_GetMax();
 ```
 
 ### See Also
-- Everything_SetMax
-- Everything_Query
+- [Everything_SetMax](#everything_setmax)
+- [Everything_Query](#everything_query)
 
 ## everything getminorversion
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getminorversion
 
-## Everything_GetMinorVersion
-The Everything_GetMinorVersion function retrieves the minor version number of Everything.
+## [Everything_GetMinorVersion](#everything_getminorversion)
+The [Everything_GetMinorVersion](#everything_getminorversion) function retrieves the minor version number of Everything.
 
 ### Syntax
 ```
@@ -507,7 +507,7 @@ No parameters.
 ### Return Value
 The function returns the minor version number.
 
-The function returns 0 if minor version information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns 0 if minor version information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -539,17 +539,17 @@ if ((majorVersion > 1) || ((majorVersion == 1) && (minorVersion > 3)) || ((major
 Requires Everything 1.0.0.0 or later.
 
 ### See Also
-- Everything_GetMajorVersion
-- Everything_GetRevision
-- Everything_GetBuildNumber
-- Everything_GetTargetMachine
+- [Everything_GetMajorVersion](#everything_getmajorversion)
+- [Everything_GetRevision](#everything_getrevision)
+- [Everything_GetBuildNumber](#everything_getbuildnumber)
+- [Everything_GetTargetMachine](#everything_gettargetmachine)
 
 ## everything getnumfileresults
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getnumfileresults
 
-## Everything_GetNumFileResults
-The Everything_GetNumFileResults function returns the number of visible file results.
+## [Everything_GetNumFileResults](#everything_getnumfileresults)
+The [Everything_GetNumFileResults](#everything_getnumfileresults) function returns the number of visible file results.
 
 ### Syntax
 ```
@@ -562,22 +562,22 @@ This functions has no parameters.
 ### Return Value
 Returns the number of visible file results.
 
-If the function fails the return value is 0. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is 0. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetNumFileResults.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetNumFileResults](#everything_getnumfileresults).
 ### Remarks
-You must call Everything_Query before calling Everything_GetNumFileResults.
+You must call [Everything_Query](#everything_query) before calling [Everything_GetNumFileResults](#everything_getnumfileresults).
 
-Use Everything_GetTotFileResults to retrieve the total number of file results.
+Use [Everything_GetTotFileResults](#everything_gettotfileresults) to retrieve the total number of file results.
 
-If the result offset state is 0, and the max result is 0xFFFFFFFF, Everything_GetNumFileResults will return the total number of file results and all file results will be visible.
+If the result offset state is 0, and the max result is 0xFFFFFFFF, [Everything_GetNumFileResults](#everything_getnumfileresults) will return the total number of file results and all file results will be visible.
 
-Everything_GetNumFileResults is not supported when using Everything_SetRequestFlags
+[Everything_GetNumFileResults](#everything_getnumfileresults) is not supported when using [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ### Example
 ```
@@ -590,19 +590,19 @@ DWORD dwNumFileResults = Everything_GetNumFileResults();
 ```
 
 ### See Also
-- Everything_Query
-- Everything_GetNumResults
-- Everything_GetNumFolderResults
-- Everything_GetTotResults
-- Everything_GetTotFileResults
-- Everything_GetTotFolderResults
+- [Everything_Query](#everything_query)
+- [Everything_GetNumResults](#everything_getnumresults)
+- [Everything_GetNumFolderResults](#everything_getnumfolderresults)
+- [Everything_GetTotResults](#everything_gettotresults)
+- [Everything_GetTotFileResults](#everything_gettotfileresults)
+- [Everything_GetTotFolderResults](#everything_gettotfolderresults)
 
 ## everything getnumfolderresults
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getnumfolderresults
 
-## Everything_GetNumFolderResults
-The Everything_GetNumFolderResults function returns the number of visible folder results.
+## [Everything_GetNumFolderResults](#everything_getnumfolderresults)
+The [Everything_GetNumFolderResults](#everything_getnumfolderresults) function returns the number of visible folder results.
 
 ### Syntax
 ```
@@ -615,22 +615,22 @@ This functions has no parameters.
 ### Return Value
 Returns the number of visible folder results.
 
-If the function fails the return value is 0. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is 0. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetNumFolderResults.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetNumFolderResults](#everything_getnumfolderresults).
 ### Remarks
-You must call Everything_Query before calling Everything_GetNumFolderResults.
+You must call [Everything_Query](#everything_query) before calling [Everything_GetNumFolderResults](#everything_getnumfolderresults).
 
-Use Everything_GetTotFolderResults to retrieve the total number of folder results.
+Use [Everything_GetTotFolderResults](#everything_gettotfolderresults) to retrieve the total number of folder results.
 
-If the result offset state is 0, and the max result is 0xFFFFFFFF, Everything_GetNumFolderResults will return the total number of folder results and all folder results will be visible.
+If the result offset state is 0, and the max result is 0xFFFFFFFF, [Everything_GetNumFolderResults](#everything_getnumfolderresults) will return the total number of folder results and all folder results will be visible.
 
-Everything_GetNumFolderResults is not supported when using Everything_SetRequestFlags
+[Everything_GetNumFolderResults](#everything_getnumfolderresults) is not supported when using [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ### Example
 ```
@@ -643,19 +643,19 @@ DWORD dwNumFolderResults = Everything_GetNumFolderResults();
 ```
 
 ### See Also
-- Everything_Query
-- Everything_GetNumResults
-- Everything_GetNumFileResults
-- Everything_GetTotResults
-- Everything_GetTotFileResults
-- Everything_GetTotFolderResults
+- [Everything_Query](#everything_query)
+- [Everything_GetNumResults](#everything_getnumresults)
+- [Everything_GetNumFileResults](#everything_getnumfileresults)
+- [Everything_GetTotResults](#everything_gettotresults)
+- [Everything_GetTotFileResults](#everything_gettotfileresults)
+- [Everything_GetTotFolderResults](#everything_gettotfolderresults)
 
 ## everything getnumresults
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getnumresults
 
-## Everything_GetNumResults
-The Everything_GetNumResults function returns the number of visible file and folder results.
+## [Everything_GetNumResults](#everything_getnumresults)
+The [Everything_GetNumResults](#everything_getnumresults) function returns the number of visible file and folder results.
 
 ### Syntax
 ```
@@ -668,20 +668,20 @@ This functions has no parameters.
 ### Return Value
 Returns the number of visible file and folder results.
 
-If the function fails the return value is 0. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is 0. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetNumResults.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetNumResults](#everything_getnumresults).
 ### Remarks
-You must call Everything_Query before calling Everything_GetNumResults.
+You must call [Everything_Query](#everything_query) before calling [Everything_GetNumResults](#everything_getnumresults).
 
-Use Everything_GetTotResults to retrieve the total number of file and folder results.
+Use [Everything_GetTotResults](#everything_gettotresults) to retrieve the total number of file and folder results.
 
-If the result offset state is 0, and the max result is 0xFFFFFFFF, Everything_GetNumResults will return the total number of file and folder results and all file and folder results will be visible.
+If the result offset state is 0, and the max result is 0xFFFFFFFF, [Everything_GetNumResults](#everything_getnumresults) will return the total number of file and folder results and all file and folder results will be visible.
 
 ### Example
 ```
@@ -694,19 +694,19 @@ DWORD dwNumResults = Everything_GetNumResults();
 ```
 
 ### See Also
-- Everything_Query
-- Everything_GetNumFileResults
-- Everything_GetNumFolderResults
-- Everything_GetTotResults
-- Everything_GetTotFileResults
-- Everything_GetTotFolderResults
+- [Everything_Query](#everything_query)
+- [Everything_GetNumFileResults](#everything_getnumfileresults)
+- [Everything_GetNumFolderResults](#everything_getnumfolderresults)
+- [Everything_GetTotResults](#everything_gettotresults)
+- [Everything_GetTotFileResults](#everything_gettotfileresults)
+- [Everything_GetTotFolderResults](#everything_gettotfolderresults)
 
 ## everything getoffset
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getoffset
 
-## Everything_GetOffset
-The Everything_GetOffset function returns the first item offset of the available results.
+## [Everything_GetOffset](#everything_getoffset)
+The [Everything_GetOffset](#everything_getoffset) function returns the first item offset of the available results.
 
 ### Syntax
 ```
@@ -725,15 +725,15 @@ DWORD dwOffset = Everything_GetOffset();
 ```
 
 ### See Also
-- Everything_SetOffset
-- Everything_Query
+- [Everything_SetOffset](#everything_setoffset)
+- [Everything_Query](#everything_query)
 
 ## everything getregex
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getregex
 
-## Everything_GetRegex
-The Everything_GetRegex function returns the regex state.
+## [Everything_GetRegex](#everything_getregex)
+The [Everything_GetRegex](#everything_getregex) function returns the regex state.
 
 ### Syntax
 ```
@@ -756,15 +756,15 @@ BOOL bRegex = Everything_GetRegex();
 ```
 
 ### See Also
-- Everything_SetRegex
-- Everything_Query
+- [Everything_SetRegex](#everything_setregex)
+- [Everything_Query](#everything_query)
 
 ## everything getreplyid
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getreplyid
 
-## Everything_GetReplyID
-The Everything_GetReplyID function returns the current reply identifier for the IPC query reply.
+## [Everything_GetReplyID](#everything_getreplyid)
+The [Everything_GetReplyID](#everything_getreplyid) function returns the current reply identifier for the IPC query reply.
 
 ### Syntax
 ```
@@ -783,18 +783,18 @@ DWORD id = Everything_GetReplyID();
 ```
 
 ### See Also
-- Everything_SetReplyWindow
-- Everything_GetReplyWindow
-- Everything_SetReplyID
-- Everything_Query
-- Everything_IsQueryReply
+- [Everything_SetReplyWindow](#everything_setreplywindow)
+- [Everything_GetReplyWindow](#everything_getreplywindow)
+- [Everything_SetReplyID](#everything_setreplyid)
+- [Everything_Query](#everything_query)
+- [Everything_IsQueryReply](#everything_isqueryreply)
 
 ## everything getreplywindow
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getreplywindow
 
-## Everything_GetReplyWindow
-The Everything_GetReplyWindow function returns the current reply window for the IPC query reply.
+## [Everything_GetReplyWindow](#everything_getreplywindow)
+The [Everything_GetReplyWindow](#everything_getreplywindow) function returns the current reply window for the IPC query reply.
 
 ### Syntax
 ```
@@ -813,18 +813,18 @@ HWND hWnd = Everything_GetReplyWindow();
 ```
 
 ### See Also
-- Everything_SetReplyWindow
-- Everything_SetReplyID
-- Everything_GetReplyID
-- Everything_Query
-- Everything_IsQueryReply
+- [Everything_SetReplyWindow](#everything_setreplywindow)
+- [Everything_SetReplyID](#everything_setreplyid)
+- [Everything_GetReplyID](#everything_getreplyid)
+- [Everything_Query](#everything_query)
+- [Everything_IsQueryReply](#everything_isqueryreply)
 
 ## everything getrequestflags
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getrequestflags
 
-## Everything_GetRequestFlags
-The Everything_GetRequestFlags function returns the desired result data flags.
+## [Everything_GetRequestFlags](#everything_getrequestflags)
+The [Everything_GetRequestFlags](#everything_getrequestflags) function returns the desired result data flags.
 
 ### Syntax
 ```
@@ -862,15 +862,15 @@ DWORD dwRequestFlags = Everything_GetRequestFlags();
 ```
 
 ### See Also
-- Everything_SetRequestFlags
-- Everything_Query
+- [Everything_SetRequestFlags](#everything_setrequestflags)
+- [Everything_Query](#everything_query)
 
 ## everything getresultattributes
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultattributes
 
-## Everything_GetResultAttributes
-The Everything_GetResultAttributes function retrieves the attributes of a visible result.
+## [Everything_GetResultAttributes](#everything_getresultattributes)
+The [Everything_GetResultAttributes](#everything_getresultattributes) function retrieves the attributes of a visible result.
 
 ### Syntax
 ```
@@ -887,24 +887,24 @@ Zero based index of the visible result.
 ### Return Value
 The function returns zero or more of FILE_ATTRIBUTE_* flags.
 
-The function returns INVALID_FILE_ATTRIBUTES if attribute information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns INVALID_FILE_ATTRIBUTES if attribute information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultAttributes.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultAttributes](#everything_getresultattributes).
 EVERYTHING_ERROR_INVALIDREQUEST
 Attribute information was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_ATTRIBUTES before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-dwIndex must be a valid visible result index. To determine if a result index is visible use the Everything_GetNumResults function.
+dwIndex must be a valid visible result index. To determine if a result index is visible use the [Everything_GetNumResults](#everything_getnumresults) function.
 
 ### Example
 ```
@@ -921,16 +921,16 @@ attributes = Everything_GetResultAttributes(0);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getresultdateaccessed
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultdateaccessed
 
-## Everything_GetResultDateAccessed
-The Everything_GetResultDateAccessed function retrieves the accessed date of a visible result.
+## [Everything_GetResultDateAccessed](#everything_getresultdateaccessed)
+The [Everything_GetResultDateAccessed](#everything_getresultdateaccessed) function retrieves the accessed date of a visible result.
 
 ### Syntax
 ```
@@ -952,24 +952,24 @@ Pointer to a FILETIME to hold the accessed date of the result.
 ### Return Value
 The function returns non-zero if successful.
 
-The function returns 0 if the accessed date information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns 0 if the accessed date information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultDateAccessed.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultDateAccessed](#everything_getresultdateaccessed).
 EVERYTHING_ERROR_INVALIDREQUEST
 Accessed date was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_DATE_ACCESSED before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-dwIndex must be a valid visible result index. To determine if a result index is visible use the Everything_GetNumResults function.
+dwIndex must be a valid visible result index. To determine if a result index is visible use the [Everything_GetNumResults](#everything_getnumresults) function.
 
 ### Example
 ```
@@ -986,16 +986,16 @@ Everything_GetResultDateAccessed(0,&dateAccessed);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getresultdatecreated
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultdatecreated
 
-## Everything_GetResultDateCreated
-The Everything_GetResultDateCreated function retrieves the created date of a visible result.
+## [Everything_GetResultDateCreated](#everything_getresultdatecreated)
+The [Everything_GetResultDateCreated](#everything_getresultdatecreated) function retrieves the created date of a visible result.
 
 ### Syntax
 ```
@@ -1017,24 +1017,24 @@ Pointer to a FILETIME to hold the created date of the result.
 ### Return Value
 The function returns non-zero if successful.
 
-The function returns 0 if the date created information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns 0 if the date created information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultDateCreated.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultDateCreated](#everything_getresultdatecreated).
 EVERYTHING_ERROR_INVALIDREQUEST
 Date created was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_DATE_CREATED before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-dwIndex must be a valid visible result index. To determine if a result index is visible use the Everything_GetNumResults function.
+dwIndex must be a valid visible result index. To determine if a result index is visible use the [Everything_GetNumResults](#everything_getnumresults) function.
 
 ### Example
 ```
@@ -1051,16 +1051,16 @@ Everything_GetResultDateCreated(0,&dateCreated);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getresultdatemodified
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultdatemodified
 
-## Everything_GetResultDateModified
-The Everything_GetResultDateModified function retrieves the modified date of a visible result.
+## [Everything_GetResultDateModified](#everything_getresultdatemodified)
+The [Everything_GetResultDateModified](#everything_getresultdatemodified) function retrieves the modified date of a visible result.
 
 ### Syntax
 ```
@@ -1082,24 +1082,24 @@ Pointer to a FILETIME to hold the modified date of the result.
 ### Return Value
 The function returns non-zero if successful.
 
-The function returns 0 if the modified date information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns 0 if the modified date information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultDateModified.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultDateModified](#everything_getresultdatemodified).
 EVERYTHING_ERROR_INVALIDREQUEST
 Modified date was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_DATE_MODIFIED before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-dwIndex must be a valid visible result index. To determine if a result index is visible use the Everything_GetNumResults function.
+dwIndex must be a valid visible result index. To determine if a result index is visible use the [Everything_GetNumResults](#everything_getnumresults) function.
 
 ### Example
 ```
@@ -1116,16 +1116,16 @@ Everything_GetResultDateModified(0,&dateModified);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getresultdaterecentlychanged
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultdaterecentlychanged
 
-## Everything_GetResultDateRecentlyChanged
-The Everything_GetResultDateRecentlyChanged function retrieves the recently changed date of a visible result.
+## [Everything_GetResultDateRecentlyChanged](#everything_getresultdaterecentlychanged)
+The [Everything_GetResultDateRecentlyChanged](#everything_getresultdaterecentlychanged) function retrieves the recently changed date of a visible result.
 
 ### Syntax
 ```
@@ -1147,24 +1147,24 @@ Pointer to a FILETIME to hold the recently changed date of the result.
 ### Return Value
 The function returns non-zero if successful.
 
-The function returns 0 if the recently changed date information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns 0 if the recently changed date information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultDateRecentlyChanged.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultDateRecentlyChanged](#everything_getresultdaterecentlychanged).
 EVERYTHING_ERROR_INVALIDREQUEST
 Recently changed date was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_DATE_RECENTLY_CHANGED before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-dwIndex must be a valid visible result index. To determine if a result index is visible use the Everything_GetNumResults function.
+dwIndex must be a valid visible result index. To determine if a result index is visible use the [Everything_GetNumResults](#everything_getnumresults) function.
 
 The date recently changed is the date and time of when the result was changed in the Everything index, this could be from a file creation, rename, attribute or content change.
 
@@ -1183,16 +1183,16 @@ Everything_GetResultDateRecentlyChanged(0,&dateRecentlyChanged);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getresultdaterun
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultdaterun
 
-## Everything_GetResultDateRun
-The Everything_GetResultDateRun function retrieves the run date of a visible result.
+## [Everything_GetResultDateRun](#everything_getresultdaterun)
+The [Everything_GetResultDateRun](#everything_getresultdaterun) function retrieves the run date of a visible result.
 
 ### Syntax
 ```
@@ -1214,24 +1214,24 @@ Pointer to a FILETIME to hold the Run date of the result.
 ### Return Value
 The function returns non-zero if successful.
 
-The function returns 0 if the run date information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns 0 if the run date information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultDateRun.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultDateRun](#everything_getresultdaterun).
 EVERYTHING_ERROR_INVALIDREQUEST
 Run date was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_DATE_RUN before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-dwIndex must be a valid visible result index. To determine if a result index is visible use the Everything_GetNumResults function.
+dwIndex must be a valid visible result index. To determine if a result index is visible use the [Everything_GetNumResults](#everything_getnumresults) function.
 
 ### Example
 ```
@@ -1248,16 +1248,16 @@ Everything_GetResultDateRun(0,&dateRun);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getresultextension
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultextension
 
-## Everything_GetResultExtension
-The Everything_GetResultExtension function retrieves the extension part of a visible result.
+## [Everything_GetResultExtension](#everything_getresultextension)
+The [Everything_GetResultExtension](#everything_getresultextension) function retrieves the extension part of a visible result.
 
 ### Syntax
 ```
@@ -1274,28 +1274,28 @@ Zero based index of the visible result.
 ### Return Value
 The function returns a pointer to a null terminated string of TCHARs .
 
-If the function fails the return value is NULL. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is NULL. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultExtension.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultExtension](#everything_getresultextension).
 EVERYTHING_ERROR_INVALIDREQUEST
 Extension was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_EXTENSION before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to Everything_Query .
+The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to [Everything_Query](#everything_query) .
 
-The function returns a pointer to an internal structure that is only valid until the next call to Everything_Query , Everything_Reset or Everything_CleanUp .
+The function returns a pointer to an internal structure that is only valid until the next call to [Everything_Query](#everything_query) , [Everything_Reset](#everything_reset) or [Everything_CleanUp](#everything_cleanup) .
 
-You can only call this function for a visible result. To determine if a result is visible use the Everything_GetNumResults function.
+You can only call this function for a visible result. To determine if a result is visible use the [Everything_GetNumResults](#everything_getnumresults) function.
 
 ### Example
 ```
@@ -1308,16 +1308,16 @@ LPCTSTR lpExtension = Everything_GetResultExtension(0);
 ```
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getresultfilelistfilename
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultfilelistfilename
 
-## Everything_GetResultFileListFileName
-The Everything_GetResultFileListFileName function retrieves the file list full path and filename of the visible result.
+## [Everything_GetResultFileListFileName](#everything_getresultfilelistfilename)
+The [Everything_GetResultFileListFileName](#everything_getresultfilelistfilename) function retrieves the file list full path and filename of the visible result.
 
 ### Syntax
 ```
@@ -1334,7 +1334,7 @@ Zero based index of the visible result.
 ### Return Value
 The function returns a pointer to a null terminated string of TCHARs .
 
-If the function fails the return value is NULL. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is NULL. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 If the result specified by dwIndex is not in a file list, then the filename returned is an empty string.
 
@@ -1342,22 +1342,22 @@ Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultFileListFileName.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultFileListFileName](#everything_getresultfilelistfilename).
 EVERYTHING_ERROR_INVALIDREQUEST
 The file list filename was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_FILE_LIST_FILE_NAME before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to Everything_Query .
+The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to [Everything_Query](#everything_query) .
 
-The function returns a pointer to an internal structure that is only valid until the next call to Everything_Query or Everything_Reset .
+The function returns a pointer to an internal structure that is only valid until the next call to [Everything_Query](#everything_query) or [Everything_Reset](#everything_reset) .
 
-dwIndex must be a valid visible result index. To determine if a result is visible use the Everything_GetNumFileResults function.
+dwIndex must be a valid visible result index. To determine if a result is visible use the [Everything_GetNumFileResults](#everything_getnumfileresults) function.
 
 ### Example
 ```
@@ -1373,16 +1373,16 @@ LPCTSTR lpFileListFileName = Everything_GetResultFileListFileName(0);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getresultfilename
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultfilename
 
-## Everything_GetResultFileName
-The Everything_GetResultFileName function retrieves the file name part only of the visible result.
+## [Everything_GetResultFileName](#everything_getresultfilename)
+The [Everything_GetResultFileName](#everything_getresultfilename) function retrieves the file name part only of the visible result.
 
 ### Syntax
 ```
@@ -1399,24 +1399,24 @@ Zero based index of the visible result.
 ### Return Value
 The function returns a pointer to a null terminated string of TCHARs .
 
-If the function fails the return value is NULL. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is NULL. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultFileName.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultFileName](#everything_getresultfilename).
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to Everything_Query .
+The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to [Everything_Query](#everything_query) .
 
-The function is faster than Everything_GetResultFullPathName as no memory copying occurs.
+The function is faster than [Everything_GetResultFullPathName](#everything_getresultfullpathname) as no memory copying occurs.
 
-The function returns a pointer to an internal structure that is only valid until the next call to Everything_Query or Everything_Reset .
+The function returns a pointer to an internal structure that is only valid until the next call to [Everything_Query](#everything_query) or [Everything_Reset](#everything_reset) .
 
-You can only call this function for a visible result. To determine if a result is visible use the Everything_GetNumFileResults function.
+You can only call this function for a visible result. To determine if a result is visible use the [Everything_GetNumFileResults](#everything_getnumfileresults) function.
 
 ### Example
 ```
@@ -1429,17 +1429,17 @@ LPCTSTR cFileName = Everything_GetResultFileName(0);
 ```
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_GetResultPath
-- Everything_GetResultFullPathName
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_GetResultPath](#everything_getresultpath)
+- [Everything_GetResultFullPathName](#everything_getresultfullpathname)
 
 ## everything getresultfullpathname
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultfullpathname
 
-## Everything_GetResultFullPathName
-The Everything_GetResultFullPathName function retrieves the full path and file name of the visible result.
+## [Everything_GetResultFullPathName](#everything_getresultfullpathname)
+The [Everything_GetResultFullPathName](#everything_getresultfullpathname) function retrieves the full path and file name of the visible result.
 
 ### Syntax
 ```
@@ -1468,20 +1468,20 @@ If lpString is NULL, the return value is the number of TCHARs excluding the null
 
 If lpString is not NULL, the return value is the number of TCHARs excluding the null terminator copied into lpString.
 
-If the function fails the return value is 0. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is 0. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Description
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultFullPathName.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultFullPathName](#everything_getresultfullpathname).
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-You can only call this function for a visible result. To determine if a result is visible use the Everything_GetNumFileResults function.
+You can only call this function for a visible result. To determine if a result is visible use the [Everything_GetNumFileResults](#everything_getnumfileresults) function.
 
-You can mix ANSI / Unicode versions of Everything_GetResultFullPathName and Everything_Query.
+You can mix ANSI / Unicode versions of [Everything_GetResultFullPathName](#everything_getresultfullpathname) and [Everything_Query](#everything_query).
 
 ### Example
 ```
@@ -1498,16 +1498,16 @@ Everything_GetResultFullPathName(0,buf,sizeof(buf) / sizeof(TCHAR));
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_GetResultFileName
-- Everything_GetResultPath
+- [Everything_Query](#everything_query)
+- [Everything_GetResultFileName](#everything_getresultfilename)
+- [Everything_GetResultPath](#everything_getresultpath)
 
 ## everything getresulthighlightedfilename
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresulthighlightedfilename
 
-## Everything_GetResultHighlightedFileName
-The Everything_GetResultHighlightedFileName function retrieves the highlighted file name part of the visible result.
+## [Everything_GetResultHighlightedFileName](#everything_getresulthighlightedfilename)
+The [Everything_GetResultHighlightedFileName](#everything_getresulthighlightedfilename) function retrieves the highlighted file name part of the visible result.
 
 ### Syntax
 ```
@@ -1524,28 +1524,28 @@ Zero based index of the visible result.
 ### Return Value
 The function returns a pointer to a null terminated string of TCHARs .
 
-If the function fails the return value is NULL. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is NULL. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultHighlightedFileName.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultHighlightedFileName](#everything_getresulthighlightedfilename).
 EVERYTHING_ERROR_INVALIDREQUEST
 Highlighted file name information was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_DATE_HIGHLIGHTED_FILE_NAME before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to Everything_Query .
+The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to [Everything_Query](#everything_query) .
 
-The function returns a pointer to an internal structure that is only valid until the next call to Everything_Query or Everything_Reset .
+The function returns a pointer to an internal structure that is only valid until the next call to [Everything_Query](#everything_query) or [Everything_Reset](#everything_reset) .
 
-You can only call this function for a visible result. To determine if a result is visible use the Everything_GetNumFileResults function.
+You can only call this function for a visible result. To determine if a result is visible use the [Everything_GetNumFileResults](#everything_getnumfileresults) function.
 
 Text inside a * quote is highlighted, two consecutive *'s is a single literal *.
 
@@ -1565,16 +1565,16 @@ LPCTSTR lpHighlightedFileName = Everything_GetResultHighlightedFileName(0);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getresulthighlightedfullpathandfilename
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresulthighlightedfullpathandfilename
 
-## Everything_GetResultHighlightedFullPathAndFileName
-The Everything_GetResultHighlightedFullPathAndFileName function retrieves the highlighted full path and file name of the visible result.
+## [Everything_GetResultHighlightedFullPathAndFileName](#everything_getresulthighlightedfullpathandfilename)
+The [Everything_GetResultHighlightedFullPathAndFileName](#everything_getresulthighlightedfullpathandfilename) function retrieves the highlighted full path and file name of the visible result.
 
 ### Syntax
 ```
@@ -1591,28 +1591,28 @@ Zero based index of the visible result.
 ### Return Value
 The function returns a pointer to a null terminated string of TCHARs .
 
-If the function fails the return value is NULL. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is NULL. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultHighlightedFullPathAndFileName.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultHighlightedFullPathAndFileName](#everything_getresulthighlightedfullpathandfilename).
 EVERYTHING_ERROR_INVALIDREQUEST
 Highlighted full path and file name information was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_DATE_HIGHLIGHTED_FULL_PATH_AND_FILE_NAME before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to Everything_Query .
+The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to [Everything_Query](#everything_query) .
 
-The function returns a pointer to an internal structure that is only valid until the next call to Everything_Query or Everything_Reset .
+The function returns a pointer to an internal structure that is only valid until the next call to [Everything_Query](#everything_query) or [Everything_Reset](#everything_reset) .
 
-You can only call this function for a visible result. To determine if a result is visible use the Everything_GetNumFileResults function.
+You can only call this function for a visible result. To determine if a result is visible use the [Everything_GetNumFileResults](#everything_getnumfileresults) function.
 
 Text inside a * quote is highlighted, two consecutive *'s is a single literal *.
 
@@ -1632,16 +1632,16 @@ LPCTSTR lpHighlightedFullPathAndFileName = Everything_GetResultHighlightedFullPa
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getresulthighlightedpath
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresulthighlightedpath
 
-## Everything_GetResultHighlightedPath
-The Everything_GetResultHighlightedPath function retrieves the highlighted path part of the visible result.
+## [Everything_GetResultHighlightedPath](#everything_getresulthighlightedpath)
+The [Everything_GetResultHighlightedPath](#everything_getresulthighlightedpath) function retrieves the highlighted path part of the visible result.
 
 ### Syntax
 ```
@@ -1658,28 +1658,28 @@ Zero based index of the visible result.
 ### Return Value
 The function returns a pointer to a null terminated string of TCHARs .
 
-If the function fails the return value is NULL. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is NULL. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultHighlightedPath.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultHighlightedPath](#everything_getresulthighlightedpath).
 EVERYTHING_ERROR_INVALIDREQUEST
 Highlighted path information was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_DATE_HIGHLIGHTED_PATH before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to Everything_Query .
+The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to [Everything_Query](#everything_query) .
 
-The function returns a pointer to an internal structure that is only valid until the next call to Everything_Query or Everything_Reset .
+The function returns a pointer to an internal structure that is only valid until the next call to [Everything_Query](#everything_query) or [Everything_Reset](#everything_reset) .
 
-You can only call this function for a visible result. To determine if a result is visible use the Everything_GetNumFileResults function.
+You can only call this function for a visible result. To determine if a result is visible use the [Everything_GetNumFileResults](#everything_getnumfileresults) function.
 
 Text inside a * quote is highlighted, two consecutive *'s is a single literal *.
 
@@ -1699,16 +1699,16 @@ LPCTSTR lpHighlightedPath = Everything_GetResultHighlightedPath(0);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getresultlistrequestflags
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultlistrequestflags
 
-## Everything_GetResultListRequestFlags
-The Everything_GetResultListRequestFlags function returns the flags of available result data.
+## [Everything_GetResultListRequestFlags](#everything_getresultlistrequestflags)
+The [Everything_GetResultListRequestFlags](#everything_getresultlistrequestflags) function returns the flags of available result data.
 
 ### Syntax
 ```
@@ -1738,7 +1738,7 @@ EVERYTHING_REQUEST_HIGHLIGHTED_FULL_PATH_AND_FILE_NAME  (0x00008000)
 ```
 
 ### Remarks
-The requested result data may differ to the desired result data specified in Everything_SetRequestFlags .
+The requested result data may differ to the desired result data specified in [Everything_SetRequestFlags](#everything_setrequestflags) .
 
 ### Example
 ```
@@ -1746,15 +1746,15 @@ DWORD dwRequestFlags = Everything_GetResultListRequestFlags();
 ```
 
 ### See Also
-- Everything_SetRequestFlags
-- Everything_Query
+- [Everything_SetRequestFlags](#everything_setrequestflags)
+- [Everything_Query](#everything_query)
 
 ## everything getresultlistsort
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultlistsort
 
-## Everything_GetResultListSort
-The Everything_GetResultListSort function returns the actual sort order for the results.
+## [Everything_GetResultListSort](#everything_getresultlistsort)
+The [Everything_GetResultListSort](#everything_getresultlistsort) function returns the actual sort order for the results.
 
 ### Syntax
 ```
@@ -1794,11 +1794,11 @@ EVERYTHING_SORT_DATE_RUN_DESCENDING                 (26)
 ```
 
 ### Remarks
-Everything_GetResultListSort must be called after calling Everything_Query .
+[Everything_GetResultListSort](#everything_getresultlistsort) must be called after calling [Everything_Query](#everything_query) .
 
 If no desired sort order was specified the result list is sorted by EVERYTHING_SORT_NAME_ASCENDING.
 
-The result list sort may differ to the desired sort specified in Everything_SetSort .
+The result list sort may differ to the desired sort specified in [Everything_SetSort](#everything_setsort) .
 
 ### Example
 ```
@@ -1806,15 +1806,15 @@ DWORD dwSort = Everything_GetResultListSort();
 ```
 
 ### See Also
-- Everything_SetSort
-- Everything_Query
+- [Everything_SetSort](#everything_setsort)
+- [Everything_Query](#everything_query)
 
 ## everything getresultpath
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultpath
 
-## Everything_GetResultPath
-The Everything_GetResultPath function retrieves the path part of the visible result.
+## [Everything_GetResultPath](#everything_getresultpath)
+The [Everything_GetResultPath](#everything_getresultpath) function retrieves the path part of the visible result.
 
 ### Syntax
 ```
@@ -1831,24 +1831,24 @@ Zero based index of the visible result.
 ### Return Value
 The function returns a pointer to a null terminated string of TCHARs .
 
-If the function fails the return value is NULL. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is NULL. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultPath.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultPath](#everything_getresultpath).
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to Everything_Query .
+The ANSI / Unicode version of this function must match the ANSI / Unicode version of the call to [Everything_Query](#everything_query) .
 
-The function is faster than Everything_GetResultFullPathName as no memory copying occurs.
+The function is faster than [Everything_GetResultFullPathName](#everything_getresultfullpathname) as no memory copying occurs.
 
-The function returns a pointer to an internal structure that is only valid until the next call to Everything_Query or Everything_Reset .
+The function returns a pointer to an internal structure that is only valid until the next call to [Everything_Query](#everything_query) or [Everything_Reset](#everything_reset) .
 
-You can only call this function for a visible result. To determine if a result is visible use the Everything_GetNumFileResults function.
+You can only call this function for a visible result. To determine if a result is visible use the [Everything_GetNumFileResults](#everything_getnumfileresults) function.
 
 ### Example
 ```
@@ -1861,17 +1861,17 @@ LPCTSTR lpPath = Everything_GetResultPath(0);
 ```
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_GetResultFileName
-- Everything_GetResultFullPathName
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_GetResultFileName](#everything_getresultfilename)
+- [Everything_GetResultFullPathName](#everything_getresultfullpathname)
 
 ## everything getresultruncount
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultruncount
 
-## Everything_GetResultRunCount
-The Everything_GetResultRunCount function retrieves the number of times a visible result has been run from Everything.
+## [Everything_GetResultRunCount](#everything_getresultruncount)
+The [Everything_GetResultRunCount](#everything_getresultruncount) function retrieves the number of times a visible result has been run from Everything.
 
 ### Syntax
 ```
@@ -1888,7 +1888,7 @@ Zero based index of the visible result.
 ### Return Value
 The function returns the number of times the result has been run from Everything.
 
-The function returns 0 if the run count information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns 0 if the run count information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -1896,18 +1896,18 @@ EVERYTHING_OK
 The run count is 0.
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultRunCount.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultRunCount](#everything_getresultruncount).
 EVERYTHING_ERROR_INVALIDREQUEST
 Run count information was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_RUN_COUNT before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-dwIndex must be a valid visible result index. To determine if a result index is visible use the Everything_GetNumResults function.
+dwIndex must be a valid visible result index. To determine if a result index is visible use the [Everything_GetNumResults](#everything_getnumresults) function.
 
 ### Example
 ```
@@ -1924,16 +1924,16 @@ runCount = Everything_GetResultRunCount(0);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getresultsize
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getresultsize
 
-## Everything_GetResultSize
-The Everything_GetResultSize function retrieves the size of a visible result.
+## [Everything_GetResultSize](#everything_getresultsize)
+The [Everything_GetResultSize](#everything_getresultsize) function retrieves the size of a visible result.
 
 ### Syntax
 ```
@@ -1955,24 +1955,24 @@ Pointer to a LARGE_INTEGER to hold the size of the result.
 ### Return Value
 The function returns non-zero if successful.
 
-The function returns 0 if size information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns 0 if size information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetResultSize.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetResultSize](#everything_getresultsize).
 EVERYTHING_ERROR_INVALIDREQUEST
 Size was not requested or is unavailable, Call 
-Everything_SetRequestFlags
+[Everything_SetRequestFlags](#everything_setrequestflags)
  with EVERYTHING_REQUEST_SIZE before calling 
-Everything_Query
+[Everything_Query](#everything_query)
 .
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-dwIndex must be a valid visible result index. To determine if a result index is visible use the Everything_GetNumResults function.
+dwIndex must be a valid visible result index. To determine if a result index is visible use the [Everything_GetNumResults](#everything_getnumresults) function.
 
 ### Example
 ```
@@ -1989,16 +1989,16 @@ Everything_GetResultSize(0,&size);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_Reset
-- Everything_SetRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_Reset](#everything_reset)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ## everything getrevision
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getrevision
 
-## Everything_GetRevision
-The Everything_GetRevision function retrieves the revision number of Everything.
+## [Everything_GetRevision](#everything_getrevision)
+The [Everything_GetRevision](#everything_getrevision) function retrieves the revision number of Everything.
 
 ### Syntax
 ```
@@ -2011,7 +2011,7 @@ No parameters.
 ### Return Value
 The function returns the revision number.
 
-The function returns 0 if revision information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns 0 if revision information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -2043,17 +2043,17 @@ if ((majorVersion > 1) || ((majorVersion == 1) && (minorVersion > 3)) || ((major
 Requires Everything 1.0.0.0 or later.
 
 ### See Also
-- Everything_GetMajorVersion
-- Everything_GetMinorVersion
-- Everything_GetBuildNumber
-- Everything_GetTargetMachine
+- [Everything_GetMajorVersion](#everything_getmajorversion)
+- [Everything_GetMinorVersion](#everything_getminorversion)
+- [Everything_GetBuildNumber](#everything_getbuildnumber)
+- [Everything_GetTargetMachine](#everything_gettargetmachine)
 
 ## everything getruncountfromfilename
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getruncountfromfilename
 
-## Everything_GetRunCountFromFileName
-The Everything_GetRunCountFromFileName function gets the run count from a specified file in the Everything index by file name.
+## [Everything_GetRunCountFromFileName](#everything_getruncountfromfilename)
+The [Everything_GetRunCountFromFileName](#everything_getruncountfromfilename) function gets the run count from a specified file in the Everything index by file name.
 
 ### Syntax
 ```
@@ -2070,7 +2070,7 @@ Pointer to a null-terminated string that specifies a fully qualified file name i
 ### Return Value
 The function returns the number of times the file has been run from Everything.
 
-The function returns 0 if an error occurred. To get extended error information, call Everything_GetLastError
+The function returns 0 if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -2087,15 +2087,15 @@ runCount = Everything_GetRunCountFromFileName(TEXT("C:\\folder\\file.doc"));
 ```
 
 ### See Also
-- Everything_SetRunCountFromFileName
-- Everything_IncRunCountFromFileName
+- [Everything_SetRunCountFromFileName](#everything_setruncountfromfilename)
+- [Everything_IncRunCountFromFileName](#everything_incruncountfromfilename)
 
 ## everything getsearch
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getsearch
 
-## Everything_GetSearch
-The Everything_GetSearch function retrieves the search text to use for the next call to Everything_Query .
+## [Everything_GetSearch](#everything_getsearch)
+The [Everything_GetSearch](#everything_getsearch) function retrieves the search text to use for the next call to [Everything_Query](#everything_query) .
 
 ### Syntax
 ```
@@ -2105,7 +2105,7 @@ LPCTSTR Everything_GetSearch(void);
 ### Return Value
 The return value is a pointer to the null terminated search string.
 
-The unicode and ansi version must match the call to Everything_SetSearch.
+The unicode and ansi version must match the call to [Everything_SetSearch](#everything_setsearch).
 
 The function will fail if you call Everything_GetSearchA after a call to Everything_SetSearchW
 
@@ -2113,7 +2113,7 @@ The function will fail if you call Everything_GetSearchW after a call to Everyth
 
 If the function fails, the return value is NULL.
 
-To get extended error information, call Everything_GetLastError .
+To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
@@ -2130,15 +2130,15 @@ LPCTSTR lpSearchString = Everything_GetSearch();
 ```
 
 ### See Also
-- Everything_SetSearch
-- Everything_Query
+- [Everything_SetSearch](#everything_setsearch)
+- [Everything_Query](#everything_query)
 
 ## everything getsort
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_getsort
 
-## Everything_GetSort
-The Everything_GetSort function returns the desired sort order for the results.
+## [Everything_GetSort](#everything_getsort)
+The [Everything_GetSort](#everything_getsort) function returns the desired sort order for the results.
 
 ### Syntax
 ```
@@ -2186,15 +2186,15 @@ DWORD dwSort = Everything_GetSort();
 ```
 
 ### See Also
-- Everything_SetSort
-- Everything_Query
+- [Everything_SetSort](#everything_setsort)
+- [Everything_Query](#everything_query)
 
 ## everything gettargetmachine
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_gettargetmachine
 
-## Everything_GetTargetMachine
-The Everything_GetTargetMachine function retrieves the target machine of Everything.
+## [Everything_GetTargetMachine](#everything_gettargetmachine)
+The [Everything_GetTargetMachine](#everything_gettargetmachine) function retrieves the target machine of Everything.
 
 ### Syntax
 ```
@@ -2217,7 +2217,7 @@ EVERYTHING_TARGET_MACHINE_ARM (3)
 Target machine is ARM.
 EVERYTHING_TARGET_MACHINE_ARM64 (4)
 Target machine is ARM64.
-The function returns 0 if target machine information is unavailable. To get extended error information, call Everything_GetLastError
+The function returns 0 if target machine information is unavailable. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -2250,17 +2250,17 @@ if (targetMachine == EVERYTHING_TARGET_MACHINE_X86)
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_GetMajorVersion
-- Everything_GetMinorVersion
-- Everything_GetRevision
-- Everything_GetBuildNumber
+- [Everything_GetMajorVersion](#everything_getmajorversion)
+- [Everything_GetMinorVersion](#everything_getminorversion)
+- [Everything_GetRevision](#everything_getrevision)
+- [Everything_GetBuildNumber](#everything_getbuildnumber)
 
 ## everything gettotfileresults
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_gettotfileresults
 
-## Everything_GetTotFileResults
-The Everything_GetTotFileResults function returns the total number of file results.
+## [Everything_GetTotFileResults](#everything_gettotfileresults)
+The [Everything_GetTotFileResults](#everything_gettotfileresults) function returns the total number of file results.
 
 ### Syntax
 ```
@@ -2273,22 +2273,22 @@ This functions has no parameters.
 ### Return Value
 Returns the total number of file results.
 
-If the function fails the return value is 0. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is 0. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetTotFileResults.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetTotFileResults](#everything_gettotfileresults).
 ### Remarks
-You must call Everything_Query before calling Everything_GetTotFileResults.
+You must call [Everything_Query](#everything_query) before calling [Everything_GetTotFileResults](#everything_gettotfileresults).
 
-Use Everything_GetNumFileResults to retrieve the number of visible file results.
+Use [Everything_GetNumFileResults](#everything_getnumfileresults) to retrieve the number of visible file results.
 
 Use the result offset and max result values to limit the number of visible results.
 
-Everything_GetTotFileResults is not supported when using Everything_SetRequestFlags
+[Everything_GetTotFileResults](#everything_gettotfileresults) is not supported when using [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ### Example
 ```
@@ -2301,19 +2301,19 @@ DWORD dwTotFileResults = Everything_GetTotFileResults();
 ```
 
 ### See Also
-- Everything_Query
-- Everything_GetNumResults
-- Everything_GetNumFileResults
-- Everything_GetNumFolderResults
-- Everything_GetTotResults
-- Everything_GetTotFolderResults
+- [Everything_Query](#everything_query)
+- [Everything_GetNumResults](#everything_getnumresults)
+- [Everything_GetNumFileResults](#everything_getnumfileresults)
+- [Everything_GetNumFolderResults](#everything_getnumfolderresults)
+- [Everything_GetTotResults](#everything_gettotresults)
+- [Everything_GetTotFolderResults](#everything_gettotfolderresults)
 
 ## everything gettotfolderresults
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_gettotfolderresults
 
-## Everything_GetTotFolderResults
-The Everything_GetTotFolderResults function returns the total number of folder results.
+## [Everything_GetTotFolderResults](#everything_gettotfolderresults)
+The [Everything_GetTotFolderResults](#everything_gettotfolderresults) function returns the total number of folder results.
 
 ### Syntax
 ```
@@ -2326,22 +2326,22 @@ This functions has no parameters.
 ### Return Value
 Returns the total number of folder results.
 
-If the function fails the return value is 0. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is 0. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetTotFolderResults.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetTotFolderResults](#everything_gettotfolderresults).
 ### Remarks
-You must call Everything_Query before calling Everything_GetTotFolderResults.
+You must call [Everything_Query](#everything_query) before calling [Everything_GetTotFolderResults](#everything_gettotfolderresults).
 
-Use Everything_GetNumFolderResults to retrieve the number of visible folder results.
+Use [Everything_GetNumFolderResults](#everything_getnumfolderresults) to retrieve the number of visible folder results.
 
 Use the result offset and max result values to limit the number of visible results.
 
-Everything_GetTotFolderResults is not supported when using Everything_SetRequestFlags
+[Everything_GetTotFolderResults](#everything_gettotfolderresults) is not supported when using [Everything_SetRequestFlags](#everything_setrequestflags)
 
 ### Example
 ```
@@ -2354,19 +2354,19 @@ DWORD dwTotFolderResults = Everything_GetTotFolderResults();
 ```
 
 ### See Also
-- Everything_Query
-- Everything_GetNumResults
-- Everything_GetNumFileResults
-- Everything_GetNumFolderResults
-- Everything_GetTotResults
-- Everything_GetTotFileResults
+- [Everything_Query](#everything_query)
+- [Everything_GetNumResults](#everything_getnumresults)
+- [Everything_GetNumFileResults](#everything_getnumfileresults)
+- [Everything_GetNumFolderResults](#everything_getnumfolderresults)
+- [Everything_GetTotResults](#everything_gettotresults)
+- [Everything_GetTotFileResults](#everything_gettotfileresults)
 
 ## everything gettotresults
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_gettotresults
 
-## Everything_GetTotResults
-The Everything_GetTotResults function returns the total number of file and folder results.
+## [Everything_GetTotResults](#everything_gettotresults)
+The [Everything_GetTotResults](#everything_gettotresults) function returns the total number of file and folder results.
 
 ### Syntax
 ```
@@ -2379,18 +2379,18 @@ This functions has no parameters.
 ### Return Value
 Returns the total number of file and folder results.
 
-If the function fails the return value is 0. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is 0. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_GetTotResults.
+[Everything_Query](#everything_query)
+ before calling [Everything_GetTotResults](#everything_gettotresults).
 ### Remarks
-You must call Everything_Query before calling Everything_GetTotResults.
+You must call [Everything_Query](#everything_query) before calling [Everything_GetTotResults](#everything_gettotresults).
 
-Use Everything_GetNumResults to retrieve the number of visible file and folder results.
+Use [Everything_GetNumResults](#everything_getnumresults) to retrieve the number of visible file and folder results.
 
 Use the result offset and max result values to limit the number of visible results.
 
@@ -2405,19 +2405,19 @@ DWORD dwTotResults = Everything_GetTotResults();
 ```
 
 ### See Also
-- Everything_Query
-- Everything_GetNumResults
-- Everything_GetNumFileResults
-- Everything_GetNumFolderResults
-- Everything_GetTotFileResults
-- Everything_GetTotFolderResults
+- [Everything_Query](#everything_query)
+- [Everything_GetNumResults](#everything_getnumresults)
+- [Everything_GetNumFileResults](#everything_getnumfileresults)
+- [Everything_GetNumFolderResults](#everything_getnumfolderresults)
+- [Everything_GetTotFileResults](#everything_gettotfileresults)
+- [Everything_GetTotFolderResults](#everything_gettotfolderresults)
 
 ## everything incruncountfromfilename
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_incruncountfromfilename
 
-## Everything_IncRunCountFromFileName
-The Everything_IncRunCountFromFileName function increments the run count by one for a specified file in the Everything by file name.
+## [Everything_IncRunCountFromFileName](#everything_incruncountfromfilename)
+The [Everything_IncRunCountFromFileName](#everything_incruncountfromfilename) function increments the run count by one for a specified file in the Everything by file name.
 
 ### Syntax
 ```
@@ -2434,7 +2434,7 @@ Pointer to a null-terminated string that specifies a fully qualified file name i
 ### Return Value
 The function returns the new run count for the specifed file.
 
-The function returns 0 if an error occurred. To get extended error information, call Everything_GetLastError
+The function returns 0 if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -2458,15 +2458,15 @@ Everything_IncRunCountFromFileName(TEXT("C:\\folder\\file.doc"));
 ```
 
 ### See Also
-- Everything_GetRunCountFromFileName
-- Everything_SetRunCountFromFileName
+- [Everything_GetRunCountFromFileName](#everything_getruncountfromfilename)
+- [Everything_SetRunCountFromFileName](#everything_setruncountfromfilename)
 
 ## everything isadmin
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_isadmin
 
-## Everything_IsAdmin
-The Everything_IsAdmin function checks if Everything is running as administrator or as a standard user.
+## [Everything_IsAdmin](#everything_isadmin)
+The [Everything_IsAdmin](#everything_isadmin) function checks if Everything is running as administrator or as a standard user.
 
 ### Syntax
 ```
@@ -2479,7 +2479,7 @@ No parameters.
 ### Return Value
 The function returns non-zero if the Everything is running as an administrator.
 
-The function returns 0 Everything is running as a standard user or if an error occurred. To get extended error information, call Everything_GetLastError
+The function returns 0 Everything is running as a standard user or if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -2498,14 +2498,14 @@ isAdmin = Everything_IsAdmin();
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_IsAppData
+- [Everything_IsAppData](#everything_isappdata)
 
 ## everything isappdata
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_isappdata
 
-## Everything_IsAppData
-The Everything_IsAppData function checks if Everything is saving settings and data to %APPDATA%\Everything or to the same location as the Everything.exe.
+## [Everything_IsAppData](#everything_isappdata)
+The [Everything_IsAppData](#everything_isappdata) function checks if Everything is saving settings and data to %APPDATA%\Everything or to the same location as the Everything.exe.
 
 ### Syntax
 ```
@@ -2518,7 +2518,7 @@ No parameters.
 ### Return Value
 The function returns non-zero if settings and data are saved in %APPDATA%\Everything.
 
-The function returns 0 if settings and data are saved to the same location as the Everything.exe or if an error occurred. To get extended error information, call Everything_GetLastError
+The function returns 0 if settings and data are saved to the same location as the Everything.exe or if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -2537,14 +2537,14 @@ isAppData = Everything_IsAppData();
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_IsAdmin
+- [Everything_IsAdmin](#everything_isadmin)
 
 ## everything isdbloaded
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_isdbloaded
 
-## Everything_IsDBLoaded
-The Everything_IsDBLoaded function checks if the database has been fully loaded.
+## [Everything_IsDBLoaded](#everything_isdbloaded)
+The [Everything_IsDBLoaded](#everything_isdbloaded) function checks if the database has been fully loaded.
 
 ### Syntax
 ```
@@ -2557,7 +2557,7 @@ No parameters.
 ### Return Value
 The function returns non-zero if the Everything database is fully loaded.
 
-The function returns 0 if the database has not fully loaded or if an error occurred. To get extended error information, call Everything_GetLastError
+The function returns 0 if the database has not fully loaded or if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -2568,7 +2568,7 @@ Please make sure the Everything search client is running in the background.
 ### Remarks
 When Everything is loading, any queries will appear to return no results.
 
-Use Everything_IsDBLoaded to determine if the database has been loaded before performing a query.
+Use [Everything_IsDBLoaded](#everything_isdbloaded) to determine if the database has been loaded before performing a query.
 
 ### Example
 ```
@@ -2597,14 +2597,14 @@ for(;;)
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
+- [Everything_Query](#everything_query)
 
 ## everything isfastsort
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_isfastsort
 
-## Everything_IsFastSort
-The Everything_IsFastSort function checks if the specified file information is indexed and has fast sort enabled.
+## [Everything_IsFastSort](#everything_isfastsort)
+The [Everything_IsFastSort](#everything_isfastsort) function checks if the specified file information is indexed and has fast sort enabled.
 
 ### Syntax
 ```
@@ -2700,7 +2700,7 @@ Date run descending
 ### Return Value
 The function returns non-zero if the specified information is indexed and has fast sort enabled.
 
-The function returns 0 if the specified information does not have fast sort enabled or if an error occurred. To get extended error information, call Everything_GetLastError .
+The function returns 0 if the specified information does not have fast sort enabled or if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
@@ -2749,7 +2749,7 @@ isFastSizeSort = Everything_IsFastSort(EVERYTHING_IPC_SORT_SIZE_DESCENDING);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_IsFileInfoIndexed
+- [Everything_IsFileInfoIndexed](#everything_isfileinfoindexed)
 - Enable or disable file information indexing
 - Enable or disable fast sorting
 
@@ -2757,8 +2757,8 @@ Requires Everything 1.4.1 or later.
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_isfileinfoindexed
 
-## Everything_IsFileInfoIndexed
-The Everything_IsFileInfoIndexed function checks if the specified file information is indexed.
+## [Everything_IsFileInfoIndexed](#everything_isfileinfoindexed)
+The [Everything_IsFileInfoIndexed](#everything_isfileinfoindexed) function checks if the specified file information is indexed.
 
 ### Syntax
 ```
@@ -2794,7 +2794,7 @@ Attributes
 ### Return Value
 The function returns non-zero if the specified information is indexed.
 
-The function returns 0 if the specified information is not indexed or if an error occurred. To get extended error information, call Everything_GetLastError .
+The function returns 0 if the specified information is not indexed or if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
@@ -2813,7 +2813,7 @@ isSizeIndexed = Everything_IsFileInfoIndexed(EVERYTHING_IPC_FILE_INFO_FILE_SIZE)
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_IsFastSort
+- [Everything_IsFastSort](#everything_isfastsort)
 - Enable or disable file information indexing
 - Enable or disable fast sorting
 
@@ -2821,8 +2821,8 @@ Requires Everything 1.4.1 or later.
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_isfileresult
 
-## Everything_IsFileResult
-The Everything_IsFileResult function determines if the visible result is file.
+## [Everything_IsFileResult](#everything_isfileresult)
+The [Everything_IsFileResult](#everything_isfileresult) function determines if the visible result is file.
 
 ### Syntax
 ```
@@ -2841,18 +2841,18 @@ The function returns TRUE, if the visible result is a file (For example: C:\ABC.
 
 The function returns FALSE, if the visible result is a folder or volume (For example: C: or c:\WINDOWS).
 
-If the function fails the return value is FALSE. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is FALSE. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_IsFileResult.
+[Everything_Query](#everything_query)
+ before calling [Everything_IsFileResult](#everything_isfileresult).
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-You can only call this function for a visible result. To determine if a result is visible use the Everything_GetNumFileResults function.
+You can only call this function for a visible result. To determine if a result is visible use the [Everything_GetNumFileResults](#everything_getnumfileresults) function.
 
 ### Example
 ```
@@ -2865,16 +2865,16 @@ BOOL bIsFileResult = Everything_IsFileResult(0);
 ```
 
 ### See Also
-- Everything_Query
-- Everything_IsVolumeResult
-- Everything_IsFolderResult
+- [Everything_Query](#everything_query)
+- [Everything_IsVolumeResult](#everything_isvolumeresult)
+- [Everything_IsFolderResult](#everything_isfolderresult)
 
 ## everything isfolderresult
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_isfolderresult
 
-## Everything_IsFolderResult
-The Everything_IsFolderResult function determines if the visible result is a folder.
+## [Everything_IsFolderResult](#everything_isfolderresult)
+The [Everything_IsFolderResult](#everything_isfolderresult) function determines if the visible result is a folder.
 
 ### Syntax
 ```
@@ -2893,18 +2893,18 @@ The function returns TRUE, if the visible result is a folder or volume (For exam
 
 The function returns FALSE, if the visible result is a file (For example: C:\ABC.123).
 
-If the function fails the return value is FALSE. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is FALSE. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_IsFolderResult.
+[Everything_Query](#everything_query)
+ before calling [Everything_IsFolderResult](#everything_isfolderresult).
 EVERYTHING_ERROR_INVALIDINDEX
 Index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-You can only call this function for a visible result. To determine if a result is visible use the Everything_GetNumFileResults function.
+You can only call this function for a visible result. To determine if a result is visible use the [Everything_GetNumFileResults](#everything_getnumfileresults) function.
 
 ### Example
 ```
@@ -2917,16 +2917,16 @@ BOOL bIsFolderResult = Everything_IsFolderResult(0);
 ```
 
 ### See Also
-- Everything_Query
-- Everything_IsVolumeResult
-- Everything_IsFileResult
+- [Everything_Query](#everything_query)
+- [Everything_IsVolumeResult](#everything_isvolumeresult)
+- [Everything_IsFileResult](#everything_isfileresult)
 
 ## everything isqueryreply
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_isqueryreply
 
-## Everything_IsQueryReply
-The Everything_IsQueryReply function checks if the specified window message is a query reply.
+## [Everything_IsQueryReply](#everything_isqueryreply)
+The [Everything_IsQueryReply](#everything_isqueryreply) function checks if the specified window message is a query reply.
 
 ### Syntax
 ```
@@ -2953,38 +2953,38 @@ Specifies additional information about the message.
 
 nId
 
-The unique identifier specified with Everything_SetReplyID , or 0 for the default ID.
+The unique identifier specified with [Everything_SetReplyID](#everything_setreplyid) , or 0 for the default ID.
 
 This is the value used to compare with the dwData member of the COPYDATASTRUCT if the message is WM_COPYDATA.
 
 ### Return Value
 Returns TRUE if the message is a query reply.
 
-If the function fails the return value is FALSE. To get extended error information, call: Everything_GetLastError .
+If the function fails the return value is FALSE. To get extended error information, call: [Everything_GetLastError](#everything_getlasterror) .
 
 ### Remarks
 This function checks if the message is a WM_COPYDATA message. If the message is a WM_COPYDATA message the function checks if the ReplyID matches the dwData member of the COPYDATASTRUCT. If they match the function makes a copy of the query results.
 
-You must call Everything_IsQueryReply in the windows message handler to check for an IPC query reply if you call Everything_Query with bWait set to FALSE.
+You must call [Everything_IsQueryReply](#everything_isqueryreply) in the windows message handler to check for an IPC query reply if you call [Everything_Query](#everything_query) with bWait set to FALSE.
 
 If the function returns TRUE you should return TRUE.
 
 If the function returns TRUE you can call the following functions to read the results:
 
-- Everything_SortResultsByPath
-- Everything_Reset
-- Everything_GetNumFileResults
-- Everything_GetNumFolderResults
-- Everything_GetNumResults
-- Everything_GetTotFileResults
-- Everything_GetTotFolderResults
-- Everything_GetTotResults
-- Everything_IsVolumeResult
-- Everything_IsFolderResult
-- Everything_IsFileResult
-- Everything_GetResultFileName
-- Everything_GetResultPath
-- Everything_GetResultFullPathName
+- [Everything_SortResultsByPath](#everything_sortresultsbypath)
+- [Everything_Reset](#everything_reset)
+- [Everything_GetNumFileResults](#everything_getnumfileresults)
+- [Everything_GetNumFolderResults](#everything_getnumfolderresults)
+- [Everything_GetNumResults](#everything_getnumresults)
+- [Everything_GetTotFileResults](#everything_gettotfileresults)
+- [Everything_GetTotFolderResults](#everything_gettotfolderresults)
+- [Everything_GetTotResults](#everything_gettotresults)
+- [Everything_IsVolumeResult](#everything_isvolumeresult)
+- [Everything_IsFolderResult](#everything_isfolderresult)
+- [Everything_IsFileResult](#everything_isfileresult)
+- [Everything_GetResultFileName](#everything_getresultfilename)
+- [Everything_GetResultPath](#everything_getresultpath)
+- [Everything_GetResultFullPathName](#everything_getresultfullpathname)
 
 ### Example
 ```
@@ -3058,18 +3058,18 @@ BOOL EVERYTHINGAPI Everything_IsQueryReply(UINT message,WPARAM wParam,LPARAM lPa
 ```
 
 ### See Also
-- Everything_Query
-- Everything_SetReplyWindow
-- Everything_SetReplyID
-- Everything_GetReplyWindow
-- Everything_GetReplyID
+- [Everything_Query](#everything_query)
+- [Everything_SetReplyWindow](#everything_setreplywindow)
+- [Everything_SetReplyID](#everything_setreplyid)
+- [Everything_GetReplyWindow](#everything_getreplywindow)
+- [Everything_GetReplyID](#everything_getreplyid)
 
 ## everything isvolumeresult
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_isvolumeresult
 
-## Everything_IsVolumeResult
-The Everything_IsVolumeResult function determines if the visible result is the root folder of a volume.
+## [Everything_IsVolumeResult](#everything_isvolumeresult)
+The [Everything_IsVolumeResult](#everything_isvolumeresult) function determines if the visible result is the root folder of a volume.
 
 ### Syntax
 ```
@@ -3088,18 +3088,18 @@ The function returns TRUE, if the visible result is a volume (For example: C:).
 
 The function returns FALSE, if the visible result is a folder or file (For example: C:\ABC.123).
 
-If the function fails the return value is FALSE. To get extended error information, call Everything_GetLastError .
+If the function fails the return value is FALSE. To get extended error information, call [Everything_GetLastError](#everything_getlasterror) .
 
 Error code
 Meaning
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_Query
- before calling Everything_IsVolumeResult.
+[Everything_Query](#everything_query)
+ before calling [Everything_IsVolumeResult](#everything_isvolumeresult).
 EVERYTHING_ERROR_INVALIDINDEX
 index must be greater than or equal to 0 and less than the visible number of results.
 ### Remarks
-You can only call this function for a visible result. To determine if a result is visible use the Everything_GetNumFileResults function.
+You can only call this function for a visible result. To determine if a result is visible use the [Everything_GetNumFileResults](#everything_getnumfileresults) function.
 
 ### Example
 ```
@@ -3112,16 +3112,16 @@ BOOL bIsVolumeResult = Everything_IsVolumeResult(0);
 ```
 
 ### See Also
-- Everything_Query
-- Everything_IsFolderResult
-- Everything_IsFileResult
+- [Everything_Query](#everything_query)
+- [Everything_IsFolderResult](#everything_isfolderresult)
+- [Everything_IsFileResult](#everything_isfileresult)
 
 ## everything query
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_query
 
-## Everything_Query
-The Everything_Query function executes an Everything IPC query with the current search state.
+## [Everything_Query](#everything_query)
+The [Everything_Query](#everything_query) function executes an Everything IPC query with the current search state.
 
 ### Syntax
 ```
@@ -3142,7 +3142,7 @@ Set this to TRUE to send the IPC Query and wait for the results.
 ### Return Value
 If the function succeeds, the return value is TRUE.
 
-If the function fails, the return value is FALSE.  To get extended error information, call Everything_GetLastError
+If the function fails, the return value is FALSE.  To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Description
@@ -3158,32 +3158,32 @@ EVERYTHING_ERROR_MEMORY
 Failed to allocate memory for the search query.
 EVERYTHING_ERROR_INVALIDCALL
 Call 
-Everything_SetReplyWindow
- before calling Everything_Query with bWait set to FALSE.
+[Everything_SetReplyWindow](#everything_setreplywindow)
+ before calling [Everything_Query](#everything_query) with bWait set to FALSE.
 ### Remarks
-If bWait is FALSE you must call Everything_SetReplyWindow before calling Everything_Query. Use the Everything_IsQueryReply function to check for query replies.
+If bWait is FALSE you must call [Everything_SetReplyWindow](#everything_setreplywindow) before calling [Everything_Query](#everything_query). Use the [Everything_IsQueryReply](#everything_isqueryreply) function to check for query replies.
 
-Optionally call the following functions to set the search state before calling Everything_Query:
+Optionally call the following functions to set the search state before calling [Everything_Query](#everything_query):
 
-- Everything_SetSearch
-- Everything_SetMatchPath
-- Everything_SetMatchCase
-- Everything_SetMatchWholeWord
-- Everything_SetRegex
-- Everything_SetMax
-- Everything_SetOffset
-- Everything_SetReplyID
-- Everything_SetRequestFlags
+- [Everything_SetSearch](#everything_setsearch)
+- [Everything_SetMatchPath](#everything_setmatchpath)
+- [Everything_SetMatchCase](#everything_setmatchcase)
+- [Everything_SetMatchWholeWord](#everything_setmatchwholeword)
+- [Everything_SetRegex](#everything_setregex)
+- [Everything_SetMax](#everything_setmax)
+- [Everything_SetOffset](#everything_setoffset)
+- [Everything_SetReplyID](#everything_setreplyid)
+- [Everything_SetRequestFlags](#everything_setrequestflags)
 
-You can mix ANSI / Unicode version of Everything_SetSearch and Everything_Query.
+You can mix ANSI / Unicode version of [Everything_SetSearch](#everything_setsearch) and [Everything_Query](#everything_query).
 
-The ANSI / Unicode version of Everything_Query MUST match the ANSI / Unicode version of Everything_GetResultName and Everything_GetResultPath.
+The ANSI / Unicode version of [Everything_Query](#everything_query) MUST match the ANSI / Unicode version of Everything_GetResultName and [Everything_GetResultPath](#everything_getresultpath).
 
-The search state is not modified from a call to Everything_Query.
+The search state is not modified from a call to [Everything_Query](#everything_query).
 
 The default state is as follows:
 
-See Everything_Reset for the default search state.
+See [Everything_Reset](#everything_reset) for the default search state.
 
 ### Example
 ```
@@ -3196,37 +3196,37 @@ Everything_Query(TRUE);
 ```
 
 ### See Also
-- Everything_SetSearch
-- Everything_SetMatchPath
-- Everything_SetMatchCase
-- Everything_SetMatchWholeWord
-- Everything_SetRegex
-- Everything_SetMax
-- Everything_SetOffset
-- Everything_SortResultsByPath
-- Everything_GetLastError
-- Everything_GetNumFileResults
-- Everything_GetNumFolderResults
-- Everything_GetNumResults
-- Everything_GetTotFileResults
-- Everything_GetTotFolderResults
-- Everything_GetTotResults
-- Everything_IsVolumeResult
-- Everything_IsFolderResult
-- Everything_IsFileResult
-- Everything_GetResultFileName
-- Everything_GetResultPath
-- Everything_GetResultFullPathName
-- Everything_SetReplyWindow
-- Everything_SetReplyID
-- Everything_Reset
+- [Everything_SetSearch](#everything_setsearch)
+- [Everything_SetMatchPath](#everything_setmatchpath)
+- [Everything_SetMatchCase](#everything_setmatchcase)
+- [Everything_SetMatchWholeWord](#everything_setmatchwholeword)
+- [Everything_SetRegex](#everything_setregex)
+- [Everything_SetMax](#everything_setmax)
+- [Everything_SetOffset](#everything_setoffset)
+- [Everything_SortResultsByPath](#everything_sortresultsbypath)
+- [Everything_GetLastError](#everything_getlasterror)
+- [Everything_GetNumFileResults](#everything_getnumfileresults)
+- [Everything_GetNumFolderResults](#everything_getnumfolderresults)
+- [Everything_GetNumResults](#everything_getnumresults)
+- [Everything_GetTotFileResults](#everything_gettotfileresults)
+- [Everything_GetTotFolderResults](#everything_gettotfolderresults)
+- [Everything_GetTotResults](#everything_gettotresults)
+- [Everything_IsVolumeResult](#everything_isvolumeresult)
+- [Everything_IsFolderResult](#everything_isfolderresult)
+- [Everything_IsFileResult](#everything_isfileresult)
+- [Everything_GetResultFileName](#everything_getresultfilename)
+- [Everything_GetResultPath](#everything_getresultpath)
+- [Everything_GetResultFullPathName](#everything_getresultfullpathname)
+- [Everything_SetReplyWindow](#everything_setreplywindow)
+- [Everything_SetReplyID](#everything_setreplyid)
+- [Everything_Reset](#everything_reset)
 
 ## everything rebuilddb
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_rebuilddb
 
-## Everything_RebuildDB
-The Everything_RebuildDB function requests Everything to forcefully rebuild the Everything index.
+## [Everything_RebuildDB](#everything_rebuilddb)
+The [Everything_RebuildDB](#everything_rebuilddb) function requests Everything to forcefully rebuild the Everything index.
 
 ### Syntax
 ```
@@ -3239,7 +3239,7 @@ No parameters.
 ### Return Value
 The function returns non-zero if the request to forcefully rebuild the Everything index was successful.
 
-The function returns 0 if an error occurred. To get extended error information, call Everything_GetLastError
+The function returns 0 if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -3248,7 +3248,7 @@ Please make sure the Everything search client is running in the background.
 ### Remarks
 Requesting a rebuild will mark all indexes as dirty and start the rebuild process.
 
-Use Everything_IsDBLoaded to determine if the database has been rebuilt before performing a query.
+Use [Everything_IsDBLoaded](#everything_isdbloaded) to determine if the database has been rebuilt before performing a query.
 
 ### Example
 ```
@@ -3260,14 +3260,14 @@ Everything_RebuildDB();
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_IsDBLoaded
+- [Everything_IsDBLoaded](#everything_isdbloaded)
 
 ## everything reset
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_reset
 
-## Everything_Reset
-The Everything_Reset function resets the result list and search state to the default state, freeing any allocated memory by the library.
+## [Everything_Reset](#everything_reset)
+The [Everything_Reset](#everything_reset) function resets the result list and search state to the default state, freeing any allocated memory by the library.
 
 ### Syntax
 ```
@@ -3281,11 +3281,11 @@ This function has no parameters.
 This function has no return value.
 
 ### Remarks
-Calling Everything_SetSearch frees the old search and allocates the new search string.
+Calling [Everything_SetSearch](#everything_setsearch) frees the old search and allocates the new search string.
 
-Calling Everything_Query frees the old result list and allocates the new result list.
+Calling [Everything_Query](#everything_query) frees the old result list and allocates the new result list.
 
-Calling Everything_Reset frees the current search and current result list.
+Calling [Everything_Reset](#everything_reset) frees the current search and current result list.
 
 The default state:
 
@@ -3307,16 +3307,16 @@ Everything_Reset();
 ```
 
 ### See Also
-- Everything_SetSearch
-- Everything_Query
-- Everything_CleanUp
+- [Everything_SetSearch](#everything_setsearch)
+- [Everything_Query](#everything_query)
+- [Everything_CleanUp](#everything_cleanup)
 
 ## everything savedb
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_savedb
 
-## Everything_SaveDB
-The Everything_SaveDB function requests Everything to save the index to disk.
+## [Everything_SaveDB](#everything_savedb)
+The [Everything_SaveDB](#everything_savedb) function requests Everything to save the index to disk.
 
 ### Syntax
 ```
@@ -3329,7 +3329,7 @@ No parameters.
 ### Return Value
 The function returns non-zero if the request to save the Everything index to disk was successful.
 
-The function returns 0 if an error occurred. To get extended error information, call Everything_GetLastError
+The function returns 0 if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -3338,7 +3338,7 @@ Please make sure the Everything search client is running in the background.
 ### Remarks
 The index is only saved to disk when you exit Everything.
 
-Call Everything_SaveDB to write the index to the file: Everything.db
+Call [Everything_SaveDB](#everything_savedb) to write the index to the file: Everything.db
 
 ### Example
 ```
@@ -3355,8 +3355,8 @@ Requires Everything 1.4.1 or later.
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_saverunhistory
 
-## Everything_SaveRunHistory
-The Everything_SaveRunHistory function requests Everything to save the run history to disk.
+## [Everything_SaveRunHistory](#everything_saverunhistory)
+The [Everything_SaveRunHistory](#everything_saverunhistory) function requests Everything to save the run history to disk.
 
 ### Syntax
 ```
@@ -3369,7 +3369,7 @@ No parameters.
 ### Return Value
 The function returns non-zero if the request to save the run history to disk was successful.
 
-The function returns 0 if an error occurred. To get extended error information, call Everything_GetLastError
+The function returns 0 if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -3395,8 +3395,8 @@ Requires Everything 1.4.1 or later.
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_setmatchcase
 
-## Everything_SetMatchCase
-The Everything_SetMatchCase function enables or disables full path matching for the next call to Everything_Query .
+## [Everything_SetMatchCase](#everything_setmatchcase)
+The [Everything_SetMatchCase](#everything_setmatchcase) function enables or disables full path matching for the next call to [Everything_Query](#everything_query) .
 
 ### Syntax
 ```
@@ -3423,15 +3423,15 @@ Everything_SetMatchCase(TRUE);
 ```
 
 ### See Also
-- Everything_GetMatchCase
-- Everything_Query
+- [Everything_GetMatchCase](#everything_getmatchcase)
+- [Everything_Query](#everything_query)
 
 ## everything setmatchpath
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_setmatchpath
 
-## Everything_SetMatchPath
-The Everything_SetMatchPath function enables or disables full path matching for the next call to Everything_Query .
+## [Everything_SetMatchPath](#everything_setmatchpath)
+The [Everything_SetMatchPath](#everything_setmatchpath) function enables or disables full path matching for the next call to [Everything_Query](#everything_query) .
 
 ### Syntax
 ```
@@ -3450,9 +3450,9 @@ If this parameter is TRUE, full path matching is enabled.
 If the parameter is FALSE, full path matching is disabled.
 
 ### Remarks
-If match full path is being enabled, the next call to Everything_Query will search the full path and file name of each file and folder.
+If match full path is being enabled, the next call to [Everything_Query](#everything_query) will search the full path and file name of each file and folder.
 
-If match full path is being disabled, the next call to Everything_Query will search the file name only of each file and folder.
+If match full path is being disabled, the next call to [Everything_Query](#everything_query) will search the file name only of each file and folder.
 
 Match path is disabled by default.
 
@@ -3464,15 +3464,15 @@ Everything_SetMatchPath(TRUE);
 ```
 
 ### See Also
-- Everything_GetMatchPath
-- Everything_Query
+- [Everything_GetMatchPath](#everything_getmatchpath)
+- [Everything_Query](#everything_query)
 
 ## everything setmatchwholeword
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_setmatchwholeword
 
-## Everything_SetMatchWholeWord
-The Everything_SetMatchWholeWord function enables or disables matching whole words for the next call to Everything_Query .
+## [Everything_SetMatchWholeWord](#everything_setmatchwholeword)
+The [Everything_SetMatchWholeWord](#everything_setmatchwholeword) function enables or disables matching whole words for the next call to [Everything_Query](#everything_query) .
 
 ### Syntax
 ```
@@ -3499,15 +3499,15 @@ Everything_SetMatchWholeWord(TRUE);
 ```
 
 ### See Also
-- Everything_GetMatchWholeWord
-- Everything_Query
+- [Everything_GetMatchWholeWord](#everything_getmatchwholeword)
+- [Everything_Query](#everything_query)
 
 ## everything setmax
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_setmax
 
-## Everything_SetMax
-The Everything_SetMax function sets the maximum number of results to return from Everything_Query .
+## [Everything_SetMax](#everything_setmax)
+The [Everything_SetMax](#everything_setmax) function sets the maximum number of results to return from [Everything_Query](#everything_query) .
 
 ### Syntax
 ```
@@ -3534,15 +3534,15 @@ Everything_SetMax(window_height / item_height);
 ```
 
 ### See Also
-- Everything_GetMax
-- Everything_Query
+- [Everything_GetMax](#everything_getmax)
+- [Everything_Query](#everything_query)
 
 ## everything setoffset
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_setoffset
 
-## Everything_SetOffset
-The Everything_SetOffset function set the first result offset to return from a call to Everything_Query .
+## [Everything_SetOffset](#everything_setoffset)
+The [Everything_SetOffset](#everything_setoffset) function set the first result offset to return from a call to [Everything_Query](#everything_query) .
 
 ### Syntax
 ```
@@ -3571,15 +3571,15 @@ Everything_SetOffset(scrollbar_vpos);
 ```
 
 ### See Also
-- Everything_GetOffset
-- Everything_Query
+- [Everything_GetOffset](#everything_getoffset)
+- [Everything_Query](#everything_query)
 
 ## everything setregex
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_setregex
 
-## Everything_SetRegex
-The Everything_SetRegex function enables or disables Regular Expression searching.
+## [Everything_SetRegex](#everything_setregex)
+The [Everything_SetRegex](#everything_setregex) function enables or disables Regular Expression searching.
 
 ### Syntax
 ```
@@ -3605,15 +3605,15 @@ Everything_SetRegex(TRUE);
 ```
 
 ### See Also
-- Everything_GetRegex
-- Everything_Query
+- [Everything_GetRegex](#everything_getregex)
+- [Everything_Query](#everything_query)
 
 ## everything setreplyid
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_setreplyid
 
-## Everything_SetReplyID
-The Everything_SetReplyID function sets the unique number to identify the next query.
+## [Everything_SetReplyID](#everything_setreplyid)
+The [Everything_SetReplyID](#everything_setreplyid) function sets the unique number to identify the next query.
 
 ### Syntax
 ```
@@ -3635,11 +3635,11 @@ The default identifier is 0.
 
 Set a unique identifier for the IPC Query.
 
-If you want to post multiple search queries with the same window handle, you must call the Everything_SetReplyID function to assign each query a unique identifier.
+If you want to post multiple search queries with the same window handle, you must call the [Everything_SetReplyID](#everything_setreplyid) function to assign each query a unique identifier.
 
 The nID value is the dwData member in the COPYDATASTRUCT used in the WM_COPYDATA reply message.
 
-This function is not required if you call Everything_Query with bWait set to true.
+This function is not required if you call [Everything_Query](#everything_query) with bWait set to true.
 
 ### Example
 ```
@@ -3652,18 +3652,18 @@ Everything_Query(FALSE);
 ```
 
 ### See Also
-- Everything_Query
-- Everything_SetReplyWindow
-- Everything_GetReplyWindow
-- Everything_GetReplyID
-- Everything_IsQueryReply
+- [Everything_Query](#everything_query)
+- [Everything_SetReplyWindow](#everything_setreplywindow)
+- [Everything_GetReplyWindow](#everything_getreplywindow)
+- [Everything_GetReplyID](#everything_getreplyid)
+- [Everything_IsQueryReply](#everything_isqueryreply)
 
 ## everything setreplywindow
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_setreplywindow
 
-## Everything_SetReplyWindow
-The Everything_SetReplyWindow function sets the window that will receive the the IPC Query results.
+## [Everything_SetReplyWindow](#everything_setreplywindow)
+The [Everything_SetReplyWindow](#everything_setreplywindow) function sets the window that will receive the the IPC Query results.
 
 ### Syntax
 ```
@@ -3681,11 +3681,11 @@ The handle to the window that will receive the IPC Query reply.
 This function has no return value.
 
 ### Remarks
-This function must be called before calling Everything_Query with bWait set to FALSE.
+This function must be called before calling [Everything_Query](#everything_query) with bWait set to FALSE.
 
-Check for results with the specified window using Everything_IsQueryReply .
+Check for results with the specified window using [Everything_IsQueryReply](#everything_isqueryreply) .
 
-Call Everything_SetReplyID with a unique identifier to specify multiple searches.
+Call [Everything_SetReplyID](#everything_setreplyid) with a unique identifier to specify multiple searches.
 
 ### Example
 ```
@@ -3696,18 +3696,18 @@ Everything_Query(TRUE);
 ```
 
 ### See Also
-- Everything_Query
-- Everything_SetReplyID
-- Everything_GetReplyWindow
-- Everything_GetReplyID
-- Everything_IsQueryReply
+- [Everything_Query](#everything_query)
+- [Everything_SetReplyID](#everything_setreplyid)
+- [Everything_GetReplyWindow](#everything_getreplywindow)
+- [Everything_GetReplyID](#everything_getreplyid)
+- [Everything_IsQueryReply](#everything_isqueryreply)
 
 ## everything setrequestflags
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_setrequestflags
 
-## Everything_SetRequestFlags
-The Everything_SetRequestFlags function sets the desired result data.
+## [Everything_SetRequestFlags](#everything_setrequestflags)
+The [Everything_SetRequestFlags](#everything_setrequestflags) function sets the desired result data.
 
 ### Syntax
 ```
@@ -3752,9 +3752,9 @@ When the default flags (EVERYTHING_REQUEST_FILE_NAME | EVERYTHING_REQUEST_PATH) 
 
 When any other flags are used the new version 2 query will be tried first, and then fall back to version 1 query.
 
-It is possible the requested data is not available, in which case after you have received your results you should call Everything_GetResultListRequestFlags to determine the available result data.
+It is possible the requested data is not available, in which case after you have received your results you should call [Everything_GetResultListRequestFlags](#everything_getresultlistrequestflags) to determine the available result data.
 
-This function must be called before Everything_Query .
+This function must be called before [Everything_Query](#everything_query) .
 
 ### Example
 ```
@@ -3773,15 +3773,15 @@ Everything_GetResultSize(0,&size);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
-- Everything_GetResultListRequestFlags
+- [Everything_Query](#everything_query)
+- [Everything_GetResultListRequestFlags](#everything_getresultlistrequestflags)
 
 ## everything setruncountfromfilename
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_setruncountfromfilename
 
-## Everything_SetRunCountFromFileName
-The Everything_SetRunCountFromFileName function sets the run count for a specified file in the Everything index by file name.
+## [Everything_SetRunCountFromFileName](#everything_setruncountfromfilename)
+The [Everything_SetRunCountFromFileName](#everything_setruncountfromfilename) function sets the run count for a specified file in the Everything index by file name.
 
 ### Syntax
 ```
@@ -3803,7 +3803,7 @@ The new run count.
 ### Return Value
 The function returns non-zero if successful.
 
-The function returns 0 if an error occurred. To get extended error information, call Everything_GetLastError
+The function returns 0 if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
@@ -3825,15 +3825,15 @@ Everything_SetRunCountFromFileName(TEXT("C:\\folder\\file.doc"),1000);
 ```
 
 ### See Also
-- Everything_GetRunCountFromFileName
-- Everything_IncRunCountFromFileName
+- [Everything_GetRunCountFromFileName](#everything_getruncountfromfilename)
+- [Everything_IncRunCountFromFileName](#everything_incruncountfromfilename)
 
 ## everything setsearch
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_setsearch
 
-## Everything_SetSearch
-The Everything_SetSearch function sets the search string for the IPC Query.
+## [Everything_SetSearch](#everything_setsearch)
+The [Everything_SetSearch](#everything_setsearch) function sets the search string for the IPC Query.
 
 ### Syntax
 ```
@@ -3851,9 +3851,9 @@ Pointer to a null-terminated string to be used as the new search text.
 This function has no return value.
 
 ### Remarks
-Optionally call this function prior to a call to Everything_Query
+Optionally call this function prior to a call to [Everything_Query](#everything_query)
 
-Everything_Query executes the IPC Query using this search string.
+[Everything_Query](#everything_query) executes the IPC Query using this search string.
 
 ### Example
 ```
@@ -3864,15 +3864,15 @@ Everything_Query(TRUE);
 ```
 
 ### See Also
-- Everything_GetSearch
-- Everything_Query
+- [Everything_GetSearch](#everything_getsearch)
+- [Everything_Query](#everything_query)
 
 ## everything setsort
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_setsort
 
-## Everything_SetSort
-The Everything_SetSort function sets how the results should be ordered.
+## [Everything_SetSort](#everything_setsort)
+The [Everything_SetSort](#everything_setsort) function sets how the results should be ordered.
 
 ### Syntax
 ```
@@ -3930,9 +3930,9 @@ To enable fast sorts in Everything:
 - Check fast sort for desired fast sort type.
 - Click OK .
 
-It is possible the sort is not supported, in which case after you have received your results you should call * Everything_GetResultListSort to determine the sorting actually used.
+It is possible the sort is not supported, in which case after you have received your results you should call * [Everything_GetResultListSort](#everything_getresultlistsort) to determine the sorting actually used.
 
-This function must be called before Everything_Query .
+This function must be called before [Everything_Query](#everything_query) .
 
 ### Example
 ```
@@ -3948,14 +3948,14 @@ Everything_Query(TRUE);
 Requires Everything 1.4.1 or later.
 
 ### See Also
-- Everything_Query
+- [Everything_Query](#everything_query)
 
 ## everything sortresultsbypath
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_sortresultsbypath
 
-## Everything_SortResultsByPath
-The Everything_SortResultsByPath function sorts the current results by path, then file name.
+## [Everything_SortResultsByPath](#everything_sortresultsbypath)
+The [Everything_SortResultsByPath](#everything_sortresultsbypath) function sorts the current results by path, then file name.
 
 SortResultsByPath is CPU Intensive. Sorting by path can take several seconds.
 
@@ -3973,7 +3973,7 @@ This function has no return value.
 ### Remarks
 The default result list contains no results.
 
-Call Everything_Query to retrieve the result list prior to a call to Everything_SortResultsByPath.
+Call [Everything_Query](#everything_query) to retrieve the result list prior to a call to [Everything_SortResultsByPath](#everything_sortresultsbypath).
 
 For improved performance, use [Everything/SDK/Everything_SetSort|Everything_SetSort]]
 
@@ -3988,14 +3988,14 @@ Everything_SortResultsByPath();
 ```
 
 ### See Also
-- Everything_Query
+- [Everything_Query](#everything_query)
 
 ## everything updateallfolderindexes
 
 Source: https://www.voidtools.com/support/everything/sdk/everything_updateallfolderindexes
 
-## Everything_UpdateAllFolderIndexes
-The Everything_UpdateAllFolderIndexes function requests Everything to rescan all folder indexes.
+## [Everything_UpdateAllFolderIndexes](#everything_updateallfolderindexes)
+The [Everything_UpdateAllFolderIndexes](#everything_updateallfolderindexes) function requests Everything to rescan all folder indexes.
 
 ### Syntax
 ```
@@ -4008,7 +4008,7 @@ No parameters.
 ### Return Value
 The function returns non-zero if the request to rescan all folder indexes was successful.
 
-The function returns 0 if an error occurred. To get extended error information, call Everything_GetLastError
+The function returns 0 if an error occurred. To get extended error information, call [Everything_GetLastError](#everything_getlasterror)
 
 Error code
 Meaning
