@@ -272,6 +272,73 @@ def init_functions(dll):
     dll.Everything_IncRunCountFromFileNameA.argtypes     = [wintypes.LPCSTR]
     dll.Everything_IncRunCountFromFileNameA.restype      = wintypes.DWORD
 
+def verify_dll_bindings(dll):
+    """Verify that all expected Everything SDK exports exist on the loaded DLL.
+
+    Returns a tuple (ok: bool, missing: list[str]).
+    Only checks presence of symbols, not callability or signatures.
+    """
+    expected = [
+        # Setters
+        "Everything_SetSearchW", "Everything_SetSearchA",
+        "Everything_SetMatchPath", "Everything_SetMatchCase", "Everything_SetMatchWholeWord",
+        "Everything_SetRegex", "Everything_SetMax", "Everything_SetOffset",
+        "Everything_SetRequestFlags", "Everything_SetSort", "Everything_SetReplyWindow",
+        "Everything_SetReplyID",
+
+        # Getters / state
+        "Everything_GetSearchW", "Everything_GetSearchA",
+        "Everything_GetMatchPath", "Everything_GetMatchCase", "Everything_GetMatchWholeWord",
+        "Everything_GetRegex", "Everything_GetMax", "Everything_GetOffset",
+        "Everything_GetSort", "Everything_GetRequestFlags",
+        "Everything_GetNumResults", "Everything_GetNumFileResults", "Everything_GetNumFolderResults",
+        "Everything_GetTotResults", "Everything_GetTotFileResults", "Everything_GetTotFolderResults",
+        "Everything_GetLastError", "Everything_GetReplyWindow", "Everything_GetReplyID",
+        "Everything_GetTargetMachine",
+
+        # Query / IPC
+        "Everything_QueryW", "Everything_QueryA", "Everything_IsQueryReply",
+
+        # Result list meta
+        "Everything_GetResultListRequestFlags", "Everything_GetResultListSort",
+
+        # Per-item getters
+        "Everything_GetResultFullPathNameW", "Everything_GetResultFullPathNameA",
+        "Everything_GetResultPathW", "Everything_GetResultPathA",
+        "Everything_GetResultFileNameW", "Everything_GetResultFileNameA",
+        "Everything_GetResultExtensionW", "Everything_GetResultSize",
+        "Everything_GetResultDateCreated", "Everything_GetResultDateModified", "Everything_GetResultDateAccessed",
+        "Everything_GetResultAttributes",
+        "Everything_GetResultFileListFileNameW", "Everything_GetResultFileListFileNameA",
+        "Everything_GetResultRunCount", "Everything_GetResultDateRun", "Everything_GetResultDateRecentlyChanged",
+        "Everything_GetResultHighlightedFileNameW", "Everything_GetResultHighlightedPathW",
+        "Everything_GetResultHighlightedFullPathAndFileNameW",
+
+        # Version
+        "Everything_GetMajorVersion", "Everything_GetMinorVersion", "Everything_GetRevision", "Everything_GetBuildNumber",
+
+        # Capabilities / status
+        "Everything_IsDBLoaded", "Everything_IsAdmin", "Everything_IsAppData",
+        "Everything_IsFastSort", "Everything_IsFileInfoIndexed",
+        "Everything_IsFileResult", "Everything_IsFolderResult", "Everything_IsVolumeResult",
+
+        # Maintenance and lifecycle
+        "Everything_SaveDB", "Everything_RebuildDB", "Everything_UpdateAllFolderIndexes",
+        "Everything_SaveRunHistory", "Everything_DeleteRunHistory",
+        "Everything_Reset", "Everything_CleanUp", "Everything_Exit",
+
+        # Run history by filename
+        "Everything_GetRunCountFromFileNameW", "Everything_GetRunCountFromFileNameA",
+        "Everything_SetRunCountFromFileNameW", "Everything_SetRunCountFromFileNameA",
+        "Everything_IncRunCountFromFileNameW", "Everything_IncRunCountFromFileNameA",
+
+        # Utilities
+        "Everything_SortResultsByPath",
+    ]
+
+    missing = [name for name in expected if not hasattr(dll, name)]
+    return (len(missing) == 0, missing)
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Use Everything DLL to list files via the Everything SDK"
