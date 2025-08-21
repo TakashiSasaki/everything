@@ -35,12 +35,21 @@ This document records working agreements and decisions made during the current s
 - Conventions validated by tests:
   - `pyeverything.everything.Everything.search()` returns items with separate `name` (basename) and `path` (directory path).
   - The DLL CLI (`python -m pyeverything.dll`) returns JSON entries where `path` contains the full path; tests match against a full‑path substring.
+  - DLL can be loaded and queried for version info when IPC is available; otherwise tests skip with a clear message.
+  - All documented DLL exports are bound in `init_functions` and verifiable via `verify_dll_bindings`.
 
 ## Integration Suites Added
 
 - DLL CLI: `tests/test_integration_dll.py`
   - Windows‑only; requires `pyeverything/bin/Everything64.dll`.
   - Uses robust token queries (e.g., `windows system32 drivers etc hosts`) and relaxed full‑path substring checks.
+- DLL load/version/bindings (step‑by‑step): `tests/test_integration_dll_steps.py`
+  - `test_dll_file_exists_in_package_bin`: asserts `pyeverything/bin/Everything64.dll` exists.
+  - `test_dll_loads_and_bindings_ok`: loads DLL, initializes ctypes signatures, and verifies all expected exports via `verify_dll_bindings`.
+  - `test_ipc_available_or_skip`: detects IPC availability and skips with guidance if Everything is not running.
+  - `test_version_info_when_ipc_available`: asserts non‑zero version components when IPC is available.
+- DLL load/version (simple): `tests/test_integration_dll_load.py`
+  - Loads DLL, initializes signatures, retrieves version and target machine; skips on IPC error.
 - es CLI: `tests/test_integration_es.py`
   - Windows‑only when `es.exe` is available; recognizes PATH, package bin, CWD, repo `./bin`, and common install paths.
   - Uses multi‑query fallback (path: filter → absolute path → plain tokens) to avoid false negatives.
@@ -70,8 +79,22 @@ This document records working agreements and decisions made during the current s
 
 - Unit tests: `.\.venv\Scripts\pytest -q`
 - DLL integration tests: `.\.venv\Scripts\pytest -q tests\test_integration_dll.py`
+- DLL step tests: `.\.venv\Scripts\pytest -q tests\test_integration_dll_steps.py`
+- DLL quick load/version: `.\.venv\Scripts\pytest -q tests\test_integration_dll_load.py`
 - Full suite: `.\.venv\Scripts\pytest -q`
 - Lint: `.\.venv\Scripts\flake8`
+
+Verbose options for diagnostics:
+- `-vv` to list each test; `-s` to show prints/logs; `-ra` to show skip reasons; `-l` to show locals; `--tb=long` for full tracebacks.
+Example: `.\.venv\Scripts\pytest -vv -s -ra tests\test_integration_dll_steps.py`
+
+IPC guidance:
+- If tests skip with "Everything IPC not available", start the Everything app/service, then rerun tests.
+
+DLL bindings check from Python REPL or script:
+- `from pyeverything.dll import load_everything_dll, init_functions, verify_dll_bindings`
+- `dll = load_everything_dll(); init_functions(dll); ok, missing = verify_dll_bindings(dll)`
+- `print(ok, missing)`
 
 ## Sharing Diagnostics
 
